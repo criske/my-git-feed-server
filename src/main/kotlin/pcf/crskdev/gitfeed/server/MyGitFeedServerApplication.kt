@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class MyGitFeedServerApplication
 
 fun main(args: Array<String>) {
-	runApplication<MyGitFeedServerApplication>(*args)
+    runApplication<MyGitFeedServerApplication>(*args)
 }
