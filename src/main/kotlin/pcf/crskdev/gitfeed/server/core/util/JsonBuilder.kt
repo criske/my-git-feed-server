@@ -1,4 +1,4 @@
-package util
+package pcf.crskdev.gitfeed.server.core.util
 
 import com.fasterxml.jackson.databind.JsonSerializable
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -35,11 +35,24 @@ fun arr(scope: ArrayScope.() -> Unit): JsonWriter {
     return JsonWriter(mapper, arr)
 }
 
+/**
+ * Dumps the created json to string.
+ *
+ * @property mapper
+ * @property json
+ * @constructor Create empty Json writer
+ */
 class JsonWriter internal constructor(
     private val mapper: ObjectMapper,
     private val json: JsonSerializable
 ) {
 
+    /**
+     * As string with option of pretty printing.
+     *
+     * @param prettyPrint Pretty print flag.
+     * @return JSON as string.
+     */
     fun asString(prettyPrint: Boolean = false): String {
         val writer = if (prettyPrint)
             this.mapper.writerWithDefaultPrettyPrinter()
@@ -49,6 +62,11 @@ class JsonWriter internal constructor(
     }
 }
 
+/**
+ * Dsl raw value.
+ *
+ * @param value Any.
+ */
 private class DslRawValue(value: Any) : RawValue(value, false)
 
 private class ObjectScopeImpl(
@@ -56,12 +74,8 @@ private class ObjectScopeImpl(
     private val obj: ObjectNode
 ) : ObjectScope, BaseScopeDsl(mapper) {
 
-    override fun Pair<String, Any>.unaryPlus() {
-        put(this)
-    }
-
-    override fun put(value: Pair<String, Any>) {
-        obj.putRawValue(value.first, DslRawValue(value.second))
+    override fun String.to(value: Any) {
+        obj.putRawValue(this, DslRawValue(value.tryConvert()))
     }
 }
 
@@ -71,30 +85,87 @@ private class ArrayScopeImpl(
 ) : ArrayScope, BaseScopeDsl(mapper) {
 
     override fun Any.unaryPlus() {
-        add(this)
+        arr.addRawValue(DslRawValue(this.tryConvert()))
     }
 
-    override fun add(any: Any) {
-        arr.addRawValue(DslRawValue(any))
+    override fun add(number: Number) {
+        arr.addRawValue(DslRawValue(number))
     }
 }
 
+/**
+ * Try convert any value to a json serializable,
+ * otherwise falls back to the same value.
+ *
+ * @return Any.
+ */
+private fun Any.tryConvert(): Any = when (this) {
+    is String -> TextNode(this)
+    else -> this
+}
+
+/**
+ * Object scope
+ *
+ * @constructor Create empty Object scope
+ */
 interface ObjectScope : BaseScope {
-    operator fun Pair<String, Any>.unaryPlus()
-    fun put(value: Pair<String, Any>)
+
+    /**
+     * Adds new entry in json object, having String receiver as key
+     *
+     * @param value Any value
+     */
+    infix fun String.to(value: Any)
 }
 
+/**
+ * Array scope
+ *
+ * @constructor Create empty Array scope
+ */
 interface ArrayScope : BaseScope {
+    /**
+     * Unary plus that ads new entry to json array.
+     *
+     */
     operator fun Any.unaryPlus()
-    fun add(any: Any)
+
+    /**
+     * Adds a Number to the array, since [unaryPlus] cant be used.
+     *
+     * @param number
+     */
+    fun add(number: Number)
 }
 
+/**
+ * Base scope.
+ *
+ * @constructor Create empty Base scope
+ */
 interface BaseScope {
+
+    /**
+     * Builder for json object.
+     *
+     * @param objScope ObjectScope
+     * @receiver ObjectScope
+     * @return JsonSerializable
+     */
     fun obj(objScope: ObjectScope.() -> Unit): JsonSerializable
+
+    /**
+     * Builder for json array.
+     *
+     * @param arrScope ArrayScope
+     * @receiver ObjectScope
+     * @return JsonSerializable
+     */
     fun arr(arrScope: ArrayScope.() -> Unit): JsonSerializable
 }
 
-abstract class BaseScopeDsl(private val mapper: ObjectMapper) : BaseScope {
+private abstract class BaseScopeDsl(private val mapper: ObjectMapper) : BaseScope {
 
     override fun obj(objScope: ObjectScope.() -> Unit): JsonSerializable {
         return this.mapper.createObjectNode().apply {
@@ -108,5 +179,3 @@ abstract class BaseScopeDsl(private val mapper: ObjectMapper) : BaseScope {
         }
     }
 }
-
-val String.json get() = TextNode(this)
