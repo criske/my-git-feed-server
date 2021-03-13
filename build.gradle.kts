@@ -55,7 +55,7 @@ tasks.register<JavaExec>("ktlint") {
 	description = "Check Kotlin code style."
 	classpath = ktlint
 	main = "com.pinterest.ktlint.Main"
-	args("src/main/**/*.kt")
+	args("src/**/*.kt")
 }
 
 tasks.register<JavaExec>("ktlintFormat"){
