@@ -1,5 +1,6 @@
 package pcf.crskdev.gitfeed.server.core.util
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.JsonSerializable
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
@@ -14,11 +15,11 @@ import com.fasterxml.jackson.databind.util.RawValue
  * @receiver
  * @return JsonWriter
  */
-fun obj(scope: ObjectScope.() -> Unit): JsonWriter {
+fun obj(scope: ObjectScope.() -> Unit): JsonDump {
     val mapper = ObjectMapper()
     val obj = mapper.createObjectNode()
     ObjectScopeImpl(mapper, obj).apply(scope)
-    return JsonWriter(mapper, obj)
+    return JsonDump(mapper, obj)
 }
 
 /**
@@ -28,11 +29,11 @@ fun obj(scope: ObjectScope.() -> Unit): JsonWriter {
  * @receiver
  * @return JsonWriter
  */
-fun arr(scope: ArrayScope.() -> Unit): JsonWriter {
+fun arr(scope: ArrayScope.() -> Unit): JsonDump {
     val mapper = ObjectMapper()
     val arr = mapper.createArrayNode()
     ArrayScopeImpl(mapper, arr).apply(scope)
-    return JsonWriter(mapper, arr)
+    return JsonDump(mapper, arr)
 }
 
 /**
@@ -42,9 +43,9 @@ fun arr(scope: ArrayScope.() -> Unit): JsonWriter {
  * @property json
  * @constructor Create empty Json writer
  */
-class JsonWriter internal constructor(
+class JsonDump internal constructor(
     private val mapper: ObjectMapper,
-    private val json: JsonSerializable
+    private val json: JsonNode
 ) {
 
     /**
@@ -54,12 +55,20 @@ class JsonWriter internal constructor(
      * @return JSON as string.
      */
     fun asString(prettyPrint: Boolean = false): String {
+        this.json
         val writer = if (prettyPrint)
             this.mapper.writerWithDefaultPrettyPrinter()
         else
             this.mapper.writer()
         return writer.writeValueAsString(this.json)
     }
+
+    /**
+     * As json tree.
+     *
+     * @return Root JsonNode.
+     */
+    fun asTree(): JsonNode = this.json
 }
 
 /**
