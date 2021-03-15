@@ -7,6 +7,17 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.databind.util.RawValue
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+
+/**
+ * [ObjectMapper] with [KotlinModule] registered.
+ *
+ * @return ObjectMapper.
+ */
+@Suppress("FunctionName")
+fun KObjectMapper(): ObjectMapper = ObjectMapper().apply {
+    registerModule(KotlinModule())
+}
 
 /**
  * Json object builder dsl for Jackson.
@@ -15,8 +26,7 @@ import com.fasterxml.jackson.databind.util.RawValue
  * @receiver
  * @return JsonWriter
  */
-fun obj(scope: ObjectScope.() -> Unit): JsonDump {
-    val mapper = ObjectMapper()
+fun obj(mapper: ObjectMapper = KObjectMapper(), scope: ObjectScope.() -> Unit): JsonDump {
     val obj = mapper.createObjectNode()
     ObjectScopeImpl(mapper, obj).apply(scope)
     return JsonDump(mapper, obj)
@@ -29,8 +39,7 @@ fun obj(scope: ObjectScope.() -> Unit): JsonDump {
  * @receiver
  * @return JsonWriter
  */
-fun arr(scope: ArrayScope.() -> Unit): JsonDump {
-    val mapper = ObjectMapper()
+fun arr(mapper: ObjectMapper = KObjectMapper(), scope: ArrayScope.() -> Unit): JsonDump {
     val arr = mapper.createArrayNode()
     ArrayScopeImpl(mapper, arr).apply(scope)
     return JsonDump(mapper, arr)
@@ -84,7 +93,10 @@ private class ObjectScopeImpl(
 ) : ObjectScope, BaseScopeDsl(mapper) {
 
     override fun String.to(value: Any) {
-        obj.putRawValue(this, DslRawValue(value.tryConvert()))
+        when (value) {
+            is JsonNode -> obj.putPOJO(this, value)
+            else -> obj.putRawValue(this, DslRawValue(value.tryConvert()))
+        }
     }
 }
 
@@ -94,7 +106,10 @@ private class ArrayScopeImpl(
 ) : ArrayScope, BaseScopeDsl(mapper) {
 
     override fun Any.unaryPlus() {
-        arr.addRawValue(DslRawValue(this.tryConvert()))
+        when (this) {
+            is JsonNode -> arr.addPOJO(this)
+            else -> arr.addRawValue(DslRawValue(this.tryConvert()))
+        }
     }
 
     override fun add(number: Number) {
