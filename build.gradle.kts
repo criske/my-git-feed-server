@@ -31,15 +31,17 @@ dependencies {
     ktlint("com.pinterest:ktlint:0.40.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    val kotest = "4.2.5"
+    val kotest = "4.4.3"
     testImplementation("io.kotest:kotest-runner-junit5:${kotest}") // for kotest framework
     testImplementation("io.kotest:kotest-assertions-core:${kotest}")
     testImplementation("io.kotest:kotest-extensions-spring:${kotest}")
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
     testImplementation(group = "it.ozimov", name = "embedded-redis", version = "0.7.3")
     testImplementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
-
-
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0") {
+        exclude("com.squareup.okhttp3", "okhttp")
+    }
+    testImplementation("com.squareup.okhttp3:okhttp:4.9.0")
 }
 
 tasks.withType<KotlinCompile> {

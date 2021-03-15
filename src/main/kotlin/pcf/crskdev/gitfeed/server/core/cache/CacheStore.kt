@@ -22,7 +22,7 @@ interface CacheStore : Closeable {
      * @param key String
      * @return String
      */
-    operator fun get(key: String): String
+    operator fun get(key: String): String?
 
     /**
      * Checks if key exists.
