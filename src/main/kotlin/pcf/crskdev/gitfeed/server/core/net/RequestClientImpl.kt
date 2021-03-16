@@ -59,8 +59,14 @@ interface RequestClient {
         clazz: Class<T>,
         responseMapper: (JsonResponse) -> JsonNode = { it.body }
     ): T
-
-    fun authorized(accessToken: AccessToken): RequestClientImpl
+    
+    /**
+     * Authorized request client.
+     *
+     * @param accessToken AccessToken.
+     * @return RequestClient
+     */
+    fun authorized(accessToken: AccessToken): RequestClient
 }
 
 /**
@@ -137,7 +143,7 @@ class RequestClientImpl(
         }
     }
 
-    override fun authorized(accessToken: AccessToken): RequestClientImpl =
+    override fun authorized(accessToken: AccessToken): RequestClient =
         RequestClientImpl(this.cache, this.requestCommand, accessToken)
 
     @PublishedApi
@@ -180,7 +186,7 @@ class RequestClientImpl(
 }
 
 /**
- * Reified extension of [RequestClientImpl.request].
+ * Reified extension of [RequestClient.request].
  *
  * @param T type of response body class.
  * @param uri URI.
