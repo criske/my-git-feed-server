@@ -25,22 +25,30 @@
 
 package pcf.crskdev.gitfeed.server.api
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import com.fasterxml.jackson.databind.JsonNode
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.ControllerAdvice
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.ResponseStatus
 import pcf.crskdev.gitfeed.server.core.GitFeedException
-import pcf.crskdev.gitfeed.server.core.GitFeedException.Type
-import pcf.crskdev.gitfeed.server.core.Ping
 
-@RestController
-@RequestMapping("/api")
-class PingController {
+/**
+ * Git feed exception handler.
+ *
+ * @author Cristian Pela.
+ */
+@ControllerAdvice
+class GitFeedExceptionHandler {
 
-    @GetMapping("/ping")
-    fun ping(): Ping = Ping()
-
-    @GetMapping("/exception")
-    fun exception() {
-        throw GitFeedException(Type.VALIDATION, "Exception handling works")
-    }
+    /**
+     * Handle git feed exception
+     *
+     * @param exception GitFeedException.
+     * @return Response as JSON.
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    @ExceptionHandler(GitFeedException::class)
+    fun handleGitFeedException(exception: GitFeedException): JsonNode = exception.asJson()
 }

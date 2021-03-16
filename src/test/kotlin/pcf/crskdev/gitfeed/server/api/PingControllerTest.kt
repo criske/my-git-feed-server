@@ -26,6 +26,7 @@
 package pcf.crskdev.gitfeed.server.api
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.test.web.servlet.MockMvc
@@ -47,6 +48,18 @@ class PingControllerTest @Autowired constructor(mockMvc: MockMvc) : StringSpec()
                 .perform(get("/api/ping"))
                 .andDo(print()).andExpect(status().isOk)
                 .andExpect(content().string(json.asString()))
+        }
+
+        "git feed exceptions should be sent as json with status BAD_REQUEST" {
+            val json = obj {
+                "type" to "validation"
+                "error" to "Exception handling works"
+            }.asString()
+            mockMvc
+                .perform(get("/api/exception"))
+                .andDo(print())
+                .andExpect(status().isBadRequest)
+                .andExpect { result -> result.resolvedException?.message shouldBe json }
         }
     }
 }
