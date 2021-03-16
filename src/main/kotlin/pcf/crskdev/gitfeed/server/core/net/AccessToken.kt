@@ -25,6 +25,9 @@
 
 package pcf.crskdev.gitfeed.server.core.net
 
+import pcf.crskdev.gitfeed.server.core.GitFeedException
+import pcf.crskdev.gitfeed.server.core.util.base64Encode
+
 /**
  * Access token used by [RequestCommand] via [RequestClient]
  * to make authenticated requests.
@@ -33,12 +36,58 @@ package pcf.crskdev.gitfeed.server.core.net
  * @property value
  * @constructor Create empty Access token
  */
-data class AccessToken(val key: String, val value: String) {
+interface AccessToken {
+    val key: String
+    val value: String
+}
 
-    companion object {
-        /**
-         * U n a u t h o r i z e d token.
-         */
-        val UNAUTHORIZED = AccessToken("Authorization", "")
-    }
+/**
+ * Unauthorized token.
+ *
+ */
+object Unauthorized : AccessToken {
+
+    private val exception = GitFeedException(
+        type = GitFeedException.Type.VALIDATION,
+        "The access token for current provider is not set"
+    )
+
+    override val key: String
+        get() = throw exception
+    override val value: String
+        get() = throw exception
+}
+
+/**
+ * Bearer token authorization.
+ *
+ * @property token Token.
+ */
+class Bearer(private val token: String) : AccessToken {
+    override val key: String
+        get() = "Authorization"
+    override val value: String
+        get() = "Bearer $token"
+}
+
+/**
+ * Basic token authorization
+ *
+ * @property username Username
+ * @property password Password.
+ */
+class Basic(
+    private val username: String,
+    private val password: String
+) : AccessToken {
+
+    /**
+     * Encoded credentials.
+     */
+    private val encoded = base64Encode(username, password, separator = ":")
+
+    override val key: String
+        get() = "Authorization"
+    override val value: String
+        get() = "Basic $encoded"
 }

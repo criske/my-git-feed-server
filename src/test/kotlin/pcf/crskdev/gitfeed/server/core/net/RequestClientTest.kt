@@ -39,17 +39,24 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import org.springframework.test.context.ContextConfiguration
 import pcf.crskdev.gitfeed.server.core.GitFeedException
 import pcf.crskdev.gitfeed.server.core.cache.CacheStore
+import pcf.crskdev.gitfeed.server.core.util.base64Encode
 import pcf.crskdev.gitfeed.server.util.kotest.getBean
 import pcf.crskdev.gitfeed.server.util.spring.TestBeanFactories
 import java.net.URI
 
 @ContextConfiguration(classes = [TestBeanFactories::class])
-internal class RequestClientTest(private val client: RequestClient) : DescribeSpec() {
+internal class RequestClientTest(initial: RequestClient) : DescribeSpec() {
 
     init {
+
+        val uri = URI.create("/")
+        val etagKey = base64Encode("etag", uri.toString(), padded = false)
+        val resKey = base64Encode("res", uri.toString(), padded = false)
+        val client = initial.authorized(Bearer("123"))
+
         describe("client injection tests") {
             it("should be injected") {
-                client.shouldBeInstanceOf<RequestClient>()
+                initial.shouldBeInstanceOf<RequestClient>()
             }
         }
         describe("network tests") {
@@ -57,11 +64,16 @@ internal class RequestClientTest(private val client: RequestClient) : DescribeSp
             beforeTest {
                 reset(requestCommand)
             }
+            it("should throw if access token header is not set") {
+                shouldThrow<GitFeedException> {
+                    initial.request<Message>(uri)
+                }
+            }
             it("should get OK response") {
                 whenever(requestCommand.request(any(), any())).thenReturn(
                     Response(200, """{"message":"hello"}""", emptyMap())
                 )
-                val message = client.request<Message>(URI.create("/"))
+                val message = client.request<Message>(uri)
                 message shouldBe Message("hello")
             }
             it("should throw if response is not OK") {
@@ -69,7 +81,7 @@ internal class RequestClientTest(private val client: RequestClient) : DescribeSp
                     Response(401, "", emptyMap())
                 )
                 shouldThrow<GitFeedException> {
-                    client.request<Message>(URI.create("/"))
+                    client.request<Message>(uri)
                 }
             }
         }
@@ -91,47 +103,47 @@ internal class RequestClientTest(private val client: RequestClient) : DescribeSp
                         headers { "ETag" to etag }
                     )
                 )
-                client.request<Message>(URI.create("/"))
-                verify(cache, times(1))["etag$/"] = "123"
-                verify(cache, times(1))["res$/"] = """{"message":"hello"}"""
+                client.request<Message>(uri)
+                verify(cache, times(1))[etagKey] = "123"
+                verify(cache, times(1))[resKey] = """{"message":"hello"}"""
             }
 
             it("should get from cache") {
                 whenever(requestCommand.request(any(), any())).thenReturn(
                     Response(304, null, emptyMap())
                 )
-                whenever(cache["etag$/"]).thenReturn("123")
-                whenever(cache["res$/"]).thenReturn("""{"message":"hello"}""")
-                val message = client.request<Message>(URI.create("/"))
+                whenever(cache[etagKey]).thenReturn("123")
+                whenever(cache[resKey]).thenReturn("""{"message":"hello"}""")
+                val message = client.request<Message>(uri)
                 message shouldBe Message("hello")
                 verify(requestCommand, times(1)).request(
-                    URI.create("/"),
+                    uri,
                     headers {
                         "Content-Type" to "application/json"
                         "If-None-Match" to "123"
-                        "Authorization" to ""
+                        "Authorization" to "Bearer 123"
                     }
                 )
             }
 
             it("should get new request if cache is missing") {
-                whenever(cache["etag$/"]).thenReturn("123")
+                whenever(cache[etagKey]).thenReturn("123")
                 whenever(
                     requestCommand.request(
-                        URI.create("/"),
+                        uri,
                         headers {
                             "Content-Type" to "application/json"
                             "If-None-Match" to "123"
-                            "Authorization" to ""
+                            "Authorization" to "Bearer 123"
                         }
                     )
                 ).thenReturn(Response(304, null, emptyMap()))
                 whenever(
                     requestCommand.request(
-                        URI.create("/"),
+                        uri,
                         headers {
                             "Content-Type" to "application/json"
-                            "Authorization" to ""
+                            "Authorization" to "Bearer 123"
                         }
                     )
                 ).thenReturn(
@@ -142,28 +154,28 @@ internal class RequestClientTest(private val client: RequestClient) : DescribeSp
                     )
                 )
 
-                val message = client.request<Message>(URI.create("/"))
+                val message = client.request<Message>(uri)
                 message shouldBe Message("hello")
             }
 
             it("should throw if response after missing cache is not OK") {
-                whenever(cache["etag$/"]).thenReturn("123")
+                whenever(cache[etagKey]).thenReturn("123")
                 whenever(
                     requestCommand.request(
-                        URI.create("/"),
+                        uri,
                         headers {
                             "Content-Type" to "application/json"
                             "If-None-Match" to "123"
-                            "Authorization" to ""
+                            "Authorization" to "Bearer 123"
                         }
                     )
                 ).thenReturn(Response(304, null, emptyMap()))
                 whenever(
                     requestCommand.request(
-                        URI.create("/"),
+                        uri,
                         headers {
                             "Content-Type" to "application/json"
-                            "Authorization" to ""
+                            "Authorization" to "Bearer 123"
                         }
                     )
                 ).thenReturn(
@@ -171,7 +183,7 @@ internal class RequestClientTest(private val client: RequestClient) : DescribeSp
                 )
 
                 shouldThrow<GitFeedException> {
-                    client.request<Message>(URI.create("/"))
+                    client.request<Message>(uri)
                 }
             }
         }

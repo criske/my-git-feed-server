@@ -30,6 +30,7 @@ import pcf.crskdev.gitfeed.server.core.GitFeedException
 import pcf.crskdev.gitfeed.server.core.GitFeedException.Type
 import pcf.crskdev.gitfeed.server.core.cache.CacheStore
 import pcf.crskdev.gitfeed.server.core.util.KObjectMapper
+import pcf.crskdev.gitfeed.server.core.util.base64Encode
 import java.net.HttpURLConnection
 import java.net.URI
 
@@ -43,16 +44,15 @@ import java.net.URI
  * @author Cristian Pela
  */
 class RequestClient(
-    @PublishedApi
-    internal val cache: CacheStore,
-    @PublishedApi
-    internal val requestCommand: RequestCommand,
-    @PublishedApi
-    internal val accessToken: AccessToken = AccessToken.UNAUTHORIZED
+    private val cache: CacheStore,
+    private val requestCommand: RequestCommand,
+    private val accessToken: AccessToken = Unauthorized
 ) {
 
-    @PublishedApi
-    internal val objectMapper = KObjectMapper()
+    /**
+     * Object mapper.
+     */
+    private val objectMapper = KObjectMapper()
 
     /**
      * Make a request and also deals with caching.
@@ -61,14 +61,16 @@ class RequestClient(
      * @param uri URI.
      * @param extraHeaders Although RequestClient takes of the all the required headers,
      * one might add extra request headers.
+     * @param clazz Class of T needed to construct the object.
      * @param responseMapper
      * @receiver
      * @return T
      */
-    inline fun <reified T> request(
+    fun <T> request(
         uri: URI,
         extraHeaders: Headers = emptyMap(),
-        noinline responseMapper: (JsonResponse) -> JsonNode = { it.body }
+        clazz: Class<T>,
+        responseMapper: (JsonResponse) -> JsonNode = { it.body }
     ): T {
 
         val baseHeaders = headers(extraHeaders) {
@@ -76,7 +78,7 @@ class RequestClient(
             accessToken.key to accessToken.value
         }
 
-        val headersWithCache = this.cache[etagKey(uri)]?.let { etag ->
+        val headersWithCache = this.cache[this.etagKey(uri)]?.let { etag ->
             headers(baseHeaders) { "If-None-Match" to etag }
         } ?: baseHeaders
 
@@ -84,7 +86,7 @@ class RequestClient(
 
         return when (response.code) {
             HttpURLConnection.HTTP_OK -> {
-                this.processResponse(uri, response, T::class.java, responseMapper)
+                this.processResponse(uri, response, clazz, responseMapper)
             }
             HttpURLConnection.HTTP_NOT_MODIFIED -> {
                 val cachedResponse = this.cache[responseKey(uri)]
@@ -94,12 +96,12 @@ class RequestClient(
                         baseHeaders
                     )
                     if (newResponse.code == HttpURLConnection.HTTP_OK) {
-                        this.processResponse(uri, newResponse, T::class.java, responseMapper)
+                        this.processResponse(uri, newResponse, clazz, responseMapper)
                     } else {
                         throw GitFeedException(Type.HTTP, newResponse.body)
                     }
                 } else {
-                    this.objectMapper.readValue(cachedResponse, T::class.java) as T
+                    this.objectMapper.readValue(cachedResponse, clazz)
                 }
             }
             else -> throw GitFeedException(Type.HTTP, response.body)
@@ -135,8 +137,8 @@ class RequestClient(
      * @param uri URI.
      * @return String.
      */
-    @PublishedApi
-    internal fun etagKey(uri: URI): String = "etag\$$uri"
+    private fun etagKey(uri: URI): String =
+        base64Encode("etag", uri.toString(), padded = false)
 
     /**
      * Response key cache.
@@ -144,6 +146,23 @@ class RequestClient(
      * @param uri URI
      * @return String.
      */
-    @PublishedApi
-    internal fun responseKey(uri: URI): String = "res\$$uri"
+    private fun responseKey(uri: URI): String =
+        base64Encode("res", uri.toString(), padded = false)
 }
+
+/**
+ * Reified extension of [RequestClient.request].
+ *
+ * @param T type of response body class.
+ * @param uri URI.
+ * @param extraHeaders Although RequestClient takes of the all the required headers,
+ * one might add extra request headers.
+ * @param responseMapper
+ * @receiver
+ * @return T
+ */
+inline fun <reified T> RequestClient.request(
+    uri: URI,
+    extraHeaders: Headers = emptyMap(),
+    noinline responseMapper: (JsonResponse) -> JsonNode = { it.body }
+): T = this.request(uri, extraHeaders, T::class.java, responseMapper)
