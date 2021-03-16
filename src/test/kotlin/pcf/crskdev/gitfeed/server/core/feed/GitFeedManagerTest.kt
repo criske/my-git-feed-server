@@ -23,43 +23,25 @@
  *
  */
 
-package pcf.crskdev.gitfeed.server.util.spring
+package pcf.crskdev.gitfeed.server.core.feed
 
 import com.nhaarman.mockitokotlin2.mock
-import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Scope
-import pcf.crskdev.gitfeed.server.core.cache.CacheStore
-import pcf.crskdev.gitfeed.server.core.net.RequestClient
-import pcf.crskdev.gitfeed.server.core.net.RequestClientImpl
-import pcf.crskdev.gitfeed.server.core.net.RequestCommand
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.types.shouldBeSameInstanceAs
 
-@TestConfiguration
-class TestBeanFactories {
+internal class GitFeedManagerTest : StringSpec({
 
-    /**
-     * Cache store bean.
-     *
-     * @return CacheStore.
-     */
-    @Bean
-    fun cacheStore(): CacheStore = mock()
+    "should select an existent git feed" {
+        val github = mock<GitFeed>()
+        val manager = GitFeedManager(
+            mock(),
+            GitFeedFactory(Provider.GITHUB to { github })
+        )
+        manager.of(" gitHub  ") shouldBeSameInstanceAs github
+    }
 
-    /**
-     * RequestCommand bean.
-     *
-     * @return RequestCommand.
-     */
-    @Bean
-    fun requestCommand(): RequestCommand = mock()
-
-    /**
-     * Request client.
-     *
-     * @return RequestClient.
-     */
-    @Bean
-    @Scope("prototype")
-    fun requestClient(cacheStore: CacheStore, requestCommand: RequestCommand): RequestClient =
-        RequestClientImpl(cacheStore, requestCommand)
-}
+    "should select unknown feed if git feed is not found" {
+        val manager = GitFeedManager(mock(), GitFeedFactory())
+        manager.of("foo") shouldBeSameInstanceAs GitFeed.Unknown
+    }
+})

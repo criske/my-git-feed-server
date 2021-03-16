@@ -28,7 +28,9 @@ package pcf.crskdev.gitfeed.server
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import pcf.crskdev.gitfeed.server.core.cache.CacheStore
+import pcf.crskdev.gitfeed.server.core.feed.GitFeedManager
 import pcf.crskdev.gitfeed.server.core.net.RequestClient
+import pcf.crskdev.gitfeed.server.core.net.RequestClientImpl
 import pcf.crskdev.gitfeed.server.core.net.RequestCommand
 import pcf.crskdev.gitfeed.server.impl.core.cache.RedisClient
 import pcf.crskdev.gitfeed.server.impl.core.net.RestTemplateCommand
@@ -64,5 +66,14 @@ class BeanFactories {
      */
     @Bean
     fun requestClient(cache: CacheStore, requestCommand: RequestCommand): RequestClient =
-        RequestClient(cache, requestCommand)
+        RequestClientImpl(cache, requestCommand)
+
+    /**
+     * Git feed manager.
+     *
+     * @param client RequestClient.
+     * @return GitFeedManager.
+     */
+    @Bean
+    fun gitFeedManager(client: RequestClient): GitFeedManager = GitFeedManager(client)
 }

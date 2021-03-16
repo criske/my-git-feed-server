@@ -37,22 +37,9 @@ import java.net.URI
 /**
  * Request client.
  *
- * @property cache Cache Store.
- * @property requestCommand Request Command.
- * @property accessToken Access Token.
- *
  * @author Cristian Pela
  */
-class RequestClient(
-    private val cache: CacheStore,
-    private val requestCommand: RequestCommand,
-    private val accessToken: AccessToken = Unauthorized
-) {
-
-    /**
-     * Object mapper.
-     */
-    private val objectMapper = KObjectMapper()
+interface RequestClient {
 
     /**
      * Make a request and also deals with caching.
@@ -71,6 +58,54 @@ class RequestClient(
         extraHeaders: Headers = emptyMap(),
         clazz: Class<T>,
         responseMapper: (JsonResponse) -> JsonNode = { it.body }
+    ): T
+
+    /**
+     * Authorized request client.
+     *
+     * @param accessToken AccessToken.
+     * @return RequestClient
+     */
+    fun authorized(accessToken: AccessToken): RequestClient
+}
+
+/**
+ * Request client.
+ *
+ * @property cache Cache Store.
+ * @property requestCommand Request Command.
+ * @property accessToken Access Token.
+ *
+ * @author Cristian Pela
+ */
+class RequestClientImpl(
+    private val cache: CacheStore,
+    private val requestCommand: RequestCommand,
+    private val accessToken: AccessToken = Unauthorized
+) : RequestClient {
+
+    /**
+     * Object mapper.
+     */
+    private val objectMapper = KObjectMapper()
+
+    /**
+     * Make a request and also deals with caching.
+     *
+     * @param T type of response body class.
+     * @param uri URI.
+     * @param extraHeaders Although RequestClient takes of the all the required headers,
+     * one might add extra request headers.
+     * @param clazz Class of T needed to construct the object.
+     * @param responseMapper
+     * @receiver
+     * @return T
+     */
+    override fun <T> request(
+        uri: URI,
+        extraHeaders: Headers,
+        clazz: Class<T>,
+        responseMapper: (JsonResponse) -> JsonNode
     ): T {
 
         val baseHeaders = headers(extraHeaders) {
@@ -108,8 +143,8 @@ class RequestClient(
         }
     }
 
-    fun authorized(accessToken: AccessToken): RequestClient =
-        RequestClient(this.cache, this.requestCommand, accessToken)
+    override fun authorized(accessToken: AccessToken): RequestClient =
+        RequestClientImpl(this.cache, this.requestCommand, accessToken)
 
     @PublishedApi
     internal fun <T> processResponse(
