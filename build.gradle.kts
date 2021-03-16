@@ -57,6 +57,7 @@ tasks.withType<Test> {
 
 tasks.test {
     environment(mapOf(
+        "gh_token" to "gh_fake_123",
         "redis_host" to "localhost",
         "redis_port" to "6379"
     ))

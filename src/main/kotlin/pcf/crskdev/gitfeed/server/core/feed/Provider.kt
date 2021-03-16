@@ -23,43 +23,38 @@
  *
  */
 
-package pcf.crskdev.gitfeed.server.util.spring
+package pcf.crskdev.gitfeed.server.core.feed
 
-import com.nhaarman.mockitokotlin2.mock
-import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Scope
-import pcf.crskdev.gitfeed.server.core.cache.CacheStore
-import pcf.crskdev.gitfeed.server.core.net.RequestClient
-import pcf.crskdev.gitfeed.server.core.net.RequestClientImpl
-import pcf.crskdev.gitfeed.server.core.net.RequestCommand
+import pcf.crskdev.gitfeed.server.core.net.AccessToken
+import pcf.crskdev.gitfeed.server.core.net.Bearer
+import pcf.crskdev.gitfeed.server.core.net.Unauthorized
 
-@TestConfiguration
-class TestBeanFactories {
+/**
+ * Git platform Provider.
+ *
+ * @param accessToken Access token.
+ * @author Cristian Pela
+ */
+enum class Provider(val accessToken: AccessToken) {
 
-    /**
-     * Cache store bean.
-     *
-     * @return CacheStore.
-     */
-    @Bean
-    fun cacheStore(): CacheStore = mock()
+    GITHUB(Bearer(System.getenv("gh_token"))),
 
-    /**
-     * RequestCommand bean.
-     *
-     * @return RequestCommand.
-     */
-    @Bean
-    fun requestCommand(): RequestCommand = mock()
+    UNKNOWN(Unauthorized);
 
-    /**
-     * Request client.
-     *
-     * @return RequestClient.
-     */
-    @Bean
-    @Scope("prototype")
-    fun requestClient(cacheStore: CacheStore, requestCommand: RequestCommand): RequestClient =
-        RequestClientImpl(cacheStore, requestCommand)
+    companion object {
+        /**
+         * Safe version of enum valueOf() that returns default if value by name is
+         * not found.
+         *
+         * @param name Value name
+         * @param default Default value.
+         * @return Found value or default.
+         */
+        fun valueOfSafe(name: String, default: Provider = UNKNOWN): Provider =
+            try {
+                Provider.valueOf(name.trim().toUpperCase())
+            } catch (ex: IllegalArgumentException) {
+                default
+            }
+    }
 }

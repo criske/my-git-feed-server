@@ -23,43 +23,30 @@
  *
  */
 
-package pcf.crskdev.gitfeed.server.util.spring
+package pcf.crskdev.gitfeed.server.core.feed
 
-import com.nhaarman.mockitokotlin2.mock
-import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Scope
-import pcf.crskdev.gitfeed.server.core.cache.CacheStore
-import pcf.crskdev.gitfeed.server.core.net.RequestClient
-import pcf.crskdev.gitfeed.server.core.net.RequestClientImpl
-import pcf.crskdev.gitfeed.server.core.net.RequestCommand
+import pcf.crskdev.gitfeed.server.core.GitFeedException
 
-@TestConfiguration
-class TestBeanFactories {
+/**
+ * Git feed interface for all supported git platform providers.
+ *
+ * @author Cristian Pela
+ */
+interface GitFeed {
 
     /**
-     * Cache store bean.
+     * Unknown GitFeed.
      *
-     * @return CacheStore.
+     * @author Cristian Pela
      */
-    @Bean
-    fun cacheStore(): CacheStore = mock()
+    object Unknown : GitFeed {
 
-    /**
-     * RequestCommand bean.
-     *
-     * @return RequestCommand.
-     */
-    @Bean
-    fun requestCommand(): RequestCommand = mock()
-
-    /**
-     * Request client.
-     *
-     * @return RequestClient.
-     */
-    @Bean
-    @Scope("prototype")
-    fun requestClient(cacheStore: CacheStore, requestCommand: RequestCommand): RequestClient =
-        RequestClientImpl(cacheStore, requestCommand)
+        /**
+         * Exception thrown by each method of this [GitFeed] implementation.
+         */
+        private val exception = GitFeedException(
+            GitFeedException.Type.VALIDATION,
+            "Unknown git feed"
+        )
+    }
 }

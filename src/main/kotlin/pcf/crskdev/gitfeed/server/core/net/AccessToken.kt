@@ -29,7 +29,7 @@ import pcf.crskdev.gitfeed.server.core.GitFeedException
 import pcf.crskdev.gitfeed.server.core.util.base64Encode
 
 /**
- * Access token used by [RequestCommand] via [RequestClient]
+ * Access token used by [RequestCommand] via [RequestClientImpl]
  * to make authenticated requests.
  *
  * @property key
