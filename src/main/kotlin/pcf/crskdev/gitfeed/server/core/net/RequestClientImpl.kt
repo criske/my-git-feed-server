@@ -59,7 +59,7 @@ interface RequestClient {
         clazz: Class<T>,
         responseMapper: (JsonResponse) -> JsonNode = { it.body }
     ): T
-    
+
     /**
      * Authorized request client.
      *
