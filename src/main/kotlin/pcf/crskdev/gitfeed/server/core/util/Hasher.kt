@@ -48,7 +48,7 @@ fun base64Encode(
             Base64.getUrlEncoder()
         else
             Base64.getEncoder()
-        ).let { if (padded) it.withoutPadding() else it }
+        ).let { if (!padded) it.withoutPadding() else it }
     return encoder.encodeToString(bytes)
 }
 
