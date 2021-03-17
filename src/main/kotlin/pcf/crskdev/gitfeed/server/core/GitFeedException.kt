@@ -27,6 +27,7 @@ package pcf.crskdev.gitfeed.server.core
 
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.TextNode
 import pcf.crskdev.gitfeed.server.core.util.JsonDump
 import pcf.crskdev.gitfeed.server.core.util.KObjectMapper
 import pcf.crskdev.gitfeed.server.core.util.obj
@@ -36,20 +37,45 @@ import java.io.IOException
  * Git feed exception.
  *
  * @property type Error type.
- * @property customMessage Message.
+ * @property json JSON message.
  * @author Cristian Pela.
  */
 class GitFeedException(
     private val type: Type,
-    private val customMessage: String?
+    private val json: JsonNode? = null
 ) : RuntimeException() {
 
     companion object {
         private val MAPPER = KObjectMapper()
+        val UNKNOWN = fromString(Type.UNKNOWN, "Unknown error")
+
+        /**
+         * From string.
+         *
+         * @param type Type.
+         * @param message Message.
+         * @param isJsonStr Flags that this message is in JSON format
+         */
+        fun fromString(
+            type: Type,
+            message: String? = "Unknown error",
+            isJsonStr: Boolean = false
+        ): GitFeedException {
+            val json = if (isJsonStr && message != null) {
+                try {
+                    MAPPER.readTree(message)
+                } catch (ex: JsonParseException) {
+                    TextNode(message)
+                }
+            } else {
+                TextNode(message ?: "Unknown error")
+            }
+            return GitFeedException(type, json)
+        }
     }
 
     enum class Type {
-        IO, HTTP, VALIDATION
+        IO, HTTP, VALIDATION, UNKNOWN
     }
 
     override val message: String
@@ -69,19 +95,11 @@ class GitFeedException(
      */
     private fun errorDump(): JsonDump = obj(MAPPER) {
         "type" to type.name.toLowerCase()
-        "error" to (
-            customMessage?.let {
-                try {
-                    MAPPER.readTree(customMessage)
-                } catch (ex: JsonParseException) {
-                    it // if can't parse, fallback to simple string
-                }
-            } ?: "unknown"
-            )
+        "error" to (json ?: "Unknown error")
     }
 }
 
-fun IOException.toGitFeedException() = GitFeedException(
+fun IOException.toGitFeedException() = GitFeedException.fromString(
     GitFeedException.Type.IO,
-    this.message
+    this.message ?: "Unknown IO error"
 )

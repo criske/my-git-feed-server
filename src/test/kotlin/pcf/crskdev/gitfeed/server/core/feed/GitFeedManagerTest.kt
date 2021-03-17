@@ -27,7 +27,7 @@ package pcf.crskdev.gitfeed.server.core.feed
 
 import com.nhaarman.mockitokotlin2.mock
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.types.shouldBeSameInstanceAs
+import io.kotest.matchers.shouldBe
 
 internal class GitFeedManagerTest : StringSpec({
 
@@ -37,11 +37,11 @@ internal class GitFeedManagerTest : StringSpec({
             mock(),
             GitFeedFactory(Provider.GITHUB to { github })
         )
-        manager.of(" gitHub  ") shouldBeSameInstanceAs github
+        manager.of(" gitHub  ") shouldBe github
     }
 
     "should select unknown feed if git feed is not found" {
         val manager = GitFeedManager(mock(), GitFeedFactory())
-        manager.of("foo") shouldBeSameInstanceAs GitFeed.Unknown
+        manager.of("foo") shouldBe GitFeed.Unknown
     }
 })

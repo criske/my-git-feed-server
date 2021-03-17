@@ -26,6 +26,7 @@
 package pcf.crskdev.gitfeed.server.core.feed
 
 import pcf.crskdev.gitfeed.server.core.GitFeedException
+import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 
 /**
  * Git feed interface for all supported git platform providers.
@@ -33,6 +34,14 @@ import pcf.crskdev.gitfeed.server.core.GitFeedException
  * @author Cristian Pela
  */
 interface GitFeed {
+
+    /**
+     * Latest commits.
+     *
+     * @param page Of page.
+     * @return Commits.
+     */
+    fun commits(page: Int? = null): Commits
 
     /**
      * Unknown GitFeed.
@@ -44,9 +53,13 @@ interface GitFeed {
         /**
          * Exception thrown by each method of this [GitFeed] implementation.
          */
-        private val exception = GitFeedException(
+        private val exception = GitFeedException.fromString(
             GitFeedException.Type.VALIDATION,
-            "Unknown git feed"
+            "Unknown git feed platform provider"
         )
+
+        override fun commits(page: Int?): Commits {
+            throw exception
+        }
     }
 }

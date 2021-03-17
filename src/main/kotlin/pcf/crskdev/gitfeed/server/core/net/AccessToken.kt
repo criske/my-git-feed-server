@@ -47,7 +47,7 @@ interface AccessToken {
  */
 object Unauthorized : AccessToken {
 
-    private val exception = GitFeedException(
+    private val exception = GitFeedException.fromString(
         type = GitFeedException.Type.VALIDATION,
         "The access token for current provider is not set"
     )

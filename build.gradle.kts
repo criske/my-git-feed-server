@@ -16,6 +16,7 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
+    maven(url = "https://jitpack.io")
 }
 
 dependencies {
@@ -24,7 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation(group = "redis.clients", name = "jedis", version = "3.5.1")
-
+    implementation("com.github.criske:inval-id:1.0")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
