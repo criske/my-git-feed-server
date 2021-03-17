@@ -59,7 +59,9 @@ class GitFeedManager(
      */
     fun of(name: String): GitFeed {
         val provider = Provider.valueOfSafe(name)
-        return factory[provider]?.invoke(provider.accessToken) ?: GitFeed.Unknown
+        val feed = factory[provider]?.invoke(provider.accessToken)
+            ?: GitFeed.Unknown
+        return ValidGitFeed(feed)
     }
 }
 

@@ -23,24 +23,20 @@
  *
  */
 
-package pcf.crskdev.gitfeed.server.api
+package pcf.crskdev.gitfeed.server.core.feed.models
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import pcf.crskdev.gitfeed.server.core.GitFeedException
-import pcf.crskdev.gitfeed.server.core.GitFeedException.Type
-import pcf.crskdev.gitfeed.server.core.Ping
-
-@RestController
-@RequestMapping("/api")
-class PingController {
-
-    @GetMapping("/ping")
-    fun ping(): Ping = Ping()
-
-    @GetMapping("/exception")
-    fun exception() {
-        throw GitFeedException.fromString(Type.VALIDATION, "Exception handling works")
-    }
-}
+/**
+ * Paging.
+ *
+ * @property first First.
+ * @property prev Prev.
+ * @property next Next.
+ * @property last Last.
+ * @author Cristian Pela.
+ */
+data class Paging(
+    val first: Int? = null,
+    val prev: Int? = null,
+    val next: Int? = null,
+    val last: Int? = null
+)

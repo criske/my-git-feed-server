@@ -27,27 +27,44 @@ package pcf.crskdev.gitfeed.server.core
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import pcf.crskdev.gitfeed.server.core.GitFeedException.Type
+import pcf.crskdev.gitfeed.server.core.util.obj
 
 internal class GitFeedExceptionTest : StringSpec({
 
     "should use simple message as error content" {
-        val err = GitFeedException(GitFeedException.Type.VALIDATION, "field required")
+        val err = GitFeedException.fromString(Type.VALIDATION, "field required")
         err.message shouldBe """{"type":"validation","error":"field required"}"""
     }
 
     "should use simple message as error content array" {
-        val err = GitFeedException(GitFeedException.Type.IO, """["error1",{"error2":{"msg":"whoops"}}]""")
+        val err = GitFeedException.fromString(Type.IO, """["error1",{"error2":{"msg":"whoops"}}]""", true)
         err.message shouldBe """{"type":"io","error":["error1",{"error2":{"msg":"whoops"}}]}"""
     }
 
     "should try to convert input message to json" {
-        val err = GitFeedException(
-            GitFeedException.Type.HTTP,
+        val err = GitFeedException.fromString(
+            Type.HTTP,
             "{\n" +
                 "\"message\": \"Requires authentication\"," +
                 "\"documentation_url\": \"https://docs.github.com/rest/reference/users#get-the-authenticated-user\"" +
-                "}"
+                "}",
+            true
         )
         err.message shouldBe """{"type":"http","error":{"message":"Requires authentication","documentation_url":"https://docs.github.com/rest/reference/users#get-the-authenticated-user"}}"""
+    }
+
+    "should use json node as message" {
+        val message = obj {
+            "field" to "invalid field"
+        }.asTree()
+        val err = GitFeedException(Type.VALIDATION, message)
+        err.asJson() shouldBe obj {
+            "type" to "validation"
+            "error" to obj {
+                "field" to "invalid field"
+            }
+        }.asTree()
+        err.message shouldBe """{"type":"validation","error":{"field":"invalid field"}}"""
     }
 })

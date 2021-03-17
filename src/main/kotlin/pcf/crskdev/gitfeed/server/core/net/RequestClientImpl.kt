@@ -133,13 +133,13 @@ class RequestClientImpl(
                     if (newResponse.code == HttpURLConnection.HTTP_OK) {
                         this.processResponse(uri, newResponse, clazz, responseMapper)
                     } else {
-                        throw GitFeedException(Type.HTTP, newResponse.body)
+                        throw GitFeedException.fromString(Type.HTTP, newResponse.body, true)
                     }
                 } else {
                     this.objectMapper.readValue(cachedResponse, clazz)
                 }
             }
-            else -> throw GitFeedException(Type.HTTP, response.body)
+            else -> throw GitFeedException.fromString(Type.HTTP, response.body, true)
         }
     }
 

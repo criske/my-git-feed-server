@@ -26,6 +26,7 @@
 package pcf.crskdev.gitfeed.server.core.feed.github
 
 import pcf.crskdev.gitfeed.server.core.feed.GitFeed
+import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 import pcf.crskdev.gitfeed.server.core.net.RequestClient
 
 /**
@@ -34,4 +35,9 @@ import pcf.crskdev.gitfeed.server.core.net.RequestClient
  * @property client Authenticated client
  * @author Cristian Pela
  */
-class GithubGitFeed(private val client: RequestClient) : GitFeed
+class GithubGitFeed(private val client: RequestClient) : GitFeed {
+
+    override fun commits(page: Int?): Commits {
+        TODO("Not yet implemented")
+    }
+}
