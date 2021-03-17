@@ -27,6 +27,7 @@ package pcf.crskdev.gitfeed.server
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import pcf.crskdev.gitfeed.server.core.cache.CacheStore
 import pcf.crskdev.gitfeed.server.core.feed.GitFeedManager
 import pcf.crskdev.gitfeed.server.core.net.RequestClient
@@ -48,7 +49,26 @@ class BeanFactories {
      * @return CacheStore.
      */
     @Bean
+    @Profile("production")
     fun cacheStore(): CacheStore = RedisClient()
+
+    /**
+     * Cache store bean.
+     *
+     * @return CacheStore.
+     */
+    @Bean
+    @Profile("dev")
+    fun cacheStoreDev(): CacheStore = object : CacheStore {
+
+        override fun set(key: String, value: String) {}
+
+        override fun get(key: String): String? = null
+
+        override fun exists(key: String): Boolean = false
+
+        override fun close() {}
+    }
 
     /**
      * Request command.
