@@ -25,23 +25,29 @@
 
 package pcf.crskdev.gitfeed.server.core.feed
 
-import com.nhaarman.mockitokotlin2.mock
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.shouldBe
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.NullNode
+import pcf.crskdev.gitfeed.server.core.net.Headers
+import pcf.crskdev.gitfeed.server.core.net.first
+import pcf.crskdev.gitfeed.server.core.util.obj
 
-internal class GitFeedManagerTest : StringSpec({
+private val LINKS_REGEX = """^<.+page=(\d+)>;\srel="(.+)"$""".toRegex()
 
-    "should select an existent git feed" {
-        val github = mock<GitFeed>()
-        val manager = GitFeedManagerImpl(
-            mock(),
-            GitFeedFactory(Provider.GITHUB to { github })
-        )
-        manager.of(" gitHub  ") shouldBe github
+internal fun Headers.extractPaging(): JsonNode = obj {
+    this@extractPaging.first("Link")?.run {
+        split(",").forEach {
+            LINKS_REGEX.find(it.trim())?.destructured?.let { groups ->
+                val (page, rel) = groups
+                rel to page.toInt()
+            }
+        }
     }
-
-    "should select unknown feed if git feed is not found" {
-        val manager = GitFeedManagerImpl(mock(), GitFeedFactory())
-        manager.of("foo") shouldBe GitFeed.Unknown
-    }
-})
+}.asTree().let {
+    val none = NullNode.instance
+    obj {
+        "first" to (it.get("first") ?: none)
+        "prev" to (it.get("prev") ?: none)
+        "next" to (it.get("next") ?: none)
+        "last" to (it.get("last") ?: none)
+    }.asTree()
+}

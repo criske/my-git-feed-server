@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.JsonSerializable
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.databind.util.RawValue
@@ -44,6 +45,8 @@ fun KObjectMapper(): ObjectMapper = ObjectMapper().apply {
     registerModule(KotlinModule())
 }
 
+private val K_OBJECT_MAPPER = KObjectMapper()
+
 /**
  * Json object builder dsl for Jackson.
  *
@@ -51,7 +54,7 @@ fun KObjectMapper(): ObjectMapper = ObjectMapper().apply {
  * @receiver
  * @return JsonWriter
  */
-fun obj(mapper: ObjectMapper = KObjectMapper(), scope: ObjectScope.() -> Unit): JsonDump {
+fun obj(mapper: ObjectMapper = K_OBJECT_MAPPER, scope: ObjectScope.() -> Unit): JsonDump {
     val obj = mapper.createObjectNode()
     ObjectScopeImpl(mapper, obj).apply(scope)
     return JsonDump(mapper, obj)
@@ -64,7 +67,7 @@ fun obj(mapper: ObjectMapper = KObjectMapper(), scope: ObjectScope.() -> Unit): 
  * @receiver
  * @return JsonWriter
  */
-fun arr(mapper: ObjectMapper = KObjectMapper(), scope: ArrayScope.() -> Unit): JsonDump {
+fun arr(mapper: ObjectMapper = K_OBJECT_MAPPER, scope: ArrayScope.() -> Unit): JsonDump {
     val arr = mapper.createArrayNode()
     ArrayScopeImpl(mapper, arr).apply(scope)
     return JsonDump(mapper, arr)
@@ -120,6 +123,7 @@ private class ObjectScopeImpl(
     override fun String.to(value: Any) {
         when (value) {
             is JsonNode -> obj.putPOJO(this, value)
+            is NullNode -> obj.putNull(this)
             else -> obj.putRawValue(this, DslRawValue(value.tryConvert()))
         }
     }

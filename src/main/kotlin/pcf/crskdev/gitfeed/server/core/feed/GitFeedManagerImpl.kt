@@ -33,14 +33,29 @@ import java.util.EnumMap
 /**
  * Git feed manager.
  *
+ * @author Cristian Pela
+ */
+interface GitFeedManager {
+    /**
+     * Get a GitFeed implementation based on provider name.
+     *
+     * @param name Provider name.
+     * @return GitFeed or [GitFeed.Unknown]
+     */
+    fun of(name: String): GitFeed
+}
+
+/**
+ * Git feed manager implementation.
+ *
  * @property client RequestClient
  * @property factory GitFeedFactory
  * @author Cristian Pela
  */
-class GitFeedManager(
+class GitFeedManagerImpl(
     private val client: RequestClient,
     private val factory: GitFeedFactory
-) {
+) : GitFeedManager {
 
     constructor(client: RequestClient) : this(
         client,
@@ -51,13 +66,7 @@ class GitFeedManager(
         )
     )
 
-    /**
-     * Get a GitFeed implementation based on provider name.
-     *
-     * @param name Provider name.
-     * @return GitFeed or [GitFeed.Unknown]
-     */
-    fun of(name: String): GitFeed {
+    override fun of(name: String): GitFeed {
         val provider = Provider.valueOfSafe(name)
         val feed = factory[provider]?.invoke(provider.accessToken)
             ?: GitFeed.Unknown
