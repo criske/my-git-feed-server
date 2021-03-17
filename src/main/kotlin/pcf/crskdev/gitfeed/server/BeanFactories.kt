@@ -30,6 +30,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 import pcf.crskdev.gitfeed.server.core.cache.CacheStore
 import pcf.crskdev.gitfeed.server.core.feed.GitFeedManager
+import pcf.crskdev.gitfeed.server.core.feed.GitFeedManagerImpl
 import pcf.crskdev.gitfeed.server.core.net.RequestClient
 import pcf.crskdev.gitfeed.server.core.net.RequestClientImpl
 import pcf.crskdev.gitfeed.server.core.net.RequestCommand
@@ -95,5 +96,5 @@ class BeanFactories {
      * @return GitFeedManager.
      */
     @Bean
-    fun gitFeedManager(client: RequestClient): GitFeedManager = GitFeedManager(client)
+    fun gitFeedManager(client: RequestClient): GitFeedManager = GitFeedManagerImpl(client)
 }

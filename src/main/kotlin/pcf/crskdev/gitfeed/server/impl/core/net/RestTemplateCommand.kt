@@ -25,12 +25,20 @@
 
 package pcf.crskdev.gitfeed.server.impl.core.net
 
+import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
+import org.springframework.http.client.ClientHttpResponse
+import org.springframework.web.client.ResponseErrorHandler
 import org.springframework.web.client.RestTemplate
+import pcf.crskdev.gitfeed.server.core.GitFeedException
 import pcf.crskdev.gitfeed.server.core.net.Headers
 import pcf.crskdev.gitfeed.server.core.net.RequestCommand
 import pcf.crskdev.gitfeed.server.core.net.Response
+import pcf.crskdev.gitfeed.server.core.toGitFeedException
+import java.io.BufferedReader
+import java.io.IOException
 import java.net.URI
 
 /**
@@ -40,7 +48,29 @@ import java.net.URI
  */
 class RestTemplateCommand : RequestCommand {
 
-    private val restTemplate = RestTemplate()
+    private val restTemplate = RestTemplateBuilder()
+        .errorHandler(object : ResponseErrorHandler {
+            override fun hasError(response: ClientHttpResponse): Boolean {
+                return (
+                    response.statusCode.series() == HttpStatus.Series.CLIENT_ERROR ||
+                        response.statusCode.series() == HttpStatus.Series.SERVER_ERROR
+                    )
+            }
+
+            override fun handleError(response: ClientHttpResponse) {
+                val gitFeedException = try {
+                    GitFeedException.fromString(
+                        type = GitFeedException.Type.HTTP,
+                        response.body.bufferedReader().use(BufferedReader::readText),
+                        true
+                    )
+                } catch (ex: IOException) {
+                    ex.toGitFeedException()
+                }
+                throw gitFeedException
+            }
+        })
+        .build()
 
     override fun request(uri: URI, headers: Headers): Response {
         val restHeaders = RestHeaders().apply {

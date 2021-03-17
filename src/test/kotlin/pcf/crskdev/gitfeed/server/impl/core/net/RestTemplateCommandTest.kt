@@ -25,11 +25,13 @@
 
 package pcf.crskdev.gitfeed.server.impl.core.net
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import pcf.crskdev.gitfeed.server.core.GitFeedException
 import pcf.crskdev.gitfeed.server.core.net.first
 import pcf.crskdev.gitfeed.server.core.net.headers
 import java.net.URI
@@ -64,6 +66,38 @@ internal class RestTemplateCommandTest : StringSpec({
         res.code shouldBe 200
         res.headers.first("Content-Type") shouldBe "application/json"
 
+        server.shutdown()
+    }
+
+    "should catch 4xx errors" {
+        val server = MockWebServer()
+        server.enqueue(
+            MockResponse().setResponseCode(404)
+        )
+        server.start()
+        val url = URI.create(server.url("/api").toString())
+
+        val reqCommand = RestTemplateCommand()
+
+        shouldThrow<GitFeedException> {
+            reqCommand.request(url, emptyMap())
+        }
+        server.shutdown()
+    }
+
+    "should catch 5xx errors" {
+        val server = MockWebServer()
+        server.enqueue(
+            MockResponse().setResponseCode(500)
+        )
+        server.start()
+        val url = URI.create(server.url("/api").toString())
+
+        val reqCommand = RestTemplateCommand()
+
+        shouldThrow<GitFeedException> {
+            reqCommand.request(url, emptyMap())
+        }.let { println(it.message) }
         server.shutdown()
     }
 })

@@ -23,52 +23,30 @@
  *
  */
 
-package pcf.crskdev.gitfeed.server.util.spring
+package pcf.crskdev.gitfeed.server.api
 
-import com.nhaarman.mockitokotlin2.mock
-import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Scope
-import pcf.crskdev.gitfeed.server.core.cache.CacheStore
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 import pcf.crskdev.gitfeed.server.core.feed.GitFeedManager
-import pcf.crskdev.gitfeed.server.core.net.RequestClient
-import pcf.crskdev.gitfeed.server.core.net.RequestClientImpl
-import pcf.crskdev.gitfeed.server.core.net.RequestCommand
+import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 
-@TestConfiguration
-class TestBeanFactories {
+/**
+ * Git feed API.
+ *
+ * @property manager GitFeedManager
+ */
+@RestController
+@RequestMapping("/api/feeds")
+class GitFeedApiController(private val manager: GitFeedManager) {
 
-    /**
-     * Cache store bean.
-     *
-     * @return CacheStore.
-     */
-    @Bean
-    fun cacheStore(): CacheStore = mock()
-
-    /**
-     * RequestCommand bean.
-     *
-     * @return RequestCommand.
-     */
-    @Bean
-    fun requestCommand(): RequestCommand = mock()
-
-    /**
-     * Request client.
-     *
-     * @return RequestClient.
-     */
-    @Bean
-    @Scope("prototype")
-    fun requestClient(cacheStore: CacheStore, requestCommand: RequestCommand): RequestClient =
-        RequestClientImpl(cacheStore, requestCommand)
-
-    /**
-     * Git feed manager.
-     *
-     * @return GitFeedManager.
-     */
-    @Bean
-    fun gitFeedManager(): GitFeedManager = mock()
+    @GetMapping("/commits/{provider}")
+    fun commits(
+        @PathVariable provider: String,
+        @RequestParam(required = false) page: Int?
+    ): Commits {
+        return this.manager.of(provider).commits(page)
+    }
 }

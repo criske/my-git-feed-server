@@ -25,23 +25,16 @@
 
 package pcf.crskdev.gitfeed.server.core.feed
 
-import com.nhaarman.mockitokotlin2.mock
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import pcf.crskdev.gitfeed.server.core.net.headers
 
-internal class GitFeedManagerTest : StringSpec({
+internal class ExtractPagingTest : StringSpec({
 
-    "should select an existent git feed" {
-        val github = mock<GitFeed>()
-        val manager = GitFeedManagerImpl(
-            mock(),
-            GitFeedFactory(Provider.GITHUB to { github })
-        )
-        manager.of(" gitHub  ") shouldBe github
-    }
-
-    "should select unknown feed if git feed is not found" {
-        val manager = GitFeedManagerImpl(mock(), GitFeedFactory())
-        manager.of("foo") shouldBe GitFeed.Unknown
+    "should extract paging from header" {
+        val paging = headers {
+            "Link" to """<https://api.github.com/search/commits?q=author%3Acriske&sort=author-date&page=2>; rel="next", <https://api.github.com/search/commits?q=author%3Acriske&sort=author-date&page=34>; rel="last""""
+        }.extractPaging().toString()
+        paging shouldBe """{"first":null,"prev":null,"next":2,"last":34}"""
     }
 })
