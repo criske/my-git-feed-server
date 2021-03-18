@@ -23,14 +23,11 @@
  *
  */
 
-package pcf.crskdev.gitfeed.server.core.feed.models
+package pcf.crskdev.gitfeed.server.util
 
-data class Commits(val paging: Paging, val entries: List<Commit>)
+import pcf.crskdev.gitfeed.server.core.util.KObjectMapper
 
-data class Commit(
-    val sha: String,
-    val date: String,
-    val url: String,
-    val message: String,
-    val repo: Repo
-)
+fun Any.printAsJson() {
+    val out = KObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this)
+    println(out)
+}

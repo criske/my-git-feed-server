@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.node.TextNode
 import pcf.crskdev.gitfeed.server.core.util.JsonDump
 import pcf.crskdev.gitfeed.server.core.util.KObjectMapper
 import pcf.crskdev.gitfeed.server.core.util.obj
+import pcf.crskdev.inval.id.ValidationException
 import java.io.IOException
 
 /**
@@ -46,7 +47,6 @@ class GitFeedException(
 ) : RuntimeException() {
 
     companion object {
-        private val MAPPER = KObjectMapper()
         val UNKNOWN = fromString(Type.UNKNOWN, "Unknown error")
 
         /**
@@ -63,7 +63,7 @@ class GitFeedException(
         ): GitFeedException {
             val json = if (isJsonStr && message != null) {
                 try {
-                    MAPPER.readTree(message)
+                    KObjectMapper.readTree(message)
                 } catch (ex: JsonParseException) {
                     TextNode(message)
                 }
@@ -93,13 +93,50 @@ class GitFeedException(
      *
      * @return JsonDump.
      */
-    private fun errorDump(): JsonDump = obj(MAPPER) {
+    private fun errorDump(): JsonDump = obj {
         "type" to type.name.toLowerCase()
         "error" to (json ?: "Unknown error")
     }
 }
 
-fun IOException.toGitFeedException() = GitFeedException.fromString(
+fun IOException.toGitFeedException(): GitFeedException = GitFeedException.fromString(
     GitFeedException.Type.IO,
     this.message ?: "Unknown IO error"
 )
+
+fun NotImplementedError.toGitFeedException(): GitFeedException = GitFeedException.fromString(
+    GitFeedException.Type.UNKNOWN,
+    "Feature under construction"
+)
+
+fun ValidationException.toGitFeedException(): GitFeedException {
+    val json = obj {
+        "violations" to arr {
+            violations.forEach { violation ->
+                +obj {
+                    violation.id.toString() to violation.message
+                }
+            }
+        }
+    }
+    return GitFeedException(type = GitFeedException.Type.VALIDATION, json.asTree())
+}
+
+/**
+ * Get result T or throw a ValidationException converted to GitFeedException.
+ *
+ * @param T value type.
+ * @return value
+ * @throws GitFeedException
+ */
+fun <T> Result<T>.getOrThrowGitFeedException(): T =
+    try {
+        this.getOrThrow()
+    } catch (ex: Throwable) {
+        throw when (ex) {
+            is ValidationException -> ex.toGitFeedException()
+            is IOException -> ex.toGitFeedException()
+            is GitFeedException -> ex
+            else -> GitFeedException.UNKNOWN
+        }
+    }

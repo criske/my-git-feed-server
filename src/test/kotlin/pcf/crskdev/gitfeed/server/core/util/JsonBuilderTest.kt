@@ -72,4 +72,24 @@ class JsonBuilderTest : StringSpec({
         }
         json.asString() shouldBe """[{"name":"cris"},{"address":{"street":"franklin","no":3},"hobbies":["Music","Football",7]}]"""
     }
+
+    "should add kotlin object to json" {
+        class User(val firstName: String, val lastName: String, val age: Int)
+
+        val json = obj {
+            "admin" to User("john", "doe", 32)
+            "users" to arr {
+                +User("frank", "done", 22)
+                +User("mary", "jane", 22)
+            }
+        }
+
+        json.asString() shouldBe """{"admin":{"firstName":"john","lastName":"doe","age":32},"users":[{"firstName":"frank","lastName":"done","age":22},{"firstName":"mary","lastName":"jane","age":22}]}"""
+    }
+
+    "should accept nulls" {
+        obj {
+            "foo" to null
+        }.asString() shouldBe """{"foo":null}"""
+    }
 })

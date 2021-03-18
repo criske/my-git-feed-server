@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import pcf.crskdev.gitfeed.server.core.GitFeedException
+import pcf.crskdev.gitfeed.server.core.toGitFeedException
 
 /**
  * Git feed exception handler.
@@ -51,4 +52,15 @@ class GitFeedExceptionHandler {
     @ResponseBody
     @ExceptionHandler(GitFeedException::class)
     fun handleGitFeedException(exception: GitFeedException): JsonNode = exception.asJson()
+
+    /**
+     * Handle T O D Os.
+     *
+     * @param exception NotImplementedError.
+     * @return Response as JSON.
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    @ExceptionHandler(NotImplementedError::class)
+    fun handleTODOs(exception: NotImplementedError): JsonNode = exception.toGitFeedException().asJson()
 }

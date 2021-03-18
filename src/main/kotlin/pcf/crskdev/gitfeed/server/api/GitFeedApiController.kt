@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import pcf.crskdev.gitfeed.server.core.feed.GitFeedManager
+import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
+import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 
 /**
@@ -42,11 +44,36 @@ import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 @RequestMapping("/api/feeds")
 class GitFeedApiController(private val manager: GitFeedManager) {
 
+    /**
+     * Commits endpoint.
+     *
+     * @param provider Provider.
+     * @param page Page number
+     * @return Commits.
+     */
     @GetMapping("/commits/{provider}")
     fun commits(
         @PathVariable provider: String,
         @RequestParam(required = false) page: Int?
     ): Commits {
         return this.manager.of(provider).commits(page)
+    }
+
+    /**
+     * Assignments endpoint.
+     *
+     * @param provider Provider.
+     * @param state State(all, closed, open) or null.
+     * @param page Page number
+     * @return Assignments.
+     */
+    @GetMapping("/assignments/{provider}")
+    fun assignments(
+        @PathVariable provider: String,
+        @RequestParam(required = false) state: String?,
+        @RequestParam(required = false) page: Int?
+    ): Assignments {
+        return this.manager.of(provider)
+            .assignments(Assignment.State.valueOfSafe(state), page)
     }
 }

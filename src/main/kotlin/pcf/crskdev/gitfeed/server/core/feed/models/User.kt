@@ -25,12 +25,4 @@
 
 package pcf.crskdev.gitfeed.server.core.feed.models
 
-data class Commits(val paging: Paging, val entries: List<Commit>)
-
-data class Commit(
-    val sha: String,
-    val date: String,
-    val url: String,
-    val message: String,
-    val repo: Repo
-)
+data class User(val name: String, val avatar: String, val url: String, val type: String)

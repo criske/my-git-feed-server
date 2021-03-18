@@ -26,6 +26,8 @@
 package pcf.crskdev.gitfeed.server.core.feed
 
 import pcf.crskdev.gitfeed.server.core.GitFeedException
+import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
+import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 
 /**
@@ -44,6 +46,15 @@ interface GitFeed {
     fun commits(page: Int? = null): Commits
 
     /**
+     * Latest assignments.
+     *
+     * @param state State("closed","open","all")
+     * @param page Of page.
+     * @return Assignments.
+     */
+    fun assignments(state: Assignment.State = Assignment.State.ALL, page: Int? = null): Assignments
+
+    /**
      * Unknown GitFeed.
      *
      * @author Cristian Pela
@@ -59,6 +70,10 @@ interface GitFeed {
         )
 
         override fun commits(page: Int?): Commits {
+            throw exception
+        }
+
+        override fun assignments(state: Assignment.State, page: Int?): Assignments {
             throw exception
         }
     }
