@@ -87,7 +87,7 @@ class RequestClientImpl(
     /**
      * Object mapper.
      */
-    private val objectMapper = KObjectMapper()
+    private val objectMapper = KObjectMapper
 
     /**
      * Make a request and also deals with caching.
@@ -121,6 +121,8 @@ class RequestClientImpl(
 
         return when (response.code) {
             HttpURLConnection.HTTP_OK -> {
+                // TODO use proper logging here
+                println("REQUEST CLIENT: from remote: $uri")
                 this.processResponse(uri, response, clazz, responseMapper)
             }
             HttpURLConnection.HTTP_NOT_MODIFIED -> {
@@ -136,6 +138,7 @@ class RequestClientImpl(
                         throw GitFeedException.fromString(Type.HTTP, newResponse.body, true)
                     }
                 } else {
+                    println("REQUEST CLIENT: from cache: $uri")
                     this.objectMapper.readValue(cachedResponse, clazz)
                 }
             }

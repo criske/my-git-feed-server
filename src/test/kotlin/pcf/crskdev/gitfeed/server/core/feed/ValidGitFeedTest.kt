@@ -32,6 +32,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import pcf.crskdev.gitfeed.server.core.GitFeedException
+import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 import pcf.crskdev.gitfeed.server.core.feed.models.Paging
 
@@ -72,6 +73,26 @@ internal class ValidGitFeedTest : DescribeSpec({
             shouldThrow<GitFeedException> {
                 gitFeed.commits(1)
             } shouldBe exception
+        }
+    }
+
+    describe("assignments validation") {
+        it("should pass validation") {
+            val delegate = mock<GitFeed>()
+            val gitFeed = ValidGitFeed(delegate)
+            val result = Assignments(Paging(), emptyList())
+
+            whenever(delegate.assignments(page = 1)).thenReturn(result)
+            gitFeed.assignments(page = 1) shouldBe result
+        }
+
+        it("should throw if page is not positive") {
+            val delegate = mock<GitFeed>()
+            val gitFeed = ValidGitFeed(delegate)
+            val err = shouldThrow<GitFeedException> {
+                gitFeed.assignments(page = 0)
+            }
+            err.message shouldBe """{"type":"validation","error":{"violations":[{"page":"Assignments page number must be positive"}]}}"""
         }
     }
 })

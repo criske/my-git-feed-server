@@ -25,15 +25,18 @@
 
 package pcf.crskdev.gitfeed.server.core.feed.github
 
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
 import pcf.crskdev.gitfeed.server.core.feed.models.Commit
-import pcf.crskdev.gitfeed.server.core.feed.models.Owner
 import pcf.crskdev.gitfeed.server.core.feed.models.Paging
 import pcf.crskdev.gitfeed.server.core.feed.models.Repo
+import pcf.crskdev.gitfeed.server.core.feed.models.User
 import pcf.crskdev.gitfeed.server.core.net.Bearer
 import pcf.crskdev.gitfeed.server.core.net.RequestClientImpl
 import pcf.crskdev.gitfeed.server.core.net.RequestCommand
@@ -77,10 +80,11 @@ internal class GithubGitFeedTest : StringSpec({
             Repo(
                 "self-xdsd/self-web",
                 "https://github.com/self-xdsd/self-web",
-                Owner(
+                User(
                     "self-xdsd",
                     "https://avatars.githubusercontent.com/u/65442807?v=4",
-                    "https://github.com/self-xdsd"
+                    "https://github.com/self-xdsd",
+                    "Organization"
                 )
             )
         )
@@ -107,5 +111,68 @@ internal class GithubGitFeedTest : StringSpec({
         gitFeed.commits(2)
 
         verify(command).request(uri, requestHeaders)
+    }
+
+    "should fetch assignments" {
+        val uri = URI.create("https://api.github.com/search/issues?q=assignee:criske")
+        val requestHeaders = headers {
+            "Accept" to "application/vnd.github.cloak-preview+json"
+            "Content-Type" to "application/json"
+            "Authorization" to "Bearer 123"
+        }
+        val command = mock<RequestCommand>()
+        val gitFeed = GithubGitFeed(RequestClientImpl(mock(), command, Bearer("123")))
+
+        whenever(command.request(uri, requestHeaders)).thenReturn(
+            Response(
+                200,
+                File("src/test/resources/github_assignments.json").readText(),
+                emptyMap()
+            )
+        )
+        whenever(
+            command.request(
+                any(),
+                eq(
+                    headers {
+                        "Content-Type" to "application/json"
+                        "Authorization" to "Bearer 123"
+                    }
+                )
+            )
+        ).thenReturn(
+            Response(
+                200,
+                File("src/test/resources/github_repo.json").readText(),
+                emptyMap()
+            )
+        )
+
+        val assignments = gitFeed.assignments()
+
+        // TODO finish tests here
+        assignments.paging shouldBe Paging()
+        assignments.entries.first() shouldBe Assignment(
+            "Delete Fake Wallet On Real Wallet Activation",
+            "When activating a real wallet, we should remove the fake wallet.",
+            "https://github.com/self-xdsd/self-web/issues/389",
+            true,
+            Repo(
+                "self-xdsd/self-web",
+                "https://github.com/self-xdsd/self-web",
+                User(
+                    "self-xdsd",
+                    "https://avatars.githubusercontent.com/u/65442807?v=4",
+                    "https://github.com/self-xdsd",
+                    "Organization"
+                )
+            ),
+            User(
+                "amihaiemil",
+                "https://avatars.githubusercontent.com/u/6305156?v=4",
+                "https://github.com/amihaiemil",
+                "User"
+            )
+        )
     }
 })

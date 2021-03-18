@@ -25,12 +25,26 @@
 
 package pcf.crskdev.gitfeed.server.core.feed.models
 
-data class Commits(val paging: Paging, val entries: List<Commit>)
+data class Assignments(val paging: Paging, val entries: List<Assignment>)
 
-data class Commit(
-    val sha: String,
-    val date: String,
+data class Assignment(
+    val title: String,
+    val body: String,
     val url: String,
-    val message: String,
-    val repo: Repo
-)
+    val isOpen: Boolean,
+    val repo: Repo,
+    val author: User
+) {
+    enum class State {
+        ALL, CLOSED, OPEN;
+
+        companion object {
+            fun valueOfSafe(state: String?): State =
+                try {
+                    state?.trim()?.toUpperCase()?.let { valueOf(it) } ?: ALL
+                } catch (ex: IllegalArgumentException) {
+                    ALL
+                }
+        }
+    }
+}

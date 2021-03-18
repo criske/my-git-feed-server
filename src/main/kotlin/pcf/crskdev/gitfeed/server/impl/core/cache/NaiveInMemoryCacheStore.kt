@@ -23,14 +23,29 @@
  *
  */
 
-package pcf.crskdev.gitfeed.server.core.feed.models
+package pcf.crskdev.gitfeed.server.impl.core.cache
 
-data class Commits(val paging: Paging, val entries: List<Commit>)
+import pcf.crskdev.gitfeed.server.core.cache.CacheStore
+import java.util.concurrent.ConcurrentHashMap
 
-data class Commit(
-    val sha: String,
-    val date: String,
-    val url: String,
-    val message: String,
-    val repo: Repo
-)
+/**
+ * Naive in memory cache store, used in dev.
+ *
+ * @author Cristian Pela.
+ */
+class NaiveInMemoryCacheStore : CacheStore {
+
+    private val cache = ConcurrentHashMap<String, String>()
+
+    override fun set(key: String, value: String) {
+        cache[key] = value
+    }
+
+    override fun get(key: String): String? = cache[key]
+
+    override fun exists(key: String): Boolean = cache.containsKey(key)
+
+    override fun close() {
+        cache.clear()
+    }
+}

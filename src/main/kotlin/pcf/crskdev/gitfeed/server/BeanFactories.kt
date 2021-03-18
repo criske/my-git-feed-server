@@ -34,6 +34,7 @@ import pcf.crskdev.gitfeed.server.core.feed.GitFeedManagerImpl
 import pcf.crskdev.gitfeed.server.core.net.RequestClient
 import pcf.crskdev.gitfeed.server.core.net.RequestClientImpl
 import pcf.crskdev.gitfeed.server.core.net.RequestCommand
+import pcf.crskdev.gitfeed.server.impl.core.cache.NaiveInMemoryCacheStore
 import pcf.crskdev.gitfeed.server.impl.core.cache.RedisClient
 import pcf.crskdev.gitfeed.server.impl.core.net.RestTemplateCommand
 
@@ -60,16 +61,7 @@ class BeanFactories {
      */
     @Bean
     @Profile("dev")
-    fun cacheStoreDev(): CacheStore = object : CacheStore {
-
-        override fun set(key: String, value: String) {}
-
-        override fun get(key: String): String? = null
-
-        override fun exists(key: String): Boolean = false
-
-        override fun close() {}
-    }
+    fun cacheStoreDev(): CacheStore = NaiveInMemoryCacheStore()
 
     /**
      * Request command.

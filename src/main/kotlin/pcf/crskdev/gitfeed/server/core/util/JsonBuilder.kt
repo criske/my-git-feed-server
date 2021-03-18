@@ -29,23 +29,19 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.JsonSerializable
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
-import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
-import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.databind.util.RawValue
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.fasterxml.jackson.module.kotlin.readValue
 
 /**
  * [ObjectMapper] with [KotlinModule] registered.
  *
  * @return ObjectMapper.
  */
-@Suppress("FunctionName")
-fun KObjectMapper(): ObjectMapper = ObjectMapper().apply {
+val KObjectMapper: ObjectMapper = ObjectMapper().apply {
     registerModule(KotlinModule())
 }
-
-private val K_OBJECT_MAPPER = KObjectMapper()
 
 /**
  * Json object builder dsl for Jackson.
@@ -54,7 +50,7 @@ private val K_OBJECT_MAPPER = KObjectMapper()
  * @receiver
  * @return JsonWriter
  */
-fun obj(mapper: ObjectMapper = K_OBJECT_MAPPER, scope: ObjectScope.() -> Unit): JsonDump {
+fun obj(mapper: ObjectMapper = KObjectMapper, scope: ObjectScope.() -> Unit): JsonDump {
     val obj = mapper.createObjectNode()
     ObjectScopeImpl(mapper, obj).apply(scope)
     return JsonDump(mapper, obj)
@@ -67,7 +63,7 @@ fun obj(mapper: ObjectMapper = K_OBJECT_MAPPER, scope: ObjectScope.() -> Unit): 
  * @receiver
  * @return JsonWriter
  */
-fun arr(mapper: ObjectMapper = K_OBJECT_MAPPER, scope: ArrayScope.() -> Unit): JsonDump {
+fun arr(mapper: ObjectMapper = KObjectMapper, scope: ArrayScope.() -> Unit): JsonDump {
     val arr = mapper.createArrayNode()
     ArrayScopeImpl(mapper, arr).apply(scope)
     return JsonDump(mapper, arr)
@@ -116,29 +112,26 @@ class JsonDump internal constructor(
 private class DslRawValue(value: Any) : RawValue(value, false)
 
 private class ObjectScopeImpl(
-    mapper: ObjectMapper,
+    private val mapper: ObjectMapper,
     private val obj: ObjectNode
 ) : ObjectScope, BaseScopeDsl(mapper) {
 
-    override fun String.to(value: Any) {
-        when (value) {
-            is JsonNode -> obj.putPOJO(this, value)
-            is NullNode -> obj.putNull(this)
-            else -> obj.putRawValue(this, DslRawValue(value.tryConvert()))
+    override fun String.to(value: Any?) {
+        if (value == null) {
+            obj.putNull(this)
+        } else {
+            obj.putPOJO(this, value.asJsonNode(mapper))
         }
     }
 }
 
 private class ArrayScopeImpl(
-    mapper: ObjectMapper,
+    private val mapper: ObjectMapper,
     private val arr: ArrayNode
 ) : ArrayScope, BaseScopeDsl(mapper) {
 
     override fun Any.unaryPlus() {
-        when (this) {
-            is JsonNode -> arr.addPOJO(this)
-            else -> arr.addRawValue(DslRawValue(this.tryConvert()))
-        }
+        arr.addPOJO(this.asJsonNode(mapper))
     }
 
     override fun add(number: Number) {
@@ -152,10 +145,8 @@ private class ArrayScopeImpl(
  *
  * @return Any.
  */
-private fun Any.tryConvert(): Any = when (this) {
-    is String -> TextNode(this)
-    else -> this
-}
+private fun Any.asJsonNode(mapper: ObjectMapper): JsonNode =
+    mapper.convertValue(this, JsonNode::class.java)
 
 /**
  * Object scope
@@ -169,7 +160,7 @@ interface ObjectScope : BaseScope {
      *
      * @param value Any value
      */
-    infix fun String.to(value: Any)
+    infix fun String.to(value: Any?)
 }
 
 /**
@@ -232,3 +223,11 @@ private abstract class BaseScopeDsl(private val mapper: ObjectMapper) : BaseScop
         }
     }
 }
+
+/**
+ * Convenient way to call _KObjectMapper.readValue<T>_.
+ *
+ * @param T type.
+ * @returns Value of T.
+ */
+inline fun <reified T> String.jsonTo(): T = KObjectMapper.readValue(this)

@@ -25,12 +25,11 @@
 
 package pcf.crskdev.gitfeed.server.core.feed
 
-import pcf.crskdev.gitfeed.server.core.GitFeedException
-import pcf.crskdev.gitfeed.server.core.GitFeedException.Type
+import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
+import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
-import pcf.crskdev.gitfeed.server.core.util.obj
+import pcf.crskdev.gitfeed.server.core.getOrThrowGitFeedException
 import pcf.crskdev.inval.id.Rules
-import pcf.crskdev.inval.id.ValidationException
 import pcf.crskdev.inval.id.validates
 import pcf.crskdev.inval.id.withId
 
@@ -51,6 +50,15 @@ class ValidGitFeed(private val delegate: GitFeed) : GitFeed {
             delegate.commits(page)
         }
 
+    override fun assignments(state: Assignment.State, page: Int?): Assignments =
+        if (page != null) {
+            (Rules.Positive { "Assignments page number must be positive" } validates page withId "page")()
+                .map { delegate.assignments(state, it.toInt()) }
+                .getOrThrowGitFeedException()
+        } else {
+            delegate.assignments(state, page)
+        }
+
     override fun equals(other: Any?): Boolean {
         return this.delegate == other
     }
@@ -58,33 +66,4 @@ class ValidGitFeed(private val delegate: GitFeed) : GitFeed {
     override fun hashCode(): Int {
         return this.delegate.hashCode()
     }
-
-    /**
-     * Get result T or throw a ValidationException converted to GitFeedException.
-     *
-     * @param T value type.
-     * @return value
-     * @throws GitFeedException
-     */
-    private fun <T> Result<T>.getOrThrowGitFeedException(): T =
-        try {
-            this.getOrThrow()
-        } catch (ex: Throwable) {
-            throw when (ex) {
-                is ValidationException -> {
-                    val json = obj {
-                        "violations" to arr {
-                            ex.violations.forEach { violation ->
-                                +obj {
-                                    violation.id.toString() to violation.message
-                                }
-                            }
-                        }
-                    }
-                    GitFeedException(type = Type.VALIDATION, json.asTree())
-                }
-                is GitFeedException -> ex
-                else -> GitFeedException.UNKNOWN
-            }
-        }
 }
