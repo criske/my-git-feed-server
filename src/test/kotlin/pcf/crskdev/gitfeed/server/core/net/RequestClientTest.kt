@@ -224,10 +224,13 @@ internal class RequestClientTest(initial: RequestClient) : DescribeSpec() {
                 // get etag
                 verify(cacheStore, times(1))[any()]
 
-                verify(command, times(1)).request(uri, headers {
-                    "Content-Type" to "application/json"
-                    "Authorization" to "Bearer 123"
-                })
+                verify(command, times(1)).request(
+                    uri,
+                    headers {
+                        "Content-Type" to "application/json"
+                        "Authorization" to "Bearer 123"
+                    }
+                )
 
                 message shouldBe Message("hello")
             }

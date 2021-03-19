@@ -102,8 +102,8 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
             Assignment.State.CLOSED -> "+state:closed"
             Assignment.State.OPEN -> "+state:open"
         }
-        val fastClient = this.client.fastCache();
-        return this.client.request(
+        val fastClient = this.client.fastCache()
+        return fastClient.request(
             this.uriWithPage("search/issues?q=assignee:criske$stateQuery", page),
             this.previewHeaders
         ) {
