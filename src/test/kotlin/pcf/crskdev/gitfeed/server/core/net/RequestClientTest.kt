@@ -28,6 +28,7 @@
 package pcf.crskdev.gitfeed.server.core.net
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
@@ -185,6 +186,53 @@ internal class RequestClientTest(initial: RequestClient) : DescribeSpec() {
                 shouldThrow<GitFeedException> {
                     client.request<Message>(uri)
                 }
+            }
+        }
+
+        describe("fast cache tests") {
+
+            it("should hit fast cache") {
+
+                val cacheStore = mock<CacheStore>()
+                val command = mock<RequestCommand>()
+
+                val fastClient = RequestClientImpl(cacheStore, command, Bearer("123"))
+                    .fastCache()
+
+                whenever(command.request(any(), any())).thenReturn(
+                    Response(
+                        200,
+                        """{"message":"hello"}""",
+                        headers { "ETag" to "123" }
+                    )
+                )
+
+                fastClient.request<Message>(uri)
+                fastClient.request<Message>(uri)
+                fastClient.request<Message>(uri)
+                fastClient.request<Message>(uri)
+                fastClient.request<Message>(uri)
+                fastClient.request<Message>(uri)
+                fastClient.request<Message>(uri)
+                fastClient.request<Message>(uri)
+                fastClient.request<Message>(uri)
+                fastClient.request<Message>(uri)
+                val message = fastClient.request<Message>(uri)
+
+                // set etag and response
+                verify(cacheStore, times(2))[any()] = any()
+                // get etag
+                verify(cacheStore, times(1))[any()]
+
+                verify(command, times(1)).request(
+                    uri,
+                    headers {
+                        "Content-Type" to "application/json"
+                        "Authorization" to "Bearer 123"
+                    }
+                )
+
+                message shouldBe Message("hello")
             }
         }
     }

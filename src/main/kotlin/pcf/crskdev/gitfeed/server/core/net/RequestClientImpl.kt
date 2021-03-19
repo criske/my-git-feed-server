@@ -67,6 +67,19 @@ interface RequestClient {
      * @return RequestClient
      */
     fun authorized(accessToken: AccessToken): RequestClient
+
+    /**
+     * Request client the uses a local in memory cache, without caring about
+     * the data staleness.
+     *
+     * This should only be used in locally, for example when doing successive
+     * requests for the same url(s) within a function scope.
+     *
+     * This client should not be used in a multi-thread environment.
+     *
+     * @return RequestClient
+     */
+    fun fastCache(): RequestClient
 }
 
 /**
@@ -114,6 +127,7 @@ class RequestClientImpl(
         }
 
         val headersWithCache = this.cache[this.etagKey(uri)]?.let { etag ->
+            println("REQUEST CLIENT: check cache validity with etag $etag for: $uri")
             headers(baseHeaders) { "If-None-Match" to etag }
         } ?: baseHeaders
 
@@ -128,6 +142,7 @@ class RequestClientImpl(
             HttpURLConnection.HTTP_NOT_MODIFIED -> {
                 val cachedResponse = this.cache[responseKey(uri)]
                 if (cachedResponse == null) { // missed cache just in case
+                    println("REQUEST CLIENT: missed cache result; try from remote for: $uri")
                     val newResponse = this.requestCommand.request(
                         uri,
                         baseHeaders
@@ -149,6 +164,8 @@ class RequestClientImpl(
     override fun authorized(accessToken: AccessToken): RequestClient =
         RequestClientImpl(this.cache, this.requestCommand, accessToken)
 
+    override fun fastCache(): RequestClient = FastCacheRequestClient(this)
+
     @PublishedApi
     internal fun <T> processResponse(
         uri: URI,
@@ -162,9 +179,14 @@ class RequestClientImpl(
         val jsonResponse = JsonResponse(json, response.headers)
         val jsonMapped = responseMapper(jsonResponse)
         val strMapped = this.objectMapper.writeValueAsString(jsonMapped)
-        response.headers.first("ETag")?.also { etag ->
+        val etag = response.headers.first("ETag")
+        if (etag != null) {
+            println("REQUEST CLIENT: got remote etag $etag for : $uri")
+            println("REQUEST CLIENT: caching response for : $uri")
             this.cache[this.etagKey(uri)] = etag
             this.cache[this.responseKey(uri)] = strMapped
+        } else {
+            println("REQUEST CLIENT: no remote etag: $uri")
         }
         return this.objectMapper.readValue(strMapped, clazz)
     }
@@ -186,6 +208,40 @@ class RequestClientImpl(
      */
     private fun responseKey(uri: URI): String =
         base64Encode("res", uri.toString(), padded = false)
+
+    /**
+     * Fast cache request client.
+     *
+     * @param delegate RequestClient.
+     */
+    private class FastCacheRequestClient(private val delegate: RequestClient) : RequestClient {
+
+        /**
+         * Fast cache.
+         */
+        private val fastCache = mutableMapOf<URI, Any>()
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T> request(
+            uri: URI,
+            extraHeaders: Headers,
+            clazz: Class<T>,
+            responseMapper: (JsonResponse) -> JsonNode
+        ): T = if (!fastCache.containsKey(uri)) {
+            println("REQUEST CLIENT: fast caching response for: $uri")
+            val entry = this.delegate.request(uri, extraHeaders, clazz, responseMapper) as Any
+            fastCache[uri] = entry
+            entry as T
+        } else {
+            println("REQUEST CLIENT: from fast cache: $uri")
+            fastCache[uri]!! as T
+        }
+
+        override fun authorized(accessToken: AccessToken): RequestClient =
+            FastCacheRequestClient(this.delegate.authorized(accessToken))
+
+        override fun fastCache(): RequestClient = this
+    }
 }
 
 /**

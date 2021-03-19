@@ -102,7 +102,8 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
             Assignment.State.CLOSED -> "+state:closed"
             Assignment.State.OPEN -> "+state:open"
         }
-        return this.client.request(
+        val fastClient = this.client.fastCache()
+        return fastClient.request(
             this.uriWithPage("search/issues?q=assignee:criske$stateQuery", page),
             this.previewHeaders
         ) {
@@ -115,7 +116,7 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
                             "body" to it["body"]
                             "url" to it["html_url"]
                             "isOpen" to (it["state"].asText() != "closed")
-                            "repo" to getRepo(it["repository_url"].asText()).simple
+                            "repo" to getRepo(fastClient, it["repository_url"].asText()).simple
                             "author" to obj { getUser(it["user"]) }
                         }
                     }
@@ -124,8 +125,8 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
         }
     }
 
-    private fun getRepo(url: String): RepoExtended =
-        this.client.request(URI.create(url)) {
+    private fun getRepo(client: RequestClient, url: String): RepoExtended =
+        client.request(URI.create(url)) {
             obj {
                 "simple" to obj {
                     "fullName" to it.body["full_name"]
