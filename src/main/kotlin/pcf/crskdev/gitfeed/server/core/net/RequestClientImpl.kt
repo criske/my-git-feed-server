@@ -67,6 +67,19 @@ interface RequestClient {
      * @return RequestClient
      */
     fun authorized(accessToken: AccessToken): RequestClient
+
+    /**
+     * Request client the uses a local in memory cache, without caring about
+     * the data staleness.
+     *
+     * This should only be used in locally, for example when doing successive
+     * requests for the same url(s) within a function scope.
+     *
+     * This client should not be used in a multi-thread environment.
+     *
+     * @return RequestClient
+     */
+    fun fastCache(): RequestClient
 }
 
 /**
@@ -149,6 +162,8 @@ class RequestClientImpl(
     override fun authorized(accessToken: AccessToken): RequestClient =
         RequestClientImpl(this.cache, this.requestCommand, accessToken)
 
+    override fun fastCache(): RequestClient = FastCacheRequestClient(this)
+
     @PublishedApi
     internal fun <T> processResponse(
         uri: URI,
@@ -186,6 +201,40 @@ class RequestClientImpl(
      */
     private fun responseKey(uri: URI): String =
         base64Encode("res", uri.toString(), padded = false)
+
+
+    /**
+     * Fast cache request client.
+     *
+     * @param delegate RequestClient.
+     */
+    private class FastCacheRequestClient(private val delegate: RequestClient) : RequestClient {
+
+        /**
+         * Fast cache.
+         */
+        private val fastCache = mutableMapOf<URI, Any>()
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T> request(
+            uri: URI,
+            extraHeaders: Headers,
+            clazz: Class<T>,
+            responseMapper: (JsonResponse) -> JsonNode
+        ): T = fastCache
+            .apply {
+                if(containsKey(uri)){
+                    println("REQUEST CLIENT: from fast cache: $uri")
+                }
+            }.computeIfAbsent(uri) {
+                this.delegate.request(uri, extraHeaders, clazz, responseMapper) as Any
+            } as T
+
+        override fun authorized(accessToken: AccessToken): RequestClient =
+            FastCacheRequestClient(this.delegate.authorized(accessToken))
+
+        override fun fastCache(): RequestClient = this
+    }
 }
 
 /**
