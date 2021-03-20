@@ -88,7 +88,7 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
                         "repo" to obj {
                             "fullName" to it["repository"]["full_name"]
                             "url" to it["repository"]["html_url"]
-                            "owner" to obj { getUser(it["repository"]["owner"]) }
+                            "owner" to getUser(it["repository"]["owner"])
                         }
                     }
                 }
@@ -117,7 +117,7 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
                             "url" to it["html_url"]
                             "isOpen" to (it["state"].asText() != "closed")
                             "repo" to getRepo(fastClient, it["repository_url"].asText()).simple
-                            "author" to obj { getUser(it["user"]) }
+                            "author" to getUser(it["user"])
                         }
                     }
                 }
@@ -131,13 +131,13 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
                 "simple" to obj {
                     "fullName" to it.body["full_name"]
                     "url" to it.body["html_url"]
-                    "owner" to obj { getUser(it.body["owner"]) }
+                    "owner" to getUser(it.body["owner"])
                 }
                 "description" to it.body["description"]
                 "isFork" to it.body["fork"]
                 "stars" to it.body["stargazers_count"]
                 "language" to it.body["language"]
-                "organization" to it.body["organization"]?.let { obj { getUser(it) } }
+                "organization" to it.body["organization"]?.let { getUser(it) }
                 "createdAt" to it.body["created_at"]
                 "updatedAt" to it.body["updated_at"]
             }.asTree()
@@ -148,7 +148,7 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
      *
      * @return JsonDump
      */
-    private fun ObjectScope.getUser(node: JsonNode) {
+    private fun ObjectScope.getUser(node: JsonNode) = obj {
         "name" to node["login"]
         "avatar" to node["avatar_url"]
         "url" to node["html_url"]
