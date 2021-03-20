@@ -29,6 +29,7 @@ import pcf.crskdev.gitfeed.server.core.GitFeedException
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
+import pcf.crskdev.gitfeed.server.core.feed.models.User
 
 /**
  * Git feed interface for all supported git platform providers.
@@ -55,6 +56,12 @@ interface GitFeed {
     fun assignments(state: Assignment.State = Assignment.State.ALL, page: Int? = null): Assignments
 
     /**
+     * Basic info about me
+     * @return User.
+     */
+    fun me(): User
+
+    /**
      * Unknown GitFeed.
      *
      * @author Cristian Pela
@@ -74,6 +81,10 @@ interface GitFeed {
         }
 
         override fun assignments(state: Assignment.State, page: Int?): Assignments {
+            throw exception
+        }
+
+        override fun me(): User {
             throw exception
         }
     }

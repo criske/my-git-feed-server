@@ -34,6 +34,7 @@ import pcf.crskdev.gitfeed.server.core.feed.GitFeedManager
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
+import pcf.crskdev.gitfeed.server.core.feed.models.User
 
 /**
  * Git feed API.
@@ -76,4 +77,13 @@ class GitFeedApiController(private val manager: GitFeedManager) {
         return this.manager.of(provider)
             .assignments(Assignment.State.valueOfSafe(state), page)
     }
+
+    /**
+     * Me.
+     *
+     * @param provider Provider.
+     * @return User.
+     */
+    @GetMapping("/me/{provider}")
+    fun me(@PathVariable provider: String): User = this.manager.of(provider).me()
 }

@@ -39,7 +39,7 @@ import pcf.crskdev.inval.id.withId
  * @property delegate Delegate.
  * @author Cristian Pela
  */
-class ValidGitFeed(private val delegate: GitFeed) : GitFeed {
+class ValidGitFeed(private val delegate: GitFeed) : GitFeed by delegate {
 
     override fun commits(page: Int?): Commits =
         if (page != null) {
