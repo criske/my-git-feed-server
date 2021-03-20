@@ -32,6 +32,7 @@ import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 import pcf.crskdev.gitfeed.server.core.feed.models.RepoExtended
+import pcf.crskdev.gitfeed.server.core.feed.models.User
 import pcf.crskdev.gitfeed.server.core.net.RequestClient
 import pcf.crskdev.gitfeed.server.core.net.headers
 import pcf.crskdev.gitfeed.server.core.net.request
@@ -125,6 +126,9 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
         }
     }
 
+    override fun me(): User = this.client
+        .request(URI.create("$baseUrl/users/criske")) { getUser(it.body) }
+
     private fun getRepo(client: RequestClient, url: String): RepoExtended =
         client.request(URI.create(url)) {
             obj {
@@ -146,7 +150,7 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
     /**
      * Get user from a github json response key.
      *
-     * @return JsonDump
+     * @return JsonNode
      */
     private fun ObjectScope.getUser(node: JsonNode) = obj {
         "name" to node["login"]
@@ -154,4 +158,16 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
         "url" to node["html_url"]
         "type" to node["type"]
     }
+
+    /**
+     * Get user from a github json response key.
+     *
+     * @return JsonNode
+     */
+    private fun getUser(node: JsonNode) = obj {
+        "name" to node["login"]
+        "avatar" to node["avatar_url"]
+        "url" to node["html_url"]
+        "type" to node["type"]
+    }.asTree()
 }

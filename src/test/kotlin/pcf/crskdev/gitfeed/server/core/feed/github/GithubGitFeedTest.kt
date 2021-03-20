@@ -175,4 +175,29 @@ internal class GithubGitFeedTest : StringSpec({
             )
         )
     }
+
+    "should fetch me" {
+        val uri = URI.create("https://api.github.com/users/criske")
+        val requestHeaders = headers {
+            "Content-Type" to "application/json"
+            "Authorization" to "Bearer 123"
+        }
+        val command = mock<RequestCommand>()
+        val gitFeed = GithubGitFeed(RequestClientImpl(mock(), command, Bearer("123")))
+
+        whenever(command.request(uri, requestHeaders)).thenReturn(
+            Response(
+                200,
+                File("src/test/resources/github_me.json").readText(),
+                emptyMap()
+            )
+        )
+
+        gitFeed.me() shouldBe User(
+            "criske",
+            "https://avatars.githubusercontent.com/u/10284893?v=4",
+            "https://github.com/criske",
+            "User"
+        )
+    }
 })
