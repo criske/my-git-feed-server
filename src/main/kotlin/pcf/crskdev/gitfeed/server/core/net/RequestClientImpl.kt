@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import pcf.crskdev.gitfeed.server.core.GitFeedException
 import pcf.crskdev.gitfeed.server.core.GitFeedException.Type
 import pcf.crskdev.gitfeed.server.core.cache.CacheStore
+import pcf.crskdev.gitfeed.server.core.util.KLogger
 import pcf.crskdev.gitfeed.server.core.util.KObjectMapper
 import pcf.crskdev.gitfeed.server.core.util.base64Encode
 import java.net.HttpURLConnection
@@ -98,6 +99,11 @@ class RequestClientImpl(
 ) : RequestClient {
 
     /**
+     * Logger.
+     */
+    private val logger = KLogger<RequestClient>()
+
+    /**
      * Object mapper.
      */
     private val objectMapper = KObjectMapper
@@ -127,7 +133,9 @@ class RequestClientImpl(
         }
 
         val headersWithCache = this.cache[this.etagKey(uri)]?.let { etag ->
-            println("REQUEST CLIENT: check cache validity with etag $etag for: $uri")
+            logger.info {
+                "Checking cache validity with etag $etag for: $uri\""
+            }
             headers(baseHeaders) { "If-None-Match" to etag }
         } ?: baseHeaders
 
@@ -135,14 +143,15 @@ class RequestClientImpl(
 
         return when (response.code) {
             HttpURLConnection.HTTP_OK -> {
-                // TODO use proper logging here
-                println("REQUEST CLIENT: from remote: $uri")
+                logger.info { "Fetch from remote: $uri" }
                 this.processResponse(uri, response, clazz, responseMapper)
             }
             HttpURLConnection.HTTP_NOT_MODIFIED -> {
                 val cachedResponse = this.cache[responseKey(uri)]
                 if (cachedResponse == null) { // missed cache just in case
-                    println("REQUEST CLIENT: missed cache result; try from remote for: $uri")
+                    logger.info {
+                        "Missed cache result -> try re-fetching from remote for: $uri\""
+                    }
                     val newResponse = this.requestCommand.request(
                         uri,
                         baseHeaders
@@ -153,7 +162,9 @@ class RequestClientImpl(
                         throw GitFeedException.fromString(Type.HTTP, newResponse.body, true)
                     }
                 } else {
-                    println("REQUEST CLIENT: from cache: $uri")
+                    logger.info {
+                        "Fetch from cache: $uri"
+                    }
                     this.objectMapper.readValue(cachedResponse, clazz)
                 }
             }
@@ -181,12 +192,15 @@ class RequestClientImpl(
         val strMapped = this.objectMapper.writeValueAsString(jsonMapped)
         val etag = response.headers.first("ETag")
         if (etag != null) {
-            println("REQUEST CLIENT: got remote etag $etag for : $uri")
-            println("REQUEST CLIENT: caching response for : $uri")
+            logger.info {
+                "Got remote etag $etag for : $uri. Caching response."
+            }
             this.cache[this.etagKey(uri)] = etag
             this.cache[this.responseKey(uri)] = strMapped
         } else {
-            println("REQUEST CLIENT: no remote etag: $uri")
+            logger.info {
+                "No remote etag present for : $uri. Caching response skipped."
+            }
         }
         return this.objectMapper.readValue(strMapped, clazz)
     }
@@ -217,6 +231,11 @@ class RequestClientImpl(
     private class FastCacheRequestClient(private val delegate: RequestClient) : RequestClient {
 
         /**
+         * Logger.
+         */
+        private val logger = KLogger<FastCacheRequestClient>()
+
+        /**
          * Fast cache.
          */
         private val fastCache = mutableMapOf<URI, Any>()
@@ -228,12 +247,16 @@ class RequestClientImpl(
             clazz: Class<T>,
             responseMapper: (JsonResponse) -> JsonNode
         ): T = if (!fastCache.containsKey(uri)) {
-            println("REQUEST CLIENT: fast caching response for: $uri")
+            logger.info {
+                "Storing to fast cache for $uri"
+            }
             val entry = this.delegate.request(uri, extraHeaders, clazz, responseMapper) as Any
             fastCache[uri] = entry
             entry as T
         } else {
-            println("REQUEST CLIENT: from fast cache: $uri")
+            logger.info {
+                "Fetch from fast cache for $uri"
+            }
             fastCache[uri]!! as T
         }
 
