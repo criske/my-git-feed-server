@@ -26,6 +26,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation(group = "redis.clients", name = "jedis", version = "3.5.1")
     implementation("com.github.criske:inval-id:1.0")
+    implementation("io.github.microutils:kotlin-logging-jvm:2.0.6")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
@@ -38,6 +39,7 @@ dependencies {
     testImplementation("io.kotest:kotest-extensions-spring:${kotest}")
     testImplementation(group = "it.ozimov", name = "embedded-redis", version = "0.7.3")
     testImplementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
+  //  testImplementation(group = "org.slf4j", name = "slf4j-simple", version = "1.7.30")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0") {
         exclude("com.squareup.okhttp3", "okhttp")
