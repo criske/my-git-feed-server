@@ -38,61 +38,13 @@ import java.net.URI
 /**
  * Request client.
  *
- * @author Cristian Pela
- */
-interface RequestClient {
-
-    /**
-     * Make a request and also deals with caching.
-     *
-     * @param T type of response body class.
-     * @param uri URI.
-     * @param extraHeaders Although RequestClient takes of the all the required headers,
-     * one might add extra request headers.
-     * @param clazz Class of T needed to construct the object.
-     * @param responseMapper
-     * @receiver
-     * @return T
-     */
-    fun <T> request(
-        uri: URI,
-        extraHeaders: Headers = emptyMap(),
-        clazz: Class<T>,
-        responseMapper: (JsonResponse) -> JsonNode = { it.body }
-    ): T
-
-    /**
-     * Authorized request client.
-     *
-     * @param accessToken AccessToken.
-     * @return RequestClient
-     */
-    fun authorized(accessToken: AccessToken): RequestClient
-
-    /**
-     * Request client the uses a local in memory cache, without caring about
-     * the data staleness.
-     *
-     * This should only be used in locally, for example when doing successive
-     * requests for the same url(s) within a function scope.
-     *
-     * This client should not be used in a multi-thread environment.
-     *
-     * @return RequestClient
-     */
-    fun fastCache(): RequestClient
-}
-
-/**
- * Request client.
- *
  * @property cache Cache Store.
  * @property requestCommand Request Command.
  * @property accessToken Access Token.
  *
  * @author Cristian Pela
  */
-class RequestClientImpl(
+internal class RequestClientImpl(
     private val cache: CacheStore,
     private val requestCommand: RequestCommand,
     private val accessToken: AccessToken = Unauthorized
@@ -222,49 +174,6 @@ class RequestClientImpl(
      */
     private fun responseKey(uri: URI): String =
         base64Encode("res", uri.toString(), padded = false)
-
-    /**
-     * Fast cache request client.
-     *
-     * @param delegate RequestClient.
-     */
-    private class FastCacheRequestClient(private val delegate: RequestClient) : RequestClient {
-
-        /**
-         * Logger.
-         */
-        private val logger = KLogger<FastCacheRequestClient>()
-
-        /**
-         * Fast cache.
-         */
-        private val fastCache = mutableMapOf<URI, Any>()
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T> request(
-            uri: URI,
-            extraHeaders: Headers,
-            clazz: Class<T>,
-            responseMapper: (JsonResponse) -> JsonNode
-        ): T = if (!fastCache.containsKey(uri)) {
-            logger.info {
-                "Storing to fast cache for $uri"
-            }
-            val entry = this.delegate.request(uri, extraHeaders, clazz, responseMapper) as Any
-            fastCache[uri] = entry
-            entry as T
-        } else {
-            logger.info {
-                "Fetch from fast cache for $uri"
-            }
-            fastCache[uri]!! as T
-        }
-
-        override fun authorized(accessToken: AccessToken): RequestClient =
-            FastCacheRequestClient(this.delegate.authorized(accessToken))
-
-        override fun fastCache(): RequestClient = this
-    }
 }
 
 /**
