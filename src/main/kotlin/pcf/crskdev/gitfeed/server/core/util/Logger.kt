@@ -28,6 +28,7 @@ package pcf.crskdev.gitfeed.server.core.util
 import mu.KLogger
 import mu.KotlinLogging
 import org.slf4j.LoggerFactory
+import kotlin.properties.ReadOnlyProperty
 
 /**
  * K logger simple builder function.
@@ -36,3 +37,14 @@ import org.slf4j.LoggerFactory
  */
 inline fun <reified T> KLogger(): KLogger = KotlinLogging
     .logger(LoggerFactory.getLogger(T::class.java))
+
+/**
+ * K logger simple builder delegation function.
+ *
+ * @return mu.KLogger.
+ */
+fun logger(): ReadOnlyProperty<Any, KLogger> =
+    ReadOnlyProperty { thisRef, _ ->
+        KotlinLogging
+            .logger(LoggerFactory.getLogger(thisRef::class.java))
+    }
