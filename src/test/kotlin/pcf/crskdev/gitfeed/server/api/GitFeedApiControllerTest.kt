@@ -33,7 +33,8 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.test.context.ContextConfiguration
+import org.springframework.boot.test.context.TestConfiguration
+import org.springframework.context.annotation.Bean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
@@ -49,11 +50,15 @@ import pcf.crskdev.gitfeed.server.core.feed.models.Repo
 import pcf.crskdev.gitfeed.server.core.feed.models.User
 import pcf.crskdev.gitfeed.server.core.util.jsonTo
 import pcf.crskdev.gitfeed.server.util.kotest.getBean
-import pcf.crskdev.gitfeed.server.util.spring.TestBeanFactories
 
 @WebMvcTest(GitFeedApiController::class)
-@ContextConfiguration(classes = [TestBeanFactories::class])
 internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc) : DescribeSpec() {
+
+    @TestConfiguration
+    class Inject {
+        @Bean
+        fun gitFeedManager(): GitFeedManager = mock()
+    }
 
     init {
 

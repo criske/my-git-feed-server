@@ -36,6 +36,7 @@ import pcf.crskdev.gitfeed.server.core.net.first
 import pcf.crskdev.gitfeed.server.core.net.headers
 import java.net.URI
 
+@Suppress("BlockingMethodInNonBlockingContext")
 internal class RestTemplateCommandTest : StringSpec({
 
     "rest template request command impl should work" {
@@ -97,7 +98,7 @@ internal class RestTemplateCommandTest : StringSpec({
 
         shouldThrow<GitFeedException> {
             reqCommand.request(url, emptyMap())
-        }.let { println(it.message) }
+        }
         server.shutdown()
     }
 })
