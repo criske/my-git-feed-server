@@ -36,38 +36,30 @@ import com.nhaarman.mockitokotlin2.whenever
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
-import org.springframework.test.context.ContextConfiguration
 import pcf.crskdev.gitfeed.server.core.GitFeedException
 import pcf.crskdev.gitfeed.server.core.cache.CacheStore
 import pcf.crskdev.gitfeed.server.core.util.base64Encode
-import pcf.crskdev.gitfeed.server.util.kotest.getBean
-import pcf.crskdev.gitfeed.server.util.spring.TestBeanFactories
 import java.net.URI
 
-@ContextConfiguration(classes = [TestBeanFactories::class])
-internal class RequestClientTest(initial: RequestClient) : DescribeSpec() {
+internal class RequestClientTest() : DescribeSpec() {
 
     init {
-
         val uri = URI.create("/")
         val etagKey = base64Encode("etag", uri.toString(), padded = false)
         val resKey = base64Encode("res", uri.toString(), padded = false)
-        val client = initial.authorized(Bearer("123"))
 
-        describe("client injection tests") {
-            it("should be injected") {
-                initial.shouldBeInstanceOf<RequestClient>()
-            }
-        }
+        val requestCommand = mock<RequestCommand>()
+        val cache = mock<CacheStore>()
+        val client = RequestClientImpl(cache, requestCommand)
+            .authorized(Bearer("123"))
+
         describe("network tests") {
-            val requestCommand = getBean<RequestCommand>()
             beforeTest {
                 reset(requestCommand)
             }
             it("should throw if access token header is not set") {
                 shouldThrow<GitFeedException> {
-                    initial.request<Message>(uri)
+                    client.authorized(Unauthorized).request<Message>(uri)
                 }
             }
             it("should get OK response") {
@@ -87,14 +79,9 @@ internal class RequestClientTest(initial: RequestClient) : DescribeSpec() {
             }
         }
         describe("cache tests") {
-
-            val cache = getBean<CacheStore>()
-            val requestCommand = getBean<RequestCommand>()
-
             beforeTest {
                 reset(cache, requestCommand)
             }
-
             it("should cache the response") {
                 val etag = "123"
                 whenever(requestCommand.request(any(), any())).thenReturn(
