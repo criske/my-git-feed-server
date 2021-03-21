@@ -26,6 +26,7 @@
 package pcf.crskdev.gitfeed.server.core.feed.github
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.JsonSerializable
 import pcf.crskdev.gitfeed.server.core.feed.GitFeed
 import pcf.crskdev.gitfeed.server.core.feed.extractPaging
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
@@ -86,11 +87,7 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
                         "date" to it["commit"]["author"]["date"]
                         "url" to it["html_url"]
                         "message" to it["commit"]["message"]
-                        "repo" to obj {
-                            "fullName" to it["repository"]["full_name"]
-                            "url" to it["repository"]["html_url"]
-                            "owner" to getUser(it["repository"]["owner"])
-                        }
+                        "repo" to simpleRepo(it["repository"])
                     }
                 }
             }
@@ -117,8 +114,8 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
                             "body" to it["body"]
                             "url" to it["html_url"]
                             "isOpen" to (it["state"].asText() != "closed")
-                            "repo" to getRepo(fastClient, it["repository_url"].asText()).simple
-                            "author" to getUser(it["user"])
+                            "repo" to fastClient.fetchRepo(it["repository_url"].asText()).simple
+                            "author" to user(it["user"])
                         }
                     }
                 }
@@ -127,47 +124,69 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
     }
 
     override fun me(): User = this.client
-        .request(URI.create("$baseUrl/users/criske")) { getUser(it.body) }
+        .request(URI.create("$baseUrl/users/criske")) { user(it.body) }
 
-    private fun getRepo(client: RequestClient, url: String): RepoExtended =
-        client.request(URI.create(url)) {
+    /**
+     * Get repo from remote.
+     *
+     * @param url Url
+     * @return RepoExtended.
+     */
+    private fun RequestClient.fetchRepo(url: String): RepoExtended =
+        this.request(URI.create(url)) {
             obj {
-                "simple" to obj {
-                    "fullName" to it.body["full_name"]
-                    "url" to it.body["html_url"]
-                    "owner" to getUser(it.body["owner"])
-                }
+                "simple" to simpleRepo(it.body)
                 "description" to it.body["description"]
                 "isFork" to it.body["fork"]
                 "stars" to it.body["stargazers_count"]
                 "language" to it.body["language"]
-                "organization" to it.body["organization"]?.let { getUser(it) }
+                "organization" to it.body["organization"]?.let { user(it) }
                 "createdAt" to it.body["created_at"]
                 "updatedAt" to it.body["updated_at"]
             }.asTree()
         }
 
     /**
-     * Get user from a github json response key.
+     * Extract simple repo from json.
      *
-     * @return JsonNode
+     * @param node
+     * @return
      */
-    private fun ObjectScope.getUser(node: JsonNode) = obj {
-        "name" to node["login"]
-        "avatar" to node["avatar_url"]
+    private fun ObjectScope.simpleRepo(node: JsonNode): JsonSerializable = obj {
+        "fullName" to node["full_name"]
         "url" to node["html_url"]
-        "type" to node["type"]
+        "owner" to user(node["owner"])
     }
 
     /**
-     * Get user from a github json response key.
+     * Extract user from a github json response key.
      *
      * @return JsonNode
      */
-    private fun getUser(node: JsonNode) = obj {
-        "name" to node["login"]
-        "avatar" to node["avatar_url"]
-        "url" to node["html_url"]
-        "type" to node["type"]
+    private fun ObjectScope.user(node: JsonNode) = obj {
+        applyUser(this, node)
+    }
+
+    /**
+     * Extract user from a github json response key.
+     *
+     * @return JsonNode
+     */
+    private fun user(node: JsonNode) = obj {
+        applyUser(this, node)
     }.asTree()
+
+    /**
+     * Apply extracted user data from a github json response key to ObjectScope.
+     *
+     * @param objectScope ObjectScope.
+     * @param node JsonNode.
+     */
+    private fun applyUser(objectScope: ObjectScope, node: JsonNode) =
+        objectScope.apply {
+            "name" to node["login"]
+            "avatar" to node["avatar_url"]
+            "url" to node["html_url"]
+            "type" to node["type"]
+        }
 }
