@@ -34,6 +34,7 @@ import pcf.crskdev.gitfeed.server.core.feed.GitFeedManager
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
+import pcf.crskdev.gitfeed.server.core.feed.models.Repos
 import pcf.crskdev.gitfeed.server.core.feed.models.User
 
 /**
@@ -79,11 +80,24 @@ class GitFeedApiController(private val manager: GitFeedManager) {
     }
 
     /**
-     * Me.
+     * Me endpoint.
      *
      * @param provider Provider.
      * @return User.
      */
     @GetMapping("/me/{provider}")
     fun me(@PathVariable provider: String): User = this.manager.of(provider).me()
+
+    /**
+     * Repos non-forked endpoint.
+     *
+     * @param provider Provider
+     * @param page Page number
+     * @return Repos.
+     */
+    @GetMapping("/repos/{provider}")
+    fun repos(
+        @PathVariable provider: String,
+        @RequestParam(required = false) page: Int?
+    ): Repos = this.manager.of(provider).repos(page)
 }

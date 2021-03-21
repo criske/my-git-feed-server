@@ -25,15 +25,18 @@
 
 package pcf.crskdev.gitfeed.server.core.feed.models
 
-data class Repo(val fullName: String, val url: String, val owner: User)
+data class Repo(val name: String, val fullName: String, val url: String, val owner: User)
 
 data class RepoExtended(
     val simple: Repo,
-    val description: String,
+    val description: String?,
     val isFork: Boolean,
+    val isPrivate: Boolean,
     val stars: Int,
-    val language: String,
+    val language: String?,
     val organization: User?,
     val createdAt: String,
     val updatedAt: String
 )
+
+data class Repos(val paging: Paging, val entries: List<RepoExtended>)
