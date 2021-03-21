@@ -42,7 +42,7 @@ class CheckControllerTest @Autowired constructor(mockMvc: MockMvc) : StringSpec(
     init {
         "should call ping api endpoint" {
             val json = obj {
-                "ping" to "My-Git-Feed API is up and running"
+                "ping" to "My-Git-Feed API is up and running!"
             }
             mockMvc
                 .perform(get("/check/ping"))
