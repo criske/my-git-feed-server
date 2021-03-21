@@ -26,7 +26,7 @@
 package pcf.crskdev.gitfeed.server.core.net
 
 import com.fasterxml.jackson.databind.JsonNode
-import pcf.crskdev.gitfeed.server.core.util.KLogger
+import pcf.crskdev.gitfeed.server.core.util.logger
 import java.net.URI
 
 /**
@@ -41,7 +41,7 @@ internal class FastCacheRequestClient(private val delegate: RequestClient) : Req
     /**
      * Logger.
      */
-    private val logger = KLogger<FastCacheRequestClient>()
+    private val logger by logger()
 
     /**
      * Fast cache.
