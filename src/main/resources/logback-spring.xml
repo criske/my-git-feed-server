@@ -1,0 +1,22 @@
+<configuration>
+    <springProfile name="prod">
+        <appender name="consoleAppender"
+                  class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+        </appender>
+        <logger name="jsonLogger" additivity="false" level="DEBUG">
+            <appender-ref ref="consoleAppender"/>
+        </logger>
+        <root level="INFO">
+            <appender-ref ref="consoleAppender"/>
+        </root>
+    </springProfile>
+    <springProfile name="dev">
+        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+        </root>
+        <logger name="org.springframework.web" level="DEBUG"/>
+    </springProfile>
+</configuration>

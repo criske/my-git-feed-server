@@ -36,7 +36,7 @@ class RedisTest : StringSpec({
     "embedded redis should work" {
 
         val server = RedisServer.builder()
-            .port(RedisInfo.PORT)
+            .port(RedisInfo.URL.split(":")[2].toInt())
             .build()
             .apply { start() }
 

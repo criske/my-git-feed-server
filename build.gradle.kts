@@ -21,6 +21,13 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("org.ehcache:ehcache:3.9.2")
+    implementation("com.giffing.bucket4j.spring.boot.starter:bucket4j-spring-boot-starter:0.3.3")
+    val springSec = "5.4.5"
+    implementation(group = "org.springframework.security", name = "spring-security-config", version = springSec)
+    implementation(group = "org.springframework.security", name = "spring-security-web", version = springSec)
+    implementation(group = "net.logstash.logback", name = "logstash-logback-encoder", version = "6.6")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -39,7 +46,7 @@ dependencies {
     testImplementation("io.kotest:kotest-extensions-spring:${kotest}")
     testImplementation(group = "it.ozimov", name = "embedded-redis", version = "0.7.3")
     testImplementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
-  //  testImplementation(group = "org.slf4j", name = "slf4j-simple", version = "1.7.30")
+    //  testImplementation(group = "org.slf4j", name = "slf4j-simple", version = "1.7.30")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0") {
         exclude("com.squareup.okhttp3", "okhttp")
@@ -60,9 +67,8 @@ tasks.withType<Test> {
 
 tasks.test {
     environment(mapOf(
-        "gh_token" to "gh_fake_123",
-        "redis_host" to "localhost",
-        "redis_port" to "6379"
+        "GH_TOKEN" to "gh_fake_123",
+        "REDIS_URL" to "redis://localhost:6379"
     ))
 }
 
