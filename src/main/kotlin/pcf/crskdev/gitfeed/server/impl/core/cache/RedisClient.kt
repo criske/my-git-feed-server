@@ -50,7 +50,7 @@ object RedisClient {
                 client.set(key, value)
             }
 
-            override fun get(key: String): String = client[key]
+            override fun get(key: String): String? = client[key]
 
             override fun exists(key: String): Boolean = client.exists(key)
 

@@ -51,7 +51,7 @@ class BeanFactories {
      * @return CacheStore.
      */
     @Bean
-    @Profile("production")
+    @Profile("prod")
     fun cacheStore(): CacheStore = RedisClient()
 
     /**
