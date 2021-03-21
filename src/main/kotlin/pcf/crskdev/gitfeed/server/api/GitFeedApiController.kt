@@ -43,7 +43,7 @@ import pcf.crskdev.gitfeed.server.core.feed.models.User
  * @property manager GitFeedManager
  */
 @RestController
-@RequestMapping("/api/feeds")
+@RequestMapping("/api/{provider}")
 class GitFeedApiController(private val manager: GitFeedManager) {
 
     /**
@@ -53,7 +53,7 @@ class GitFeedApiController(private val manager: GitFeedManager) {
      * @param page Page number
      * @return Commits.
      */
-    @GetMapping("/commits/{provider}")
+    @GetMapping("/commits")
     fun commits(
         @PathVariable provider: String,
         @RequestParam(required = false) page: Int?
@@ -69,7 +69,7 @@ class GitFeedApiController(private val manager: GitFeedManager) {
      * @param page Page number
      * @return Assignments.
      */
-    @GetMapping("/assignments/{provider}")
+    @GetMapping("/assignments")
     fun assignments(
         @PathVariable provider: String,
         @RequestParam(required = false) state: String?,
@@ -85,7 +85,7 @@ class GitFeedApiController(private val manager: GitFeedManager) {
      * @param provider Provider.
      * @return User.
      */
-    @GetMapping("/me/{provider}")
+    @GetMapping("/me")
     fun me(@PathVariable provider: String): User = this.manager.of(provider).me()
 
     /**
@@ -95,7 +95,7 @@ class GitFeedApiController(private val manager: GitFeedManager) {
      * @param page Page number
      * @return Repos.
      */
-    @GetMapping("/repos/{provider}")
+    @GetMapping("/repos")
     fun repos(
         @PathVariable provider: String,
         @RequestParam(required = false) page: Int?

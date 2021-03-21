@@ -36,8 +36,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import pcf.crskdev.gitfeed.server.core.util.obj
 
-@WebMvcTest(PingController::class)
-class PingControllerTest @Autowired constructor(mockMvc: MockMvc) : StringSpec() {
+@WebMvcTest(CheckController::class)
+class CheckControllerTest @Autowired constructor(mockMvc: MockMvc) : StringSpec() {
 
     init {
         "should call ping api endpoint" {
@@ -45,7 +45,7 @@ class PingControllerTest @Autowired constructor(mockMvc: MockMvc) : StringSpec()
                 "ping" to "My-Git-Feed API is up and running"
             }
             mockMvc
-                .perform(get("/api/ping"))
+                .perform(get("/check/ping"))
                 .andDo(print()).andExpect(status().isOk)
                 .andExpect(content().string(json.asString()))
         }
@@ -56,7 +56,7 @@ class PingControllerTest @Autowired constructor(mockMvc: MockMvc) : StringSpec()
                 "error" to "Exception handling works"
             }.asString()
             mockMvc
-                .perform(get("/api/exception"))
+                .perform(get("/check/exception"))
                 .andDo(print())
                 .andExpect(status().isBadRequest)
                 .andExpect { result -> result.resolvedException?.message shouldBe json }

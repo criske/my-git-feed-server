@@ -33,8 +33,8 @@ import pcf.crskdev.gitfeed.server.core.GitFeedException.Type
 import pcf.crskdev.gitfeed.server.core.Ping
 
 @RestController
-@RequestMapping("/api")
-class PingController {
+@RequestMapping("/check")
+class CheckController {
 
     @GetMapping("/ping")
     fun ping(): Ping = Ping()

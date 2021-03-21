@@ -51,6 +51,7 @@ internal class GithubGitFeedTest : StringSpec({
     "should fetch commits" {
         val uri = URI.create("https://api.github.com/search/commits?q=author:criske&sort=author-date")
         val requestHeaders = headers {
+            "Accept" to "application/vnd.github.v3+json"
             "Accept" to "application/vnd.github.cloak-preview+json"
             "Content-Type" to "application/json"
             "Authorization" to "Bearer 123"
@@ -95,6 +96,7 @@ internal class GithubGitFeedTest : StringSpec({
     "should fetch page commits" {
         val uri = URI.create("https://api.github.com/search/commits?q=author:criske&sort=author-date&page=2")
         val requestHeaders = headers {
+            "Accept" to "application/vnd.github.v3+json"
             "Accept" to "application/vnd.github.cloak-preview+json"
             "Content-Type" to "application/json"
             "Authorization" to "Bearer 123"
@@ -118,6 +120,7 @@ internal class GithubGitFeedTest : StringSpec({
     "should fetch assignments" {
         val uri = URI.create("https://api.github.com/search/issues?q=assignee:criske")
         val requestHeaders = headers {
+            "Accept" to "application/vnd.github.v3+json"
             "Accept" to "application/vnd.github.cloak-preview+json"
             "Content-Type" to "application/json"
             "Authorization" to "Bearer 123"
@@ -181,6 +184,7 @@ internal class GithubGitFeedTest : StringSpec({
     "should fetch me" {
         val uri = URI.create("https://api.github.com/users/criske")
         val requestHeaders = headers {
+            "Accept" to "application/vnd.github.v3+json"
             "Content-Type" to "application/json"
             "Authorization" to "Bearer 123"
         }
@@ -206,9 +210,10 @@ internal class GithubGitFeedTest : StringSpec({
     "should fetch repositories" {
         val uri = URI.create("https://api.github.com/search/repositories?q=user:criske+fork:false&sort=updated")
         val requestHeaders = headers {
+            "Accept" to "application/vnd.github.v3+json"
+            "Accept" to "application/vnd.github.cloak-preview+json"
             "Content-Type" to "application/json"
             "Authorization" to "Bearer 123"
-            "Accept" to "application/vnd.github.cloak-preview+json"
         }
         val command = mock<RequestCommand>()
         val gitFeed = GithubGitFeed(RequestClientImpl(mock(), command, Bearer("123")))

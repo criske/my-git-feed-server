@@ -98,7 +98,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                 whenever(feed.commits(null)).thenReturn(commits)
 
                 mockMvc
-                    .perform(get("/api/feeds/commits/github"))
+                    .perform(get("/api/github/commits"))
                     .andDo(print()).andExpect(status().isOk)
                     .andExpect { result ->
                         result.response.contentAsString.jsonTo<Commits>() shouldBe commits
@@ -119,7 +119,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                 whenever(feed.assignments(Assignment.State.ALL)).thenReturn(assignments)
 
                 mockMvc
-                    .perform(get("/api/feeds/assignments/github"))
+                    .perform(get("/api/github/assignments"))
                     .andDo(print()).andExpect(status().isOk)
                     .andExpect { result ->
                         result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
@@ -131,7 +131,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                 whenever(feed.assignments(Assignment.State.ALL)).thenReturn(assignments)
 
                 mockMvc
-                    .perform(get("/api/feeds/assignments/github?state=all"))
+                    .perform(get("/api/github/assignments?state=all"))
                     .andDo(print()).andExpect(status().isOk)
                     .andExpect { result ->
                         result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
@@ -143,7 +143,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                 whenever(feed.assignments(Assignment.State.ALL)).thenReturn(assignments)
 
                 mockMvc
-                    .perform(get("/api/feeds/assignments/github?state=foo"))
+                    .perform(get("/api/github/assignments?state=foo"))
                     .andDo(print()).andExpect(status().isOk)
                     .andExpect { result ->
                         result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
@@ -155,7 +155,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                 whenever(feed.assignments(Assignment.State.ALL, 1)).thenReturn(assignments)
 
                 mockMvc
-                    .perform(get("/api/feeds/assignments/github?state=all&page=1"))
+                    .perform(get("/api/github/assignments?state=all&page=1"))
                     .andDo(print()).andExpect(status().isOk)
                     .andExpect { result ->
                         result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
@@ -167,7 +167,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                 whenever(feed.assignments(Assignment.State.CLOSED, 1)).thenReturn(assignments)
 
                 mockMvc
-                    .perform(get("/api/feeds/assignments/github?state=closed&page=1"))
+                    .perform(get("/api/github/assignments?state=closed&page=1"))
                     .andDo(print()).andExpect(status().isOk)
                     .andExpect { result ->
                         result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
@@ -179,7 +179,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                 whenever(feed.assignments(Assignment.State.CLOSED)).thenReturn(assignments)
 
                 mockMvc
-                    .perform(get("/api/feeds/assignments/github?state=closed"))
+                    .perform(get("/api/github/assignments?state=closed"))
                     .andDo(print()).andExpect(status().isOk)
                     .andExpect { result ->
                         result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
@@ -191,7 +191,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                 whenever(feed.assignments(Assignment.State.OPEN, 1)).thenReturn(assignments)
 
                 mockMvc
-                    .perform(get("/api/feeds/assignments/github?state=oPen&page=1"))
+                    .perform(get("/api/github/assignments?state=oPen&page=1"))
                     .andDo(print()).andExpect(status().isOk)
                     .andExpect { result ->
                         result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
@@ -203,7 +203,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                 whenever(feed.assignments(Assignment.State.OPEN)).thenReturn(assignments)
 
                 mockMvc
-                    .perform(get("/api/feeds/assignments/github?state=open"))
+                    .perform(get("/api/github/assignments?state=open"))
                     .andDo(print()).andExpect(status().isOk)
                     .andExpect { result ->
                         result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
@@ -225,7 +225,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                 whenever(feed.me()).thenReturn(me)
 
                 mockMvc
-                    .perform(get("/api/feeds/me/github"))
+                    .perform(get("/api/github/me"))
                     .andDo(print()).andExpect(status().isOk)
                     .andExpect { result ->
                         result.response.contentAsString.jsonTo<User>() shouldBe me
@@ -268,7 +268,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                 whenever(feed.repos()).thenReturn(repos)
 
                 mockMvc
-                    .perform(get("/api/feeds/repos/github"))
+                    .perform(get("/api/github/repos"))
                     .andDo(print()).andExpect(status().isOk)
                     .andExpect { result ->
                         result.response.contentAsString.jsonTo<Repos>() shouldBe repos

@@ -56,28 +56,22 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
     private val baseUrl = "https://api.github.com"
 
     /**
-     * Headers.
+     * Api header.
      */
-    private val searchHeaders = headers {
-        "Accept" to "application/vnd.github.cloak-preview+json"
+    private val apiHeader = headers {
+        "Accept" to "application/vnd.github.v3+json"
     }
 
     /**
-     * Uri with optional page query param.
-     *
-     * @param path Path.
-     * @param page Int.
-     * @return URI
+     * Search feature header.
      */
-    private fun uriWithPage(path: String, page: Int?): URI {
-        val pageParam = if (page != null) "&page=$page" else ""
-        val slash = if (path.startsWith("/")) "" else "/"
-        return URI.create("$baseUrl$slash$path$pageParam")
+    private val searchHeader = headers(apiHeader) {
+        "Accept" to "application/vnd.github.cloak-preview+json"
     }
 
     override fun commits(page: Int?): Commits = this.client.request(
         this.uriWithPage("/search/commits?q=author:criske&sort=author-date", page),
-        this.searchHeaders
+        this.searchHeader
     ) {
         obj {
             "paging" to it.headers.extractPaging()
@@ -104,7 +98,7 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
         val fastClient = this.client.fastCache()
         return fastClient.request(
             this.uriWithPage("search/issues?q=assignee:criske$stateQuery", page),
-            this.searchHeaders
+            this.searchHeader
         ) {
             obj {
                 "paging" to it.headers.extractPaging()
@@ -125,12 +119,12 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
     }
 
     override fun me(): User = this.client
-        .request(URI.create("$baseUrl/users/criske")) { user(it.body) }
+        .request(URI.create("$baseUrl/users/criske"), this.apiHeader) { user(it.body) }
 
     override fun repos(page: Int?): Repos =
         this.client.request(
             this.uriWithPage("search/repositories?q=user:criske+fork:false&sort=updated", page),
-            this.searchHeaders
+            this.searchHeader
         ) {
             obj {
                 "paging" to it.headers.extractPaging()
@@ -141,6 +135,19 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
                 }
             }.asTree()
         }
+
+    /**
+     * Uri with optional page query param.
+     *
+     * @param path Path.
+     * @param page Int.
+     * @return URI
+     */
+    private fun uriWithPage(path: String, page: Int?): URI {
+        val pageParam = if (page != null) "&page=$page" else ""
+        val slash = if (path.startsWith("/")) "" else "/"
+        return URI.create("$baseUrl$slash$path$pageParam")
+    }
 
     /**
      * Get repo from remote.
