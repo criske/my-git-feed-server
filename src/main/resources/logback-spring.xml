@@ -1,5 +1,5 @@
 <configuration>
-    <springProfile name="prod">
+    <springProfile name="none">
         <appender name="consoleAppender"
                   class="ch.qos.logback.core.ConsoleAppender">
             <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
@@ -11,7 +11,7 @@
             <appender-ref ref="consoleAppender"/>
         </root>
     </springProfile>
-    <springProfile name="dev">
+    <springProfile name="prod">
         <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
         <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
         <root level="INFO">
