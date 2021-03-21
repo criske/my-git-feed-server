@@ -23,16 +23,21 @@
  *
  */
 
-package pcf.crskdev.gitfeed.server.impl.core.cache
+package pcf.crskdev.gitfeed.server.config
 
-/**
- * Redis info (host and port).
- *
- */
-object RedisInfo {
-    /**
-     * U r l
-     */
-    val URL: String = System.getenv("REDIS_URL")
-        ?: throw IllegalStateException("`REDIS_URL` env variable is not set")
+import org.springframework.cache.annotation.EnableCaching
+import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.web.util.matcher.RequestMatcher
+
+@Configuration
+@EnableCaching
+class HerokuWebSecurityConfig : WebSecurityConfigurerAdapter() {
+
+    override fun configure(http: HttpSecurity) {
+        http.requiresChannel()
+            .requestMatchers(RequestMatcher { it.getHeader("X-Forwarded-Proto") != null })
+            .requiresSecure()
+    }
 }

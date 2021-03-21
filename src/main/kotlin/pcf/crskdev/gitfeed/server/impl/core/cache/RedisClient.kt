@@ -41,10 +41,7 @@ object RedisClient {
             /**
              * Cluster
              */
-            private val client = JedisPool(
-                RedisInfo.HOST,
-                RedisInfo.PORT
-            ).resource
+            private val client = JedisPool(RedisInfo.URL).resource
 
             override fun set(key: String, value: String) {
                 client.set(key, value)

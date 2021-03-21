@@ -23,7 +23,7 @@
  *
  */
 
-package pcf.crskdev.gitfeed.server
+package pcf.crskdev.gitfeed.server.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -43,7 +43,7 @@ import pcf.crskdev.gitfeed.server.impl.core.net.RestTemplateCommand
  *
  */
 @Configuration
-class BeanFactories {
+class DependencyInjections {
 
     /**
      * Cache store bean.
