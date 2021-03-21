@@ -28,6 +28,7 @@ package pcf.crskdev.gitfeed.server.core.feed
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
+import pcf.crskdev.gitfeed.server.core.feed.models.Repos
 import pcf.crskdev.gitfeed.server.core.getOrThrowGitFeedException
 import pcf.crskdev.inval.id.Rules
 import pcf.crskdev.inval.id.validates
@@ -42,21 +43,18 @@ import pcf.crskdev.inval.id.withId
 class ValidGitFeed(private val delegate: GitFeed) : GitFeed by delegate {
 
     override fun commits(page: Int?): Commits =
-        if (page != null) {
-            (Rules.Positive { "Commits page number must be positive" } validates page withId "page")()
-                .map { delegate.commits(it.toInt()) }
-                .getOrThrowGitFeedException()
-        } else {
+        this.pageCheckDelegation(page, "Commits") {
             delegate.commits(page)
         }
 
     override fun assignments(state: Assignment.State, page: Int?): Assignments =
-        if (page != null) {
-            (Rules.Positive { "Assignments page number must be positive" } validates page withId "page")()
-                .map { delegate.assignments(state, it.toInt()) }
-                .getOrThrowGitFeedException()
-        } else {
+        this.pageCheckDelegation(page, "Assignments") {
             delegate.assignments(state, page)
+        }
+
+    override fun repos(page: Int?): Repos =
+        this.pageCheckDelegation(page, "Repositories") {
+            delegate.repos(page)
         }
 
     override fun equals(other: Any?): Boolean {
@@ -66,4 +64,23 @@ class ValidGitFeed(private val delegate: GitFeed) : GitFeed by delegate {
     override fun hashCode(): Int {
         return this.delegate.hashCode()
     }
+
+    /**
+     * Checks if page is valid and the delegate.
+     *
+     * @param T Type.
+     * @param page Page.
+     * @param prefixMessage Starting message.
+     * @param delegation Call delegation.
+     * @receiver Nothing
+     * @return T
+     */
+    private fun <T> pageCheckDelegation(page: Int?, prefixMessage: String, delegation: () -> T): T =
+        if (page != null) {
+            (Rules.Positive { "$prefixMessage page number must be positive" } validates page withId "page")()
+                .map { delegation() }
+                .getOrThrowGitFeedException()
+        } else {
+            delegation()
+        }
 }

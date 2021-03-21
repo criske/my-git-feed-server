@@ -33,6 +33,7 @@ import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 import pcf.crskdev.gitfeed.server.core.feed.models.RepoExtended
+import pcf.crskdev.gitfeed.server.core.feed.models.Repos
 import pcf.crskdev.gitfeed.server.core.feed.models.User
 import pcf.crskdev.gitfeed.server.core.net.RequestClient
 import pcf.crskdev.gitfeed.server.core.net.headers
@@ -57,7 +58,7 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
     /**
      * Headers.
      */
-    private val previewHeaders = headers {
+    private val searchHeaders = headers {
         "Accept" to "application/vnd.github.cloak-preview+json"
     }
 
@@ -76,7 +77,7 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
 
     override fun commits(page: Int?): Commits = this.client.request(
         this.uriWithPage("/search/commits?q=author:criske&sort=author-date", page),
-        this.previewHeaders
+        this.searchHeaders
     ) {
         obj {
             "paging" to it.headers.extractPaging()
@@ -103,7 +104,7 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
         val fastClient = this.client.fastCache()
         return fastClient.request(
             this.uriWithPage("search/issues?q=assignee:criske$stateQuery", page),
-            this.previewHeaders
+            this.searchHeaders
         ) {
             obj {
                 "paging" to it.headers.extractPaging()
@@ -126,6 +127,21 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
     override fun me(): User = this.client
         .request(URI.create("$baseUrl/users/criske")) { user(it.body) }
 
+    override fun repos(page: Int?): Repos =
+        this.client.request(
+            this.uriWithPage("search/repositories?q=user:criske+fork:false&sort=updated", page),
+            this.searchHeaders
+        ) {
+            obj {
+                "paging" to it.headers.extractPaging()
+                "entries" to arr {
+                    it.body["items"].elements().forEach {
+                        +obj { applyRepo(it) }
+                    }
+                }
+            }.asTree()
+        }
+
     /**
      * Get repo from remote.
      *
@@ -135,24 +151,34 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
     private fun RequestClient.fetchRepo(url: String): RepoExtended =
         this.request(URI.create(url)) {
             obj {
-                "simple" to simpleRepo(it.body)
-                "description" to it.body["description"]
-                "isFork" to it.body["fork"]
-                "stars" to it.body["stargazers_count"]
-                "language" to it.body["language"]
-                "organization" to it.body["organization"]?.let { user(it) }
-                "createdAt" to it.body["created_at"]
-                "updatedAt" to it.body["updated_at"]
+                applyRepo(it.body)
             }.asTree()
         }
 
     /**
-     * Extract simple repo from json.
+     * Apply repo
      *
      * @param node
-     * @return
+     */
+    private fun ObjectScope.applyRepo(node: JsonNode) = apply {
+        "simple" to simpleRepo(node)
+        "description" to node["description"]
+        "isFork" to node["fork"]
+        "isPrivate" to node["private"]
+        "stars" to node["stargazers_count"]
+        "language" to node["language"]
+        "organization" to node["organization"]?.let { user(it) }
+        "createdAt" to node["created_at"]
+        "updatedAt" to node["updated_at"]
+    }
+
+    /**
+     *  Apply extracted repo data from a github json response key to ObjectScope.
+     *
+     * @param node JsonNode
      */
     private fun ObjectScope.simpleRepo(node: JsonNode): JsonSerializable = obj {
+        "name" to node["name"]
         "fullName" to node["full_name"]
         "url" to node["html_url"]
         "owner" to user(node["owner"])

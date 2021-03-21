@@ -23,6 +23,8 @@
  *
  */
 
+@file:Suppress("unused")
+
 package pcf.crskdev.gitfeed.server.api
 
 import com.nhaarman.mockitokotlin2.any
@@ -47,6 +49,8 @@ import pcf.crskdev.gitfeed.server.core.feed.models.Commit
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 import pcf.crskdev.gitfeed.server.core.feed.models.Paging
 import pcf.crskdev.gitfeed.server.core.feed.models.Repo
+import pcf.crskdev.gitfeed.server.core.feed.models.RepoExtended
+import pcf.crskdev.gitfeed.server.core.feed.models.Repos
 import pcf.crskdev.gitfeed.server.core.feed.models.User
 import pcf.crskdev.gitfeed.server.core.util.jsonTo
 import pcf.crskdev.gitfeed.server.util.kotest.getBean
@@ -75,6 +79,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                             "https://github.com/self-xdsd/self-web/commit/d4496c7c50e6ae443263e5fe5c13b631ca2cbebd",
                             "#371 Allow Deactivation Of All PaymentMethods.",
                             Repo(
+                                "self-web",
                                 "self-xdsd/self-web",
                                 "https://github.com/self-xdsd/self-web",
                                 User(
@@ -224,6 +229,49 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                     .andDo(print()).andExpect(status().isOk)
                     .andExpect { result ->
                         result.response.contentAsString.jsonTo<User>() shouldBe me
+                    }
+            }
+        }
+
+        describe("repos endpoint") {
+            it("should get repos") {
+                val repos = Repos(
+                    Paging(),
+                    listOf(
+                        RepoExtended(
+                            Repo(
+                                "self-web",
+                                "self-xdsd/self-web",
+                                "https://github.com/self-xdsd/self-web",
+                                User(
+                                    "self-xdsd",
+                                    "https://avatars.githubusercontent.com/u/65442807?v=4",
+                                    "https://github.com/self-xdsd",
+                                    "organization"
+                                )
+                            ),
+                            "Simple description",
+                            false,
+                            isPrivate = false,
+                            0,
+                            "Java",
+                            null,
+                            "now",
+                            "now"
+                        )
+                    )
+                )
+
+                val feed = mock<GitFeed>()
+                val manager = getBean<GitFeedManager>()
+                whenever(manager.of("github")).thenReturn(feed)
+                whenever(feed.repos()).thenReturn(repos)
+
+                mockMvc
+                    .perform(get("/api/feeds/repos/github"))
+                    .andDo(print()).andExpect(status().isOk)
+                    .andExpect { result ->
+                        result.response.contentAsString.jsonTo<Repos>() shouldBe repos
                     }
             }
         }

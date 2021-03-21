@@ -36,6 +36,7 @@ import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
 import pcf.crskdev.gitfeed.server.core.feed.models.Commit
 import pcf.crskdev.gitfeed.server.core.feed.models.Paging
 import pcf.crskdev.gitfeed.server.core.feed.models.Repo
+import pcf.crskdev.gitfeed.server.core.feed.models.RepoExtended
 import pcf.crskdev.gitfeed.server.core.feed.models.User
 import pcf.crskdev.gitfeed.server.core.net.Bearer
 import pcf.crskdev.gitfeed.server.core.net.RequestClientImpl
@@ -78,6 +79,7 @@ internal class GithubGitFeedTest : StringSpec({
             "https://github.com/self-xdsd/self-web/commit/d4496c7c50e6ae443263e5fe5c13b631ca2cbebd",
             "#371 Allow Deactivation Of All PaymentMethods.",
             Repo(
+                "self-web",
                 "self-xdsd/self-web",
                 "https://github.com/self-xdsd/self-web",
                 User(
@@ -150,7 +152,6 @@ internal class GithubGitFeedTest : StringSpec({
 
         val assignments = gitFeed.assignments()
 
-        // TODO finish tests here
         assignments.paging shouldBe Paging()
         assignments.entries.first() shouldBe Assignment(
             "Delete Fake Wallet On Real Wallet Activation",
@@ -158,6 +159,7 @@ internal class GithubGitFeedTest : StringSpec({
             "https://github.com/self-xdsd/self-web/issues/389",
             true,
             Repo(
+                "self-web",
                 "self-xdsd/self-web",
                 "https://github.com/self-xdsd/self-web",
                 User(
@@ -199,5 +201,50 @@ internal class GithubGitFeedTest : StringSpec({
             "https://github.com/criske",
             "User"
         )
+    }
+
+    "should fetch repositories" {
+        val uri = URI.create("https://api.github.com/search/repositories?q=user:criske+fork:false&sort=updated")
+        val requestHeaders = headers {
+            "Content-Type" to "application/json"
+            "Authorization" to "Bearer 123"
+            "Accept" to "application/vnd.github.cloak-preview+json"
+        }
+        val command = mock<RequestCommand>()
+        val gitFeed = GithubGitFeed(RequestClientImpl(mock(), command, Bearer("123")))
+
+        whenever(command.request(uri, requestHeaders)).thenReturn(
+            Response(
+                200,
+                File("src/test/resources/github_repos.json").readText(),
+                emptyMap()
+            )
+        )
+
+        val repos = gitFeed.repos()
+        repos.entries.size shouldBe 16
+        repos.paging shouldBe Paging()
+        repos.entries.first() shouldBe
+            RepoExtended(
+                Repo(
+                    "koonsplash",
+                    "criske/koonsplash",
+                    "https://github.com/criske/koonsplash",
+                    User(
+                        "criske",
+                        "https://avatars.githubusercontent.com/u/10284893?v=4",
+                        "https://github.com/criske",
+                        "User"
+                    )
+                ),
+                "Unofficial client side Kotlin wrapper for Unsplash API.",
+                false,
+                isPrivate = false,
+                0,
+                "Kotlin",
+                null,
+                "2020-09-21T10:19:18Z",
+                "2021-03-10T12:28:18Z"
+            )
     }
 })

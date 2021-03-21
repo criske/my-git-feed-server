@@ -29,6 +29,7 @@ import pcf.crskdev.gitfeed.server.core.GitFeedException
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
+import pcf.crskdev.gitfeed.server.core.feed.models.Repos
 import pcf.crskdev.gitfeed.server.core.feed.models.User
 
 /**
@@ -62,6 +63,14 @@ interface GitFeed {
     fun me(): User
 
     /**
+     * Non-forked owned Repos.
+     *
+     * @param page Of page.
+     * @return Repos.
+     */
+    fun repos(page: Int? = null): Repos
+
+    /**
      * Unknown GitFeed.
      *
      * @author Cristian Pela
@@ -85,6 +94,10 @@ interface GitFeed {
         }
 
         override fun me(): User {
+            throw exception
+        }
+
+        override fun repos(page: Int?): Repos {
             throw exception
         }
     }

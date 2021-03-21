@@ -35,6 +35,7 @@ import pcf.crskdev.gitfeed.server.core.GitFeedException
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 import pcf.crskdev.gitfeed.server.core.feed.models.Paging
+import pcf.crskdev.gitfeed.server.core.feed.models.Repos
 
 internal class ValidGitFeedTest : DescribeSpec({
 
@@ -93,6 +94,26 @@ internal class ValidGitFeedTest : DescribeSpec({
                 gitFeed.assignments(page = 0)
             }
             err.message shouldBe """{"type":"validation","error":{"violations":[{"page":"Assignments page number must be positive"}]}}"""
+        }
+    }
+
+    describe("repos validation") {
+        it("should pass validation") {
+            val delegate = mock<GitFeed>()
+            val gitFeed = ValidGitFeed(delegate)
+            val result = Repos(Paging(), emptyList())
+
+            whenever(delegate.repos(page = 1)).thenReturn(result)
+            gitFeed.repos(page = 1) shouldBe result
+        }
+
+        it("should throw if page is not positive") {
+            val delegate = mock<GitFeed>()
+            val gitFeed = ValidGitFeed(delegate)
+            val err = shouldThrow<GitFeedException> {
+                gitFeed.repos(page = 0)
+            }
+            err.message shouldBe """{"type":"validation","error":{"violations":[{"page":"Repositories page number must be positive"}]}}"""
         }
     }
 })
