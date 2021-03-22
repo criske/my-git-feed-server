@@ -30,15 +30,18 @@ import io.kotest.matchers.shouldBe
 import pcf.crskdev.gitfeed.server.impl.core.cache.RedisClient
 import pcf.crskdev.gitfeed.server.impl.core.cache.RedisInfo
 import redis.embedded.RedisServer
+import java.net.URI
 
 class RedisTest : StringSpec({
 
     "embedded redis should work" {
 
-        val server = RedisServer.builder()
-            .port(RedisInfo.URL.split(":")[2].toInt())
-            .build()
-            .apply { start() }
+        val server = URI.create(RedisInfo.URL).let {
+            RedisServer.builder()
+                .port(it.port)
+                .setting("maxmemory 128M")
+                .build()
+        }.apply { start() }
 
         RedisClient(true).use { redis ->
             redis.exists("foo") shouldBe false
