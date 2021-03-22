@@ -2,10 +2,28 @@
         xmlns="http://www.ehcache.org/v3"
         xsi:schemaLocation="
             http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
+    <persistence directory="spring-boot-ehcache/cache" />
     <cache alias="buckets">
         <expiry>
             <ttl unit="seconds">3600</ttl>
         </expiry>
         <heap unit="entries">1000000</heap>
+    </cache>
+    <cache alias="git-feed">
+<!--        <heap-store-settings>-->
+<!--            <max-object-graph-size>10</max-object-graph-size>-->
+<!--            <max-object-size unit="MB">100</max-object-size>-->
+<!--        </heap-store-settings>-->
+<!--        <disk-store-settings thread-pool="pool-disk" writer-concurrency="10" disk-segments="2"/>-->
+<!--        <expiry>-->
+<!--            <tti unit="days">10</tti>-->
+<!--        </expiry>-->
+<!--        <heap unit="entries">10000</heap>-->
+        <key-type>java.lang.String</key-type>
+        <value-type>java.lang.String</value-type>
+        <resources>
+            <disk unit="MB">20</disk>
+            <heap unit="MB">10</heap>
+        </resources>
     </cache>
 </config>
