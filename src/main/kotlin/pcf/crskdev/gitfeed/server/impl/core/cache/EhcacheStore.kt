@@ -23,33 +23,31 @@
  *
  */
 
-package pcf.crskdev.gitfeed.server
+package pcf.crskdev.gitfeed.server.impl.core.cache
 
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.shouldBe
-import pcf.crskdev.gitfeed.server.impl.core.cache.RedisClient
-import pcf.crskdev.gitfeed.server.impl.core.cache.RedisInfo
-import redis.embedded.RedisServer
-import java.net.URI
+import org.springframework.cache.CacheManager
+import pcf.crskdev.gitfeed.server.core.cache.CacheStore
 
-class RedisTest : StringSpec({
+/**
+ * Ehcache cache obtained via Spring's CacheManager.
+ *
+ * @param cacheManager CacheManager.
+ */
+class EhcacheStore(cacheManager: CacheManager) : CacheStore {
 
-    "!embedded redis should work" {
+    /**
+     * Ehcache configuration loaded from src/main/resources/ehcache.xml.
+     */
+    private val cache = cacheManager.getCache("git-feed")!!
 
-        val server = URI.create(RedisInfo.URL).let {
-            RedisServer.builder()
-                .port(it.port)
-                .setting("maxmemory 128M")
-                .build()
-        }.apply { start() }
-
-        RedisClient(true).use { redis ->
-            redis.exists("foo") shouldBe false
-            redis["foo"] = "bar"
-            redis["foo"] shouldBe "bar"
-            redis
-        }
-
-        server.stop()
+    override fun set(key: String, value: String) {
+        cache.put(key, value)
     }
-})
+
+    override fun get(key: String): String? = cache[key]?.get() as String?
+
+    override fun exists(key: String): Boolean =
+        cache[key] != null
+
+    override fun close() {}
+}

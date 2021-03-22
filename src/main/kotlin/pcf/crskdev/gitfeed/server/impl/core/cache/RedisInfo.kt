@@ -29,6 +29,7 @@ package pcf.crskdev.gitfeed.server.impl.core.cache
  * Redis info (host and port).
  *
  */
+@Deprecated("Ehcache is used now")
 object RedisInfo {
     /**
      * U r l

@@ -35,8 +35,10 @@ import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Redis client.
+ * TODO: remove redis dependencies.
  *
  */
+@Deprecated("Ehcache is used now")
 object RedisClient {
 
     private val factory: () -> CacheStore = {

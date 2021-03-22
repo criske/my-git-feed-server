@@ -25,6 +25,7 @@
 
 package pcf.crskdev.gitfeed.server.config
 
+import org.springframework.cache.CacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -34,8 +35,8 @@ import pcf.crskdev.gitfeed.server.core.feed.GitFeedManagerImpl
 import pcf.crskdev.gitfeed.server.core.net.RequestClient
 import pcf.crskdev.gitfeed.server.core.net.RequestClientImpl
 import pcf.crskdev.gitfeed.server.core.net.RequestCommand
+import pcf.crskdev.gitfeed.server.impl.core.cache.EhcacheStore
 import pcf.crskdev.gitfeed.server.impl.core.cache.NaiveInMemoryCacheStore
-import pcf.crskdev.gitfeed.server.impl.core.cache.RedisClient
 import pcf.crskdev.gitfeed.server.impl.core.net.RestTemplateCommand
 
 /**
@@ -52,7 +53,7 @@ class DependencyInjections {
      */
     @Bean
     @Profile("prod")
-    fun cacheStore(): CacheStore = RedisClient()
+    fun cacheStore(manager: CacheManager): CacheStore = EhcacheStore(manager)
 
     /**
      * Cache store bean.
