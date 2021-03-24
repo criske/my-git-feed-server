@@ -1,4 +1,4 @@
 # My Git Feed
-Server for application that centralize my git activity on various git platform providers: Github, Gitlab, Bitbucket.
+REST API backend app that centralize my git activity on various git platform providers: Github, Gitlab, Bitbucket.
 
 
