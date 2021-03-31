@@ -30,14 +30,20 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.web.util.matcher.RequestMatcher
+import org.springframework.web.cors.CorsConfiguration
 
 @Configuration
 @EnableCaching
 class HerokuWebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
-        http.requiresChannel()
+        http
+            .cors()
+            .configurationSource { CorsConfiguration().applyPermitDefaultValues() }
+            .and()
+            .requiresChannel()
             .requestMatchers(RequestMatcher { it.getHeader("X-Forwarded-Proto") != null })
             .requiresSecure()
+            .and()
     }
 }
