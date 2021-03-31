@@ -87,7 +87,8 @@ internal class GithubGitFeedTest : StringSpec({
                     "self-xdsd",
                     "https://avatars.githubusercontent.com/u/65442807?v=4",
                     "https://github.com/self-xdsd",
-                    "Organization"
+                    "Organization",
+                    "Github"
                 )
             )
         )
@@ -169,14 +170,16 @@ internal class GithubGitFeedTest : StringSpec({
                     "self-xdsd",
                     "https://avatars.githubusercontent.com/u/65442807?v=4",
                     "https://github.com/self-xdsd",
-                    "Organization"
+                    "Organization",
+                    "Github"
                 )
             ),
             User(
                 "amihaiemil",
                 "https://avatars.githubusercontent.com/u/6305156?v=4",
                 "https://github.com/amihaiemil",
-                "User"
+                "User",
+                "Github"
             )
         )
     }
@@ -203,7 +206,8 @@ internal class GithubGitFeedTest : StringSpec({
             "criske",
             "https://avatars.githubusercontent.com/u/10284893?v=4",
             "https://github.com/criske",
-            "User"
+            "User",
+            "Github"
         )
     }
 
@@ -239,7 +243,8 @@ internal class GithubGitFeedTest : StringSpec({
                         "criske",
                         "https://avatars.githubusercontent.com/u/10284893?v=4",
                         "https://github.com/criske",
-                        "User"
+                        "User",
+                        "Github"
                     )
                 ),
                 "Unofficial client side Kotlin wrapper for Unsplash API.",

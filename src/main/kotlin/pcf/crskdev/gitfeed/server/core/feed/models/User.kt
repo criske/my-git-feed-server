@@ -25,4 +25,4 @@
 
 package pcf.crskdev.gitfeed.server.core.feed.models
 
-data class User(val name: String, val avatar: String, val url: String, val type: String)
+data class User(val name: String, val avatar: String, val url: String, val type: String, val provider: String)

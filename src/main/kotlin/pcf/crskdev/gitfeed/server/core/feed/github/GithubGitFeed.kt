@@ -221,5 +221,6 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
             "avatar" to node["avatar_url"]
             "url" to node["html_url"]
             "type" to node["type"]
+            "provider" to "Github"
         }
 }

@@ -86,7 +86,8 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                                     "self-xdsd",
                                     "https://avatars.githubusercontent.com/u/65442807?v=4",
                                     "https://github.com/self-xdsd",
-                                    "organization"
+                                    "organization",
+                                    "Github"
                                 )
                             )
                         )
@@ -217,7 +218,8 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                     "criske",
                     "https://avatars.githubusercontent.com/u/10284893?v=4",
                     "https://github.com/criske",
-                    "User"
+                    "User",
+                    "Github"
                 )
                 val feed = mock<GitFeed>()
                 val manager = getBean<GitFeedManager>()
@@ -247,7 +249,8 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                                     "self-xdsd",
                                     "https://avatars.githubusercontent.com/u/65442807?v=4",
                                     "https://github.com/self-xdsd",
-                                    "organization"
+                                    "organization",
+                                    "Github"
                                 )
                             ),
                             "Simple description",
