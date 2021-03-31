@@ -28,6 +28,7 @@ package pcf.crskdev.gitfeed.server.core.feed
 import com.nhaarman.mockitokotlin2.mock
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class GitFeedManagerTest : StringSpec({
 
@@ -42,6 +43,6 @@ internal class GitFeedManagerTest : StringSpec({
 
     "should select unknown feed if git feed is not found" {
         val manager = GitFeedManagerImpl(mock(), GitFeedFactory())
-        manager.of("foo") shouldBe GitFeed.Unknown
+        manager.of("foo").shouldBeInstanceOf<GitFeed.Unknown>()
     }
 })

@@ -75,14 +75,14 @@ interface GitFeed {
      *
      * @author Cristian Pela
      */
-    object Unknown : GitFeed {
+    class Unknown(private val provider: String) : GitFeed {
 
         /**
          * Exception thrown by each method of this [GitFeed] implementation.
          */
         private val exception = GitFeedException.fromString(
             GitFeedException.Type.VALIDATION,
-            "Unknown git feed platform provider"
+            "Unknown git feed platform provider: ${provider.toLowerCase().capitalize()}"
         )
 
         override fun commits(page: Int?): Commits {
