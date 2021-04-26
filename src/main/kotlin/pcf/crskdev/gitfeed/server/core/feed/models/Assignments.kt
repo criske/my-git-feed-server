@@ -25,16 +25,7 @@
 
 package pcf.crskdev.gitfeed.server.core.feed.models
 
-data class Assignments(val paging: Paging, val entries: List<Assignment>)
-
-data class Assignment(
-    val title: String,
-    val body: String,
-    val url: String,
-    val isOpen: Boolean,
-    val repo: Repo,
-    val author: User
-) {
+data class Assignments(val paging: Paging, val entries: List<Assignment>, val filter: State = State.ALL) {
     enum class State {
         ALL, CLOSED, OPEN;
 
@@ -48,3 +39,12 @@ data class Assignment(
         }
     }
 }
+
+data class Assignment(
+    val title: String,
+    val body: String,
+    val url: String,
+    val isOpen: Boolean,
+    val repo: Repo,
+    val author: User
+)

@@ -26,7 +26,6 @@
 package pcf.crskdev.gitfeed.server.core.feed
 
 import pcf.crskdev.gitfeed.server.core.GitFeedException
-import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 import pcf.crskdev.gitfeed.server.core.feed.models.Repos
@@ -54,7 +53,7 @@ interface GitFeed {
      * @param page Of page.
      * @return Assignments.
      */
-    fun assignments(state: Assignment.State = Assignment.State.ALL, page: Int? = null): Assignments
+    fun assignments(state: Assignments.State = Assignments.State.ALL, page: Int? = null): Assignments
 
     /**
      * Basic info about me
@@ -89,7 +88,7 @@ interface GitFeed {
             throw exception
         }
 
-        override fun assignments(state: Assignment.State, page: Int?): Assignments {
+        override fun assignments(state: Assignments.State, page: Int?): Assignments {
             throw exception
         }
 

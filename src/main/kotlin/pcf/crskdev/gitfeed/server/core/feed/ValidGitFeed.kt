@@ -25,7 +25,6 @@
 
 package pcf.crskdev.gitfeed.server.core.feed
 
-import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 import pcf.crskdev.gitfeed.server.core.feed.models.Repos
@@ -47,7 +46,7 @@ class ValidGitFeed(private val delegate: GitFeed) : GitFeed by delegate {
             delegate.commits(page)
         }
 
-    override fun assignments(state: Assignment.State, page: Int?): Assignments =
+    override fun assignments(state: Assignments.State, page: Int?): Assignments =
         this.pageCheckDelegation(page, "Assignments") {
             delegate.assignments(state, page)
         }

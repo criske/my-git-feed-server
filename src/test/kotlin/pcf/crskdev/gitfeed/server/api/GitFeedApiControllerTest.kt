@@ -43,7 +43,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import pcf.crskdev.gitfeed.server.core.feed.GitFeed
 import pcf.crskdev.gitfeed.server.core.feed.GitFeedManager
-import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commit
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
@@ -117,7 +116,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
 
             it("should fetch all assignments implicitly") {
                 val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignment.State.ALL)).thenReturn(assignments)
+                whenever(feed.assignments(Assignments.State.ALL)).thenReturn(assignments)
 
                 mockMvc
                     .perform(get("/api/github/assignments"))
@@ -129,7 +128,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
 
             it("should fetch all assignments explicitly") {
                 val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignment.State.ALL)).thenReturn(assignments)
+                whenever(feed.assignments(Assignments.State.ALL)).thenReturn(assignments)
 
                 mockMvc
                     .perform(get("/api/github/assignments?state=all"))
@@ -141,7 +140,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
 
             it("should fetch all assignments if state is unknown") {
                 val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignment.State.ALL)).thenReturn(assignments)
+                whenever(feed.assignments(Assignments.State.ALL)).thenReturn(assignments)
 
                 mockMvc
                     .perform(get("/api/github/assignments?state=foo"))
@@ -153,7 +152,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
 
             it("should fetch all assignments explicitly with page") {
                 val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignment.State.ALL, 1)).thenReturn(assignments)
+                whenever(feed.assignments(Assignments.State.ALL, 1)).thenReturn(assignments)
 
                 mockMvc
                     .perform(get("/api/github/assignments?state=all&page=1"))
@@ -165,7 +164,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
 
             it("should fetch closed assignments with page") {
                 val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignment.State.CLOSED, 1)).thenReturn(assignments)
+                whenever(feed.assignments(Assignments.State.CLOSED, 1)).thenReturn(assignments)
 
                 mockMvc
                     .perform(get("/api/github/assignments?state=closed&page=1"))
@@ -177,7 +176,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
 
             it("should fetch closed assignments") {
                 val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignment.State.CLOSED)).thenReturn(assignments)
+                whenever(feed.assignments(Assignments.State.CLOSED)).thenReturn(assignments)
 
                 mockMvc
                     .perform(get("/api/github/assignments?state=closed"))
@@ -189,7 +188,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
 
             it("should fetch open assignments with page") {
                 val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignment.State.OPEN, 1)).thenReturn(assignments)
+                whenever(feed.assignments(Assignments.State.OPEN, 1)).thenReturn(assignments)
 
                 mockMvc
                     .perform(get("/api/github/assignments?state=oPen&page=1"))
@@ -201,7 +200,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
 
             it("should fetch open assignments") {
                 val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignment.State.OPEN)).thenReturn(assignments)
+                whenever(feed.assignments(Assignments.State.OPEN)).thenReturn(assignments)
 
                 mockMvc
                     .perform(get("/api/github/assignments?state=open"))

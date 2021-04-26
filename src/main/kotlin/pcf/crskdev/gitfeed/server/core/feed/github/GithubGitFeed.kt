@@ -29,7 +29,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.JsonSerializable
 import pcf.crskdev.gitfeed.server.core.feed.GitFeed
 import pcf.crskdev.gitfeed.server.core.feed.extractPaging
-import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 import pcf.crskdev.gitfeed.server.core.feed.models.RepoExtended
@@ -89,11 +88,11 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
         }.asTree()
     }
 
-    override fun assignments(state: Assignment.State, page: Int?): Assignments {
+    override fun assignments(state: Assignments.State, page: Int?): Assignments {
         val stateQuery = when (state) {
-            Assignment.State.ALL -> ""
-            Assignment.State.CLOSED -> "+state:closed"
-            Assignment.State.OPEN -> "+state:open"
+            Assignments.State.ALL -> ""
+            Assignments.State.CLOSED -> "+state:closed"
+            Assignments.State.OPEN -> "+state:open"
         }
         val fastClient = this.client.fastCache()
         return fastClient.request(
@@ -102,6 +101,7 @@ class GithubGitFeed(private val client: RequestClient) : GitFeed {
         ) {
             obj {
                 "paging" to it.headers.extractPaging()
+                "filter" to state.toString()
                 "entries" to arr {
                     it.body["items"].elements().forEach {
                         +obj {

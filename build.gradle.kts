@@ -37,7 +37,7 @@ dependencies {
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
-    ktlint("com.pinterest:ktlint:0.40.0")
+    ktlint("com.pinterest:ktlint:0.41.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     val kotest = "4.4.3"

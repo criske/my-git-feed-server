@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import pcf.crskdev.gitfeed.server.core.feed.GitFeedManager
-import pcf.crskdev.gitfeed.server.core.feed.models.Assignment
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 import pcf.crskdev.gitfeed.server.core.feed.models.Repos
@@ -76,7 +75,7 @@ class GitFeedApiController(private val manager: GitFeedManager) {
         @RequestParam(required = false) page: Int?
     ): Assignments {
         return this.manager.of(provider)
-            .assignments(Assignment.State.valueOfSafe(state), page)
+            .assignments(Assignments.State.valueOfSafe(state), page)
     }
 
     /**
