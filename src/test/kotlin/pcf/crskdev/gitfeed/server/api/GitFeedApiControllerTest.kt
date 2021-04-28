@@ -65,216 +65,243 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
 
     init {
 
-        describe("commits endpoint") {
+        describe("github") {
+            describe("commits endpoint") {
 
-            it("should fetch commits") {
-                val feed = mock<GitFeed>()
-                val commits = Commits(
-                    Paging(next = 2, last = 34),
-                    listOf(
-                        Commit(
-                            "d4496c7",
-                            "2021-03-13T15:58:06.000+02:00",
-                            "https://github.com/self-xdsd/self-web/commit/d4496c7c50e6ae443263e5fe5c13b631ca2cbebd",
-                            "#371 Allow Deactivation Of All PaymentMethods.",
-                            Repo(
-                                "self-web",
-                                "self-xdsd/self-web",
-                                "https://github.com/self-xdsd/self-web",
-                                User(
-                                    "self-xdsd",
-                                    "https://avatars.githubusercontent.com/u/65442807?v=4",
-                                    "https://github.com/self-xdsd",
-                                    "organization",
-                                    "Github"
+                it("should fetch commits") {
+                    val feed = mock<GitFeed>()
+                    val commits = Commits(
+                        Paging(next = 2, last = 34),
+                        listOf(
+                            Commit(
+                                "d4496c7",
+                                "2021-03-13T15:58:06.000+02:00",
+                                "https://github.com/self-xdsd/self-web/commit/d4496c7c50e6ae443263e5fe5c13b631ca2cbebd",
+                                "#371 Allow Deactivation Of All PaymentMethods.",
+                                Repo(
+                                    "self-web",
+                                    "self-xdsd/self-web",
+                                    "https://github.com/self-xdsd/self-web",
+                                    User(
+                                        "self-xdsd",
+                                        "https://avatars.githubusercontent.com/u/65442807?v=4",
+                                        "https://github.com/self-xdsd",
+                                        "organization",
+                                        "Github"
+                                    )
                                 )
                             )
                         )
                     )
-                )
 
+                    val manager = getBean<GitFeedManager>()
+                    whenever(manager.of("github")).thenReturn(feed)
+                    whenever(feed.commits(null)).thenReturn(commits)
+
+                    mockMvc
+                        .perform(get("/api/github/commits"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<Commits>() shouldBe commits
+                        }
+                }
+            }
+
+            describe("assignments endpoint") {
                 val manager = getBean<GitFeedManager>()
-                whenever(manager.of("github")).thenReturn(feed)
-                whenever(feed.commits(null)).thenReturn(commits)
-
-                mockMvc
-                    .perform(get("/api/github/commits"))
-                    .andDo(print()).andExpect(status().isOk)
-                    .andExpect { result ->
-                        result.response.contentAsString.jsonTo<Commits>() shouldBe commits
-                    }
-            }
-        }
-
-        describe("assignments endpoint") {
-            val manager = getBean<GitFeedManager>()
-            val feed = mock<GitFeed>()
-
-            whenever(manager.of(any())).thenReturn(feed)
-
-            beforeTest { reset(feed) }
-
-            it("should fetch all assignments implicitly") {
-                val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignments.State.ALL)).thenReturn(assignments)
-
-                mockMvc
-                    .perform(get("/api/github/assignments"))
-                    .andDo(print()).andExpect(status().isOk)
-                    .andExpect { result ->
-                        result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
-                    }
-            }
-
-            it("should fetch all assignments explicitly") {
-                val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignments.State.ALL)).thenReturn(assignments)
-
-                mockMvc
-                    .perform(get("/api/github/assignments?state=all"))
-                    .andDo(print()).andExpect(status().isOk)
-                    .andExpect { result ->
-                        result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
-                    }
-            }
-
-            it("should fetch all assignments if state is unknown") {
-                val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignments.State.ALL)).thenReturn(assignments)
-
-                mockMvc
-                    .perform(get("/api/github/assignments?state=foo"))
-                    .andDo(print()).andExpect(status().isOk)
-                    .andExpect { result ->
-                        result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
-                    }
-            }
-
-            it("should fetch all assignments explicitly with page") {
-                val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignments.State.ALL, 1)).thenReturn(assignments)
-
-                mockMvc
-                    .perform(get("/api/github/assignments?state=all&page=1"))
-                    .andDo(print()).andExpect(status().isOk)
-                    .andExpect { result ->
-                        result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
-                    }
-            }
-
-            it("should fetch closed assignments with page") {
-                val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignments.State.CLOSED, 1)).thenReturn(assignments)
-
-                mockMvc
-                    .perform(get("/api/github/assignments?state=closed&page=1"))
-                    .andDo(print()).andExpect(status().isOk)
-                    .andExpect { result ->
-                        result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
-                    }
-            }
-
-            it("should fetch closed assignments") {
-                val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignments.State.CLOSED)).thenReturn(assignments)
-
-                mockMvc
-                    .perform(get("/api/github/assignments?state=closed"))
-                    .andDo(print()).andExpect(status().isOk)
-                    .andExpect { result ->
-                        result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
-                    }
-            }
-
-            it("should fetch open assignments with page") {
-                val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignments.State.OPEN, 1)).thenReturn(assignments)
-
-                mockMvc
-                    .perform(get("/api/github/assignments?state=oPen&page=1"))
-                    .andDo(print()).andExpect(status().isOk)
-                    .andExpect { result ->
-                        result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
-                    }
-            }
-
-            it("should fetch open assignments") {
-                val assignments = Assignments(Paging(), emptyList())
-                whenever(feed.assignments(Assignments.State.OPEN)).thenReturn(assignments)
-
-                mockMvc
-                    .perform(get("/api/github/assignments?state=open"))
-                    .andDo(print()).andExpect(status().isOk)
-                    .andExpect { result ->
-                        result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
-                    }
-            }
-        }
-
-        describe("me endpoint") {
-            it("should get me") {
-                val me = User(
-                    "criske",
-                    "https://avatars.githubusercontent.com/u/10284893?v=4",
-                    "https://github.com/criske",
-                    "User",
-                    "Github"
-                )
                 val feed = mock<GitFeed>()
-                val manager = getBean<GitFeedManager>()
-                whenever(manager.of("github")).thenReturn(feed)
-                whenever(feed.me()).thenReturn(me)
 
-                mockMvc
-                    .perform(get("/api/github/me"))
-                    .andDo(print()).andExpect(status().isOk)
-                    .andExpect { result ->
-                        result.response.contentAsString.jsonTo<User>() shouldBe me
-                    }
+                whenever(manager.of(any())).thenReturn(feed)
+
+                beforeTest { reset(feed) }
+
+                it("should fetch all assignments implicitly") {
+                    val assignments = Assignments(Paging(), emptyList())
+                    whenever(feed.assignments(Assignments.State.ALL)).thenReturn(assignments)
+
+                    mockMvc
+                        .perform(get("/api/github/assignments"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
+                        }
+                }
+
+                it("should fetch all assignments explicitly") {
+                    val assignments = Assignments(Paging(), emptyList())
+                    whenever(feed.assignments(Assignments.State.ALL)).thenReturn(assignments)
+
+                    mockMvc
+                        .perform(get("/api/github/assignments?state=all"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
+                        }
+                }
+
+                it("should fetch all assignments if state is unknown") {
+                    val assignments = Assignments(Paging(), emptyList())
+                    whenever(feed.assignments(Assignments.State.ALL)).thenReturn(assignments)
+
+                    mockMvc
+                        .perform(get("/api/github/assignments?state=foo"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
+                        }
+                }
+
+                it("should fetch all assignments explicitly with page") {
+                    val assignments = Assignments(Paging(), emptyList())
+                    whenever(feed.assignments(Assignments.State.ALL, 1)).thenReturn(assignments)
+
+                    mockMvc
+                        .perform(get("/api/github/assignments?state=all&page=1"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
+                        }
+                }
+
+                it("should fetch closed assignments with page") {
+                    val assignments = Assignments(Paging(), emptyList())
+                    whenever(feed.assignments(Assignments.State.CLOSED, 1)).thenReturn(assignments)
+
+                    mockMvc
+                        .perform(get("/api/github/assignments?state=closed&page=1"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
+                        }
+                }
+
+                it("should fetch closed assignments") {
+                    val assignments = Assignments(Paging(), emptyList())
+                    whenever(feed.assignments(Assignments.State.CLOSED)).thenReturn(assignments)
+
+                    mockMvc
+                        .perform(get("/api/github/assignments?state=closed"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
+                        }
+                }
+
+                it("should fetch open assignments with page") {
+                    val assignments = Assignments(Paging(), emptyList())
+                    whenever(feed.assignments(Assignments.State.OPEN, 1)).thenReturn(assignments)
+
+                    mockMvc
+                        .perform(get("/api/github/assignments?state=oPen&page=1"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
+                        }
+                }
+
+                it("should fetch open assignments") {
+                    val assignments = Assignments(Paging(), emptyList())
+                    whenever(feed.assignments(Assignments.State.OPEN)).thenReturn(assignments)
+
+                    mockMvc
+                        .perform(get("/api/github/assignments?state=open"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<Assignments>() shouldBe assignments
+                        }
+                }
             }
-        }
 
-        describe("repos endpoint") {
-            it("should get repos") {
-                val repos = Repos(
-                    Paging(),
-                    listOf(
-                        RepoExtended(
-                            Repo(
-                                "self-web",
-                                "self-xdsd/self-web",
-                                "https://github.com/self-xdsd/self-web",
-                                User(
-                                    "self-xdsd",
-                                    "https://avatars.githubusercontent.com/u/65442807?v=4",
-                                    "https://github.com/self-xdsd",
-                                    "organization",
-                                    "Github"
-                                )
-                            ),
-                            "Simple description",
-                            false,
-                            isPrivate = false,
-                            0,
-                            "Java",
-                            null,
-                            "now",
-                            "now"
+            describe("me endpoint") {
+                it("should get me") {
+                    val me = User(
+                        "criske",
+                        "https://avatars.githubusercontent.com/u/10284893?v=4",
+                        "https://github.com/criske",
+                        "User",
+                        "Github"
+                    )
+                    val feed = mock<GitFeed>()
+                    val manager = getBean<GitFeedManager>()
+                    whenever(manager.of("github")).thenReturn(feed)
+                    whenever(feed.me()).thenReturn(me)
+
+                    mockMvc
+                        .perform(get("/api/github/me"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<User>() shouldBe me
+                        }
+                }
+            }
+
+            describe("repos endpoint") {
+                it("should get repos") {
+                    val repos = Repos(
+                        Paging(),
+                        listOf(
+                            RepoExtended(
+                                Repo(
+                                    "self-web",
+                                    "self-xdsd/self-web",
+                                    "https://github.com/self-xdsd/self-web",
+                                    User(
+                                        "self-xdsd",
+                                        "https://avatars.githubusercontent.com/u/65442807?v=4",
+                                        "https://github.com/self-xdsd",
+                                        "organization",
+                                        "Github"
+                                    )
+                                ),
+                                "Simple description",
+                                false,
+                                isPrivate = false,
+                                0,
+                                "Java",
+                                null,
+                                "now",
+                                "now"
+                            )
                         )
                     )
-                )
 
-                val feed = mock<GitFeed>()
-                val manager = getBean<GitFeedManager>()
-                whenever(manager.of("github")).thenReturn(feed)
-                whenever(feed.repos()).thenReturn(repos)
+                    val feed = mock<GitFeed>()
+                    val manager = getBean<GitFeedManager>()
+                    whenever(manager.of("github")).thenReturn(feed)
+                    whenever(feed.repos()).thenReturn(repos)
 
-                mockMvc
-                    .perform(get("/api/github/repos"))
-                    .andDo(print()).andExpect(status().isOk)
-                    .andExpect { result ->
-                        result.response.contentAsString.jsonTo<Repos>() shouldBe repos
-                    }
+                    mockMvc
+                        .perform(get("/api/github/repos"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<Repos>() shouldBe repos
+                        }
+                }
+            }
+        }
+
+        describe("bitbucket") {
+            describe("me endpoint") {
+                it("should get me") {
+                    val me = User(
+                        "cristianpela",
+                        "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/557058:0f30dbbe-e90b-4d4a-a005-6fc83820c8e7/30024e46-ecc6-4fc3-9275-c97e2a8b8418/128",
+                        "https://bitbucket.org/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D/",
+                        "user",
+                        "Bitbucket"
+                    )
+                    val feed = mock<GitFeed>()
+                    val manager = getBean<GitFeedManager>()
+                    whenever(manager.of("bitbucket")).thenReturn(feed)
+                    whenever(feed.me()).thenReturn(me)
+
+                    mockMvc
+                        .perform(get("/api/bitbucket/me"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<User>() shouldBe me
+                        }
+                }
             }
         }
     }

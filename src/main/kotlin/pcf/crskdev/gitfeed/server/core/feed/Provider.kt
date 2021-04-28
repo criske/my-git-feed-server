@@ -26,6 +26,7 @@
 package pcf.crskdev.gitfeed.server.core.feed
 
 import pcf.crskdev.gitfeed.server.core.net.AccessToken
+import pcf.crskdev.gitfeed.server.core.net.Basic
 import pcf.crskdev.gitfeed.server.core.net.Bearer
 import pcf.crskdev.gitfeed.server.core.net.Unauthorized
 
@@ -38,6 +39,8 @@ import pcf.crskdev.gitfeed.server.core.net.Unauthorized
 enum class Provider(val accessToken: AccessToken) {
 
     GITHUB(Bearer(System.getenv("GH_TOKEN"))),
+
+    BITBUCKET(Basic.withEncoded(System.getenv("BB_TOKEN"))),
 
     UNKNOWN(Unauthorized);
 
