@@ -26,11 +26,18 @@
 package pcf.crskdev.gitfeed.server.core.feed.bitbucket
 
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import pcf.crskdev.gitfeed.server.core.feed.models.User
 import pcf.crskdev.gitfeed.server.core.net.Basic
 import pcf.crskdev.gitfeed.server.core.net.RequestClientImpl
 import pcf.crskdev.gitfeed.server.core.net.RequestCommand
+import pcf.crskdev.gitfeed.server.core.net.Response
+import pcf.crskdev.gitfeed.server.core.net.headers
+import java.io.File
+import java.net.URI
 
 internal class BitbucketGitFeedTest : StringSpec({
 
@@ -55,13 +62,30 @@ internal class BitbucketGitFeedTest : StringSpec({
     }
 
     "should get me" {
+        val uri = URI.create("https://bitbucket.org/api/2.0/user")
         val command = mock<RequestCommand>()
-        val gitFeed = BitbucketGitFeed(
-            RequestClientImpl(mock(), command, Basic.withEncoded("123"))
-        )
-        shouldThrow<NotImplementedError> {
-            gitFeed.me()
+        val requestHeaders = headers {
+            "Content-Type" to "application/json"
+            "Authorization" to "Basic fake_123"
         }
+        val gitFeed = BitbucketGitFeed(
+            RequestClientImpl(mock(), command, Basic.withEncoded("fake_123"))
+        )
+        whenever(command.request(uri, requestHeaders)).thenReturn(
+            Response(
+                200,
+                File("src/test/resources/bitbucket_me.json").readText(),
+                emptyMap()
+            )
+        )
+
+        gitFeed.me() shouldBe User(
+            "cristianpela",
+            "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/557058:0f30dbbe-e90b-4d4a-a005-6fc83820c8e7/30024e46-ecc6-4fc3-9275-c97e2a8b8418/128",
+            "https://bitbucket.org/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D/",
+            "user",
+            "Bitbucket"
+        )
     }
 
     "should get repos" {

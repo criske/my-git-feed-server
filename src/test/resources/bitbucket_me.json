@@ -1,0 +1,33 @@
+{
+  "username": "cristianpela",
+  "has_2fa_enabled": null,
+  "display_name": "Cristian Pela",
+  "account_id": "557058:0f30dbbe-e90b-4d4a-a005-6fc83820c8e7",
+  "links": {
+    "hooks": {
+      "href": "https://bitbucket.org/!api/2.0/users/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D/hooks"
+    },
+    "self": {
+      "href": "https://bitbucket.org/!api/2.0/users/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D"
+    },
+    "repositories": {
+      "href": "https://bitbucket.org/!api/2.0/repositories/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D"
+    },
+    "html": {
+      "href": "https://bitbucket.org/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D/"
+    },
+    "avatar": {
+      "href": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/557058:0f30dbbe-e90b-4d4a-a005-6fc83820c8e7/30024e46-ecc6-4fc3-9275-c97e2a8b8418/128"
+    },
+    "snippets": {
+      "href": "https://bitbucket.org/!api/2.0/snippets/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D"
+    }
+  },
+  "nickname": "cristianpela",
+  "created_on": "2015-03-17T08:22:22.432651+00:00",
+  "is_staff": false,
+  "location": null,
+  "account_status": "active",
+  "type": "user",
+  "uuid": "{c94b65af-2573-4c7a-93ad-da943c45ecaf}"
+}
