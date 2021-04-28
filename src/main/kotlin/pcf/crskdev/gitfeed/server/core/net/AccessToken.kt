@@ -81,6 +81,21 @@ class Basic(
     private val password: String
 ) : AccessToken {
 
+    companion object {
+        /**
+         * Basic Access token with encoding already provided.
+         *
+         * @param encoded Base64 encoded username and password.
+         * @return AccessToken.
+         */
+        fun withEncoded(encoded: String): AccessToken = object : AccessToken {
+            override val key: String
+                get() = "Authorization"
+            override val value: String
+                get() = "Basic $encoded"
+        }
+    }
+
     /**
      * Encoded credentials.
      */

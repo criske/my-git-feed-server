@@ -22,42 +22,41 @@
  *  SOFTWARE.
  *
  */
+package pcf.crskdev.gitfeed.server.core.feed.bitbucket
 
-package pcf.crskdev.gitfeed.server.core.feed
-
-import pcf.crskdev.gitfeed.server.core.net.AccessToken
-import pcf.crskdev.gitfeed.server.core.net.Basic
-import pcf.crskdev.gitfeed.server.core.net.Bearer
-import pcf.crskdev.gitfeed.server.core.net.Unauthorized
+import pcf.crskdev.gitfeed.server.core.feed.GitFeed
+import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
+import pcf.crskdev.gitfeed.server.core.feed.models.Commits
+import pcf.crskdev.gitfeed.server.core.feed.models.Repos
+import pcf.crskdev.gitfeed.server.core.feed.models.User
+import pcf.crskdev.gitfeed.server.core.net.RequestClient
 
 /**
- * Git platform Provider.
+ * Bitbucket git feed implementation.
  *
- * @param accessToken Access token.
+ * @property client Authenticated client
  * @author Cristian Pela
  */
-enum class Provider(val accessToken: AccessToken) {
+class BitbucketGitFeed(private val client: RequestClient) : GitFeed {
 
-    GITHUB(Bearer(System.getenv("GH_TOKEN"))),
+    /**
+     * Base url.
+     */
+    private val baseUrl = "https://bitbucket.org/api/2.0"
 
-    BITBUCKET(Basic.withEncoded(System.getenv("BB_TOKEN"))),
+    override fun commits(page: Int?): Commits {
+        TODO("Not yet implemented")
+    }
 
-    UNKNOWN(Unauthorized);
+    override fun assignments(state: Assignments.State, page: Int?): Assignments {
+        TODO("Not yet implemented")
+    }
 
-    companion object {
-        /**
-         * Safe version of enum valueOf() that returns default if value by name is
-         * not found.
-         *
-         * @param name Value name
-         * @param default Default value.
-         * @return Found value or default.
-         */
-        fun valueOfSafe(name: String, default: Provider = UNKNOWN): Provider =
-            try {
-                Provider.valueOf(name.trim().toUpperCase())
-            } catch (ex: IllegalArgumentException) {
-                default
-            }
+    override fun me(): User {
+        TODO("Not yet implemented")
+    }
+
+    override fun repos(page: Int?): Repos {
+        TODO("Not yet implemented")
     }
 }

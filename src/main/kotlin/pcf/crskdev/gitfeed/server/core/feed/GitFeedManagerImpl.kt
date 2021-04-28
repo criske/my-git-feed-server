@@ -25,6 +25,7 @@
 
 package pcf.crskdev.gitfeed.server.core.feed
 
+import pcf.crskdev.gitfeed.server.core.feed.bitbucket.BitbucketGitFeed
 import pcf.crskdev.gitfeed.server.core.feed.github.GithubGitFeed
 import pcf.crskdev.gitfeed.server.core.net.AccessToken
 import pcf.crskdev.gitfeed.server.core.net.RequestClient
@@ -62,6 +63,9 @@ class GitFeedManagerImpl(
         GitFeedFactory(
             Provider.GITHUB to {
                 GithubGitFeed(client.authorized(it))
+            },
+            Provider.BITBUCKET to {
+                BitbucketGitFeed(client.authorized(it))
             }
         )
     )

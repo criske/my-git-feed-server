@@ -68,6 +68,7 @@ tasks.withType<Test> {
 tasks.test {
     environment(mapOf(
         "GH_TOKEN" to "gh_fake_123",
+        "BB_TOKEN" to "bb_fake_123",
         "REDIS_URL" to "redis://localhost:6379"
     ))
 }
