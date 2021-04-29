@@ -287,7 +287,7 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                         "cristianpela",
                         "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/557058:0f30dbbe-e90b-4d4a-a005-6fc83820c8e7/30024e46-ecc6-4fc3-9275-c97e2a8b8418/128",
                         "https://bitbucket.org/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D/",
-                        "user",
+                        "User",
                         "Bitbucket"
                     )
                     val feed = mock<GitFeed>()
@@ -300,6 +300,49 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                         .andDo(print()).andExpect(status().isOk)
                         .andExpect { result ->
                             result.response.contentAsString.jsonTo<User>() shouldBe me
+                        }
+                }
+            }
+            describe("repos endpoint") {
+                it("should get repos") {
+                    val repos = Repos(
+                        Paging(),
+                        listOf(
+                            RepoExtended(
+                                Repo(
+                                    "Blog",
+                                    "cristianpela/blog",
+                                    "https://bitbucket.org/cristianpela/blog",
+                                    User(
+                                        "cristianpela",
+                                        "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/557058:0f30dbbe-e90b-4d4a-a005-6fc83820c8e7/30024e46-ecc6-4fc3-9275-c97e2a8b8418/128",
+                                        "https://bitbucket.org/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D/",
+                                        "User",
+                                        "Bitbucket"
+                                    )
+                                ),
+                                "",
+                                false,
+                                isPrivate = false,
+                                null,
+                                "Ruby",
+                                null,
+                                "2015-03-17T09:18:34.361055+00:00",
+                                "2016-08-10T12:26:04.070910+00:00"
+                            )
+                        )
+                    )
+
+                    val feed = mock<GitFeed>()
+                    val manager = getBean<GitFeedManager>()
+                    whenever(manager.of("bitbucket")).thenReturn(feed)
+                    whenever(feed.repos()).thenReturn(repos)
+
+                    mockMvc
+                        .perform(get("/api/bitbucket/repos"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<Repos>() shouldBe repos
                         }
                 }
             }
