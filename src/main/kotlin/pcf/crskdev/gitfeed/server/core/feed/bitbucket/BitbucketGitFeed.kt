@@ -64,7 +64,7 @@ class BitbucketGitFeed(private val client: RequestClient) : GitFeed {
         .request(URI.create("$baseUrl/user")) { user(it.body) }
 
     override fun repos(page: Int?): Repos = this.client.request(
-        URI.create("${baseUrl}/repositories/cristianpela/?role=owner&q=is_private=false&page=${page ?: 1}")
+        URI.create("$baseUrl/repositories/cristianpela/?role=owner&q=is_private=false&page=${page ?: 1}")
     ) {
         obj {
             "paging" to it.body.extractPagingBB()
@@ -156,14 +156,14 @@ class BitbucketGitFeed(private val client: RequestClient) : GitFeed {
             ?.let(tryExtractStartingQuotations)
             ?.split("page=")
             ?.get(1)
-            ?.toInt();
+            ?.toInt()
         val lastPage = ceil(size / pagelen).toInt().takeIf { nextPage != null }
         val prevPage = this["previous"]
             ?.asText()
             ?.let(tryExtractStartingQuotations)
             ?.split("page=")
             ?.get(1)
-            ?.toInt();
+            ?.toInt()
         val firstPage = if (prevPage != null) 1 else null
         return Paging(firstPage, prevPage, nextPage, lastPage)
     }

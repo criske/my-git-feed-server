@@ -303,8 +303,8 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                         }
                 }
             }
-            describe("repos endpoint"){
-                it("should get repos"){
+            describe("repos endpoint") {
+                it("should get repos") {
                     val repos = Repos(
                         Paging(),
                         listOf(

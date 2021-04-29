@@ -88,7 +88,7 @@ internal class BitbucketGitFeedTest : DescribeSpec({
                 "cristianpela",
                 "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/557058:0f30dbbe-e90b-4d4a-a005-6fc83820c8e7/30024e46-ecc6-4fc3-9275-c97e2a8b8418/128",
                 "https://bitbucket.org/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D/",
-                "user",
+                "User",
                 "Bitbucket"
             )
         }
@@ -148,7 +148,7 @@ internal class BitbucketGitFeedTest : DescribeSpec({
                 "previous" to "http://foo.com?page=1"
                 "next" to "http://foo.com?page=3"
             }.asTree()
-            val paging = with(BitbucketGitFeed(mock())){
+            val paging = with(BitbucketGitFeed(mock())) {
                 node.extractPagingBB()
             }
             paging shouldBe Paging(1, 1, 3, 5)
@@ -159,7 +159,7 @@ internal class BitbucketGitFeedTest : DescribeSpec({
                 "size" to 50
                 "previous" to "http://foo.com?page=2"
             }.asTree()
-            val paging = with(BitbucketGitFeed(mock())){
+            val paging = with(BitbucketGitFeed(mock())) {
                 node.extractPagingBB()
             }
             paging shouldBe Paging(1, 2, null, null)
@@ -170,7 +170,7 @@ internal class BitbucketGitFeedTest : DescribeSpec({
                 "size" to 50
                 "next" to "http://foo.com?page=2"
             }.asTree()
-            val paging = with(BitbucketGitFeed(mock())){
+            val paging = with(BitbucketGitFeed(mock())) {
                 node.extractPagingBB()
             }
             paging shouldBe Paging(null, null, 2, 5)
@@ -180,7 +180,7 @@ internal class BitbucketGitFeedTest : DescribeSpec({
                 "pagelen" to 10
                 "size" to 10
             }.asTree()
-            val paging = with(BitbucketGitFeed(mock())){
+            val paging = with(BitbucketGitFeed(mock())) {
                 node.extractPagingBB()
             }
             paging shouldBe Paging(null, null, null, null)

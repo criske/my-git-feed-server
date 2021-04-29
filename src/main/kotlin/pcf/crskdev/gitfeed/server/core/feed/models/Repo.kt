@@ -33,7 +33,7 @@ data class RepoExtended(
     val isFork: Boolean,
     val isPrivate: Boolean,
     val stars: Int?,
-    val language: String,
+    val language: String?,
     val organization: User?,
     val createdAt: String,
     val updatedAt: String
