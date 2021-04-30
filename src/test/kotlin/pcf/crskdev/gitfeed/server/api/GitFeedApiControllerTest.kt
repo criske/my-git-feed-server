@@ -303,8 +303,8 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                         }
                 }
             }
-            describe("repos endpoint"){
-                it("should get repos"){
+            describe("repos endpoint") {
+                it("should get repos") {
                     val repos = Repos(
                         Paging(),
                         listOf(
@@ -343,6 +343,46 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                         .andDo(print()).andExpect(status().isOk)
                         .andExpect { result ->
                             result.response.contentAsString.jsonTo<Repos>() shouldBe repos
+                        }
+                }
+            }
+            describe("commits endpoint") {
+
+                it("should fetch commits") {
+                    val feed = mock<GitFeed>()
+                    val commits = Commits(
+                        Paging(next = 2, last = 34),
+                        listOf(
+                            Commit(
+                                "809c426",
+                                "2016-07-19T10:47:02+00:00",
+                                "https://bitbucket.org/cristianpela/sleep-cycle-calculator/commits/809c4261f8c0665dc7849697669339a7cc33f0e8",
+                                ".\n",
+                                Repo(
+                                    "sleep-cycle-calculator",
+                                    "cristianpela/sleep-cycle-calculator",
+                                    "https://bitbucket.org/cristianpela/sleep-cycle-calculator",
+                                    User(
+                                        "cristianpela",
+                                        "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/557058:0f30dbbe-e90b-4d4a-a005-6fc83820c8e7/30024e46-ecc6-4fc3-9275-c97e2a8b8418/128",
+                                        "https://bitbucket.org/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D/",
+                                        "User",
+                                        "Bitbucket"
+                                    )
+                                )
+                            )
+                        )
+                    )
+
+                    val manager = getBean<GitFeedManager>()
+                    whenever(manager.of("bitbucket")).thenReturn(feed)
+                    whenever(feed.commits(null)).thenReturn(commits)
+
+                    mockMvc
+                        .perform(get("/api/bitbucket/commits"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<Commits>() shouldBe commits
                         }
                 }
             }
