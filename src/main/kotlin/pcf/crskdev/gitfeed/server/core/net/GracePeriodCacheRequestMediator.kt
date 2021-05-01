@@ -23,39 +23,13 @@
  *
  */
 
-package pcf.crskdev.gitfeed.server.core.cache
+package pcf.crskdev.gitfeed.server.core.net
 
-import java.io.Closeable
+import pcf.crskdev.gitfeed.server.core.cache.CacheStore
+import java.time.Duration
 
-/**
- * Cache store.
- *
- */
-interface CacheStore : Closeable {
-
-    /**
-     * Store the key value pair on cache.
-     *
-     * @param key String
-     * @param value String
-     */
-    operator fun set(key: String, value: String)
-
-    /**
-     * Get a value of a key.
-     *
-     * @param key String
-     * @return String
-     */
-    operator fun get(key: String): String?
-
-    /**
-     * Checks if key exists.
-     *
-     * @param key String.
-     * @return Boolean.
-     */
-    fun exists(key: String): Boolean
-}
-
-operator fun CacheStore.get(entry: CacheKey): String? = this[CacheKeys.create(entry)]
+class GracePeriodCacheRequestMediator(
+    private val duration: Duration,
+    private val cache: CacheStore,
+    private val command: RequestCommand
+) : CacheStore by cache, RequestCommand by command

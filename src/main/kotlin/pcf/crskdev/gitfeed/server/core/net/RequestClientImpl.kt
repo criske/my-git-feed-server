@@ -28,10 +28,13 @@ package pcf.crskdev.gitfeed.server.core.net
 import com.fasterxml.jackson.databind.JsonNode
 import pcf.crskdev.gitfeed.server.core.GitFeedException
 import pcf.crskdev.gitfeed.server.core.GitFeedException.Type
+import pcf.crskdev.gitfeed.server.core.cache.CacheKeys
 import pcf.crskdev.gitfeed.server.core.cache.CacheStore
+import pcf.crskdev.gitfeed.server.core.cache.createKey
+import pcf.crskdev.gitfeed.server.core.cache.raw
+import pcf.crskdev.gitfeed.server.core.cache.switch
 import pcf.crskdev.gitfeed.server.core.util.KLogger
 import pcf.crskdev.gitfeed.server.core.util.KObjectMapper
-import pcf.crskdev.gitfeed.server.core.util.base64Encode
 import java.net.HttpURLConnection
 import java.net.URI
 
@@ -84,7 +87,8 @@ internal class RequestClientImpl(
             accessToken.key to accessToken.value
         }
 
-        val headersWithCache = this.cache[this.etagKey(uri)]?.let { etag ->
+        val etagKey = CacheKeys.Type.ETAG.createKey(uri.toString())
+        val headersWithCache = this.cache[etagKey.raw()]?.let { etag ->
             logger.info {
                 "Checking cache validity with etag $etag for: $uri\""
             }
@@ -99,7 +103,8 @@ internal class RequestClientImpl(
                 this.processResponse(uri, response, clazz, responseMapper)
             }
             HttpURLConnection.HTTP_NOT_MODIFIED -> {
-                val cachedResponse = this.cache[responseKey(uri)]
+                val responseKey = etagKey.switch(CacheKeys.Type.RESPONSE)
+                val cachedResponse = this.cache[responseKey.raw()]
                 if (cachedResponse == null) { // missed cache just in case
                     logger.info {
                         "Missed cache result -> try re-fetching from remote for: $uri\""
@@ -147,8 +152,10 @@ internal class RequestClientImpl(
             logger.info {
                 "Got remote etag $etag for : $uri. Caching response."
             }
-            this.cache[this.etagKey(uri)] = etag
-            this.cache[this.responseKey(uri)] = strMapped
+            val etagKey = CacheKeys.Type.ETAG.createKey(uri.toString())
+            val responseKey = etagKey.switch(CacheKeys.Type.RESPONSE)
+            this.cache[etagKey.raw()] = etag
+            this.cache[responseKey.raw()] = strMapped
         } else {
             logger.info {
                 "No remote etag present for : $uri. Caching response skipped."
@@ -156,24 +163,6 @@ internal class RequestClientImpl(
         }
         return this.objectMapper.readValue(strMapped, clazz)
     }
-
-    /**
-     * Etag key cache.
-     *
-     * @param uri URI.
-     * @return String.
-     */
-    private fun etagKey(uri: URI): String =
-        base64Encode("etag", uri.toString(), padded = false)
-
-    /**
-     * Response key cache.
-     *
-     * @param uri URI
-     * @return String.
-     */
-    private fun responseKey(uri: URI): String =
-        base64Encode("res", uri.toString(), padded = false)
 }
 
 /**
