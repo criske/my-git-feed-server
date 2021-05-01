@@ -104,5 +104,6 @@ typealias CacheKey = Pair<CacheKeys.Type, String>
 
 fun CacheKeys.Type.createKey(value: String) = this to value
 
-fun CacheKey.switch(prefix: CacheKeys.Type) = prefix to this.second
+fun CacheKey.switch(prefix: CacheKeys.Type) = if(this.first != prefix)
+    prefix to this.second else this
 fun CacheKey.raw() = CacheKeys.create(this)
