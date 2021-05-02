@@ -23,34 +23,34 @@
  *
  */
 
-package pcf.crskdev.gitfeed.server.core.net
+package pcf.crskdev.gitfeed.server.core.util
 
-typealias Headers = Map<String, List<String>>
+import java.time.Clock
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.temporal.TemporalUnit
 
-fun Headers.first(key: String) = this[key]?.first()
+class MockTimeline(start: LocalDateTime) : Clock() {
 
-fun headers(from: Headers = emptyMap(), body: HeadersScope.() -> Unit): Headers {
-    val map = mutableMapOf<String, MutableList<String>>().apply {
-        from.forEach { (key, value) ->
-            put(key, value.toMutableList())
-        }
+    private var now = start.toInstant(ZoneId.systemDefault().rules.getOffset(start))
+
+    override fun getZone(): ZoneId = ZoneId.systemDefault()
+
+    override fun withZone(zone: ZoneId?): Clock =
+        throw UnsupportedOperationException("Not supported by mock")
+
+    override fun instant(): Instant = now
+
+    fun advanceBy(amount: Long, unit: TemporalUnit) {
+        now = now.plus(amount, unit)
     }
 
-    class HeadersScopeImpl : HeadersScope {
-        override fun String.to(value: String) {
-            if (!map.containsKey(this)) {
-                map[this] = mutableListOf()
-            }
-            map[this]?.add(value)
-        }
+    fun backBy(amount: Long, unit: TemporalUnit) {
+        now = now.minus(amount, unit)
     }
-    HeadersScopeImpl().apply(body)
-    return map
-}
 
-interface HeadersScope {
-    infix fun String.to(value: String)
-}
+    fun now(): LocalDateTime = LocalDateTime.now(this)
 
-val AccessToken.asHeader: Headers
-    get() = headers { key to value }
+    fun split(): MockTimeline = MockTimeline(now())
+}
