@@ -59,7 +59,7 @@ object CacheKeys {
          * Cached response data key
          *
          */
-        RESPONSE("res"),
+        RES("res"),
 
         /**
          * Creation timestamp of cached response.

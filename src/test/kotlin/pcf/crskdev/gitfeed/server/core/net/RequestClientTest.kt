@@ -49,7 +49,7 @@ internal class RequestClientTest() : DescribeSpec() {
     init {
         val uri = URI.create("http://foo.com")
         val etagKey = CacheKeys.Type.ETAG.createKey(uri.toString())
-        val resKey = etagKey.switch(CacheKeys.Type.RESPONSE)
+        val resKey = etagKey.switch(CacheKeys.Type.RES)
 
         val requestCommand = mock<RequestCommand>()
         val cache = mock<CacheStore>()

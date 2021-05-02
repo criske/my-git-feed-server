@@ -103,7 +103,7 @@ internal class RequestClientImpl(
                 this.processResponse(uri, response, clazz, responseMapper)
             }
             HttpURLConnection.HTTP_NOT_MODIFIED -> {
-                val responseKey = etagKey.switch(CacheKeys.Type.RESPONSE)
+                val responseKey = etagKey.switch(CacheKeys.Type.RES)
                 val cachedResponse = this.cache[responseKey.raw()]
                 if (cachedResponse == null) { // missed cache just in case
                     logger.info {
@@ -153,7 +153,7 @@ internal class RequestClientImpl(
                 "Got remote etag $etag for : $uri. Caching response."
             }
             val etagKey = CacheKeys.Type.ETAG.createKey(uri.toString())
-            val responseKey = etagKey.switch(CacheKeys.Type.RESPONSE)
+            val responseKey = etagKey.switch(CacheKeys.Type.RES)
             this.cache[etagKey.raw()] = etag
             this.cache[responseKey.raw()] = strMapped
         } else {
