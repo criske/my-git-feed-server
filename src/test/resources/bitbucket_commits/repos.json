@@ -1,0 +1,250 @@
+{
+  "pagelen": 10,
+  "size": 1,
+  "values": [
+    {
+      "scm": "git",
+      "website": null,
+      "has_wiki": false,
+      "uuid": "{701004d2-213e-44ca-92f3-b9c3fc6b51c2}",
+      "links": {
+        "watchers": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/sleep-cycle-calculator/watchers"
+        },
+        "branches": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/sleep-cycle-calculator/refs/branches"
+        },
+        "tags": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/sleep-cycle-calculator/refs/tags"
+        },
+        "commits": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/sleep-cycle-calculator/commits"
+        },
+        "clone": [
+          {
+            "href": "https://cristianpela@bitbucket.org/cristianpela/sleep-cycle-calculator.git",
+            "name": "https"
+          },
+          {
+            "href": "git@bitbucket.org:cristianpela/sleep-cycle-calculator.git",
+            "name": "ssh"
+          }
+        ],
+        "self": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/sleep-cycle-calculator"
+        },
+        "source": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/sleep-cycle-calculator/src"
+        },
+        "html": {
+          "href": "https://bitbucket.org/cristianpela/sleep-cycle-calculator"
+        },
+        "avatar": {
+          "href": "https://bytebucket.org/ravatar/%7B701004d2-213e-44ca-92f3-b9c3fc6b51c2%7D?ts=default"
+        },
+        "hooks": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/sleep-cycle-calculator/hooks"
+        },
+        "forks": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/sleep-cycle-calculator/forks"
+        },
+        "downloads": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/sleep-cycle-calculator/downloads"
+        },
+        "pullrequests": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/sleep-cycle-calculator/pullrequests"
+        }
+      },
+      "fork_policy": "allow_forks",
+      "full_name": "cristianpela/sleep-cycle-calculator",
+      "name": "sleep-cycle-calculator",
+      "project": {
+        "links": {
+          "self": {
+            "href": "https://bitbucket.org/!api/2.0/workspaces/cristianpela/projects/PROJ"
+          },
+          "html": {
+            "href": "https://bitbucket.org/cristianpela/workspace/projects/PROJ"
+          },
+          "avatar": {
+            "href": "https://bitbucket.org/account/user/cristianpela/projects/PROJ/avatar/32?ts=1543638855"
+          }
+        },
+        "type": "project",
+        "name": "Untitled project",
+        "key": "PROJ",
+        "uuid": "{da826774-1c16-4005-9b5b-09089487bc59}"
+      },
+      "language": "kotlin",
+      "created_on": "2016-06-29T16:52:01.672944+00:00",
+      "mainbranch": {
+        "type": "branch",
+        "name": "master"
+      },
+      "workspace": {
+        "slug": "cristianpela",
+        "type": "workspace",
+        "name": "Cristian Pela",
+        "links": {
+          "self": {
+            "href": "https://bitbucket.org/!api/2.0/workspaces/cristianpela"
+          },
+          "html": {
+            "href": "https://bitbucket.org/cristianpela/"
+          },
+          "avatar": {
+            "href": "https://bitbucket.org/workspaces/cristianpela/avatar/?ts=1543638855"
+          }
+        },
+        "uuid": "{c94b65af-2573-4c7a-93ad-da943c45ecaf}"
+      },
+      "has_issues": false,
+      "owner": {
+        "display_name": "Cristian Pela",
+        "uuid": "{c94b65af-2573-4c7a-93ad-da943c45ecaf}",
+        "links": {
+          "self": {
+            "href": "https://bitbucket.org/!api/2.0/users/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D"
+          },
+          "html": {
+            "href": "https://bitbucket.org/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D/"
+          },
+          "avatar": {
+            "href": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/557058:0f30dbbe-e90b-4d4a-a005-6fc83820c8e7/30024e46-ecc6-4fc3-9275-c97e2a8b8418/128"
+          }
+        },
+        "type": "user",
+        "nickname": "cristianpela",
+        "account_id": "557058:0f30dbbe-e90b-4d4a-a005-6fc83820c8e7"
+      },
+      "updated_on": "2021-04-27T08:37:05.977629+00:00",
+      "size": 594824,
+      "type": "repository",
+      "slug": "sleep-cycle-calculator",
+      "is_private": false,
+      "description": ""
+    },
+    {
+      "scm": "git",
+      "website": null,
+      "has_wiki": false,
+      "uuid": "{55124ca9-5e0e-48a8-b353-f37c4e9d4ced}",
+      "links": {
+        "watchers": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/ref-manager/watchers"
+        },
+        "branches": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/ref-manager/refs/branches"
+        },
+        "tags": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/ref-manager/refs/tags"
+        },
+        "commits": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/ref-manager/commits"
+        },
+        "clone": [
+          {
+            "href": "https://cristianpela@bitbucket.org/cristianpela/ref-manager.git",
+            "name": "https"
+          },
+          {
+            "href": "git@bitbucket.org:cristianpela/ref-manager.git",
+            "name": "ssh"
+          }
+        ],
+        "self": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/ref-manager"
+        },
+        "source": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/ref-manager/src"
+        },
+        "html": {
+          "href": "https://bitbucket.org/cristianpela/ref-manager"
+        },
+        "avatar": {
+          "href": "https://bytebucket.org/ravatar/%7B55124ca9-5e0e-48a8-b353-f37c4e9d4ced%7D?ts=js"
+        },
+        "hooks": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/ref-manager/hooks"
+        },
+        "forks": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/ref-manager/forks"
+        },
+        "downloads": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/ref-manager/downloads"
+        },
+        "pullrequests": {
+          "href": "https://bitbucket.org/!api/2.0/repositories/cristianpela/ref-manager/pullrequests"
+        }
+      },
+      "fork_policy": "allow_forks",
+      "full_name": "cristianpela/ref-manager",
+      "name": "Ref-Manager",
+      "project": {
+        "links": {
+          "self": {
+            "href": "https://bitbucket.org/!api/2.0/workspaces/cristianpela/projects/PROJ"
+          },
+          "html": {
+            "href": "https://bitbucket.org/cristianpela/workspace/projects/PROJ"
+          },
+          "avatar": {
+            "href": "https://bitbucket.org/account/user/cristianpela/projects/PROJ/avatar/32?ts=1543638855"
+          }
+        },
+        "type": "project",
+        "name": "Untitled project",
+        "key": "PROJ",
+        "uuid": "{da826774-1c16-4005-9b5b-09089487bc59}"
+      },
+      "language": "javascript",
+      "created_on": "2015-03-19T08:35:55.724939+00:00",
+      "mainbranch": {
+        "type": "branch",
+        "name": "master"
+      },
+      "workspace": {
+        "slug": "cristianpela",
+        "type": "workspace",
+        "name": "Cristian Pela",
+        "links": {
+          "self": {
+            "href": "https://bitbucket.org/!api/2.0/workspaces/cristianpela"
+          },
+          "html": {
+            "href": "https://bitbucket.org/cristianpela/"
+          },
+          "avatar": {
+            "href": "https://bitbucket.org/workspaces/cristianpela/avatar/?ts=1543638855"
+          }
+        },
+        "uuid": "{c94b65af-2573-4c7a-93ad-da943c45ecaf}"
+      },
+      "has_issues": false,
+      "owner": {
+        "display_name": "Cristian Pela",
+        "uuid": "{c94b65af-2573-4c7a-93ad-da943c45ecaf}",
+        "links": {
+          "self": {
+            "href": "https://bitbucket.org/!api/2.0/users/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D"
+          },
+          "html": {
+            "href": "https://bitbucket.org/%7Bc94b65af-2573-4c7a-93ad-da943c45ecaf%7D/"
+          },
+          "avatar": {
+            "href": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/557058:0f30dbbe-e90b-4d4a-a005-6fc83820c8e7/30024e46-ecc6-4fc3-9275-c97e2a8b8418/128"
+          }
+        },
+        "type": "user",
+        "nickname": "cristianpela",
+        "account_id": "557058:0f30dbbe-e90b-4d4a-a005-6fc83820c8e7"
+      },
+      "updated_on": "2021-04-27T08:37:54.145593+00:00",
+      "size": 505493,
+      "type": "repository",
+      "slug": "ref-manager",
+      "is_private": false,
+      "description": "A manager for tracking rented referrals on a PTC."
+    }
+  ]
+}

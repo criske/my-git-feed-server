@@ -28,8 +28,10 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.JsonSerializable
 import pcf.crskdev.gitfeed.server.core.feed.GitFeed
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
+import pcf.crskdev.gitfeed.server.core.feed.models.Commit
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 import pcf.crskdev.gitfeed.server.core.feed.models.Paging
+import pcf.crskdev.gitfeed.server.core.feed.models.Repo
 import pcf.crskdev.gitfeed.server.core.feed.models.Repos
 import pcf.crskdev.gitfeed.server.core.feed.models.User
 import pcf.crskdev.gitfeed.server.core.net.RequestClient
@@ -37,15 +39,31 @@ import pcf.crskdev.gitfeed.server.core.net.request
 import pcf.crskdev.gitfeed.server.core.util.ObjectScope
 import pcf.crskdev.gitfeed.server.core.util.obj
 import java.net.URI
+import java.time.OffsetDateTime
+import java.util.stream.Collectors
 import kotlin.math.ceil
+import kotlin.math.min
 
 /**
- * Bitbucket git feed implementation.
+ * Bitbucket git feed implementation with an optional configuration.
+ *
+ * Supported configuration keys:
+ * - commitsPageSize: Int (default 30)
  *
  * @property client Authenticated client
+ * @property config Configuration.
  * @author Cristian Pela
  */
-class BitbucketGitFeed(private val client: RequestClient) : GitFeed {
+class BitbucketGitFeed(
+    private val client: RequestClient,
+    private val config: Map<String, String> = mapOf(
+        COMMITS_PAGE_SIZE to "30"
+    )
+) : GitFeed {
+
+    companion object {
+        const val COMMITS_PAGE_SIZE = "commitsPageSize"
+    }
 
     /**
      * Base url.
@@ -53,7 +71,50 @@ class BitbucketGitFeed(private val client: RequestClient) : GitFeed {
     private val baseUrl = "https://bitbucket.org/api/2.0"
 
     override fun commits(page: Int?): Commits {
-        TODO("Not yet implemented")
+        val repos = mutableListOf<Repo>().apply {
+            var next: Int? = 1
+            while (next != null) {
+                repos(next, false).also { r ->
+                    addAll(r.entries.map { it.simple })
+                    next = r.paging.next
+                }
+            }
+        }
+        val allCommits: List<Commit> = repos
+            .parallelStream()
+            .flatMap { repo ->
+                mutableListOf<Commit>()
+                    .apply {
+                        var next: Int? = 1
+                        while (next != null) {
+                            val pageCommits = commits(repo, next!!)
+                            addAll(pageCommits.entries)
+                            next = pageCommits.paging.next
+                        }
+                    }.toList().stream()
+            }
+            .collect(Collectors.toList())
+            .sortedWith { a, b ->
+                // order descending
+                -1 * OffsetDateTime.parse(a.date)
+                    .compareTo(OffsetDateTime.parse(b.date))
+            }
+
+        val pageSize = this.config[COMMITS_PAGE_SIZE]?.toInt() ?: 30
+        val lastPage = ceil(allCommits.size.toDouble().div(pageSize)).toInt()
+        val currPage = page ?: 1
+        return Commits(
+            Paging(
+                if (currPage == 1) null else 1,
+                if (currPage > 1) currPage - 1 else null,
+                if (currPage < lastPage) currPage + 1 else null,
+                if (currPage == lastPage) null else lastPage
+            ),
+            allCommits.subList(
+                (currPage - 1) * pageSize,
+                min((currPage - 1) * pageSize + pageSize, allCommits.size)
+            )
+        )
     }
 
     override fun assignments(state: Assignments.State, page: Int?): Assignments {
@@ -63,17 +124,56 @@ class BitbucketGitFeed(private val client: RequestClient) : GitFeed {
     override fun me(): User = this.client
         .request(URI.create("$baseUrl/user")) { user(it.body) }
 
-    override fun repos(page: Int?): Repos = this.client.request(
-        URI.create("$baseUrl/repositories/cristianpela/?role=owner&q=is_private=false&page=${page ?: 1}")
-    ) {
-        obj {
-            "paging" to it.body.extractPagingBB()
-            "entries" to arr {
-                it.body["values"].elements().forEach {
-                    +obj { applyRepo(it) }
+    override fun repos(page: Int?): Repos = this.repos(page ?: 1, true)
+
+    /**
+     * Commits Page for a single repo.
+     *
+     * @param repo Repo.
+     * @param page Page.
+     * @return Commits.
+     */
+    private fun commits(repo: Repo, page: Int): Commits {
+        val url = URI.create("$baseUrl/repositories/${repo.fullName}/commits?pagelen=100&page=$page")
+        return client.request(url) {
+            obj {
+                "paging" to it.body.extractPagingBB()
+                "entries" to arr {
+                    it.body["values"].elements().forEach {
+                        +obj {
+                            "sha" to it["hash"].asText().substring(0, 7)
+                            "date" to it["date"]
+                            "url" to it["links"]["html"]["href"]
+                            "message" to it["rendered"]["message"]["raw"]
+                            "repo" to repo
+                        }
+                    }
                 }
-            }
-        }.asTree()
+            }.asTree()
+        }
+    }
+
+    /**
+     * Repos optionally filtered by owned (owner role).
+     *
+     * @param page Page.
+     * @param onlyOwned Owned or not.
+     * @return Repos.
+     */
+    private fun repos(page: Int, onlyOwned: Boolean): Repos {
+        val role = if (onlyOwned) "role=owner&" else ""
+        return this.client.request(
+            URI.create("$baseUrl/repositories/cristianpela/?${role}q=is_private=false&pagelen=100&page=$page")
+        ) {
+            obj {
+                "paging" to it.body.extractPagingBB()
+                "entries" to arr {
+                    it.body["values"].elements().forEach {
+                        +obj { applyRepo(it) }
+                    }
+                }
+            }.asTree()
+        }
     }
 
     /**
@@ -93,9 +193,10 @@ class BitbucketGitFeed(private val client: RequestClient) : GitFeed {
     }
 
     /**
-     *  Apply extracted repo data from a github json response key to ObjectScope.
+     * Simple repo from JSON.
      *
-     * @param node JsonNode
+     * @param node Node from which repo is extracted.
+     * @return Repo as Json.
      */
     private fun ObjectScope.simpleRepo(node: JsonNode): JsonSerializable = obj {
         "name" to node["name"]
@@ -144,8 +245,8 @@ class BitbucketGitFeed(private val client: RequestClient) : GitFeed {
      * @return Paging.
      */
     internal fun JsonNode.extractPagingBB(): Paging {
-        val size = this["size"].asText().toDouble()
-        val pagelen = this["pagelen"].asText().toDouble()
+        val pagelen = this["pagelen"]?.asText()?.toDouble() ?: return Paging()
+        val size = this["size"]?.asText()?.toDouble()
         val tryExtractStartingQuotations: (String) -> String = { it ->
             it.takeIf { it.startsWith("\"") && it.endsWith("\"") }
                 ?.substring(0, it.lastIndex)
@@ -157,7 +258,9 @@ class BitbucketGitFeed(private val client: RequestClient) : GitFeed {
             ?.split("page=")
             ?.get(1)
             ?.toInt()
-        val lastPage = ceil(size / pagelen).toInt().takeIf { nextPage != null }
+        val lastPage = size?.let { s ->
+            ceil(s / pagelen).toInt().takeIf { nextPage != null }
+        }
         val prevPage = this["previous"]
             ?.asText()
             ?.let(tryExtractStartingQuotations)

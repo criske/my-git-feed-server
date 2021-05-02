@@ -37,16 +37,19 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import pcf.crskdev.gitfeed.server.core.GitFeedException
+import pcf.crskdev.gitfeed.server.core.cache.CacheKeys
 import pcf.crskdev.gitfeed.server.core.cache.CacheStore
-import pcf.crskdev.gitfeed.server.core.util.base64Encode
+import pcf.crskdev.gitfeed.server.core.cache.createKey
+import pcf.crskdev.gitfeed.server.core.cache.raw
+import pcf.crskdev.gitfeed.server.core.cache.switch
 import java.net.URI
 
 internal class RequestClientTest() : DescribeSpec() {
 
     init {
-        val uri = URI.create("/")
-        val etagKey = base64Encode("etag", uri.toString(), padded = false)
-        val resKey = base64Encode("res", uri.toString(), padded = false)
+        val uri = URI.create("http://foo.com")
+        val etagKey = CacheKeys.Type.ETAG.createKey(uri.toString())
+        val resKey = etagKey.switch(CacheKeys.Type.RES)
 
         val requestCommand = mock<RequestCommand>()
         val cache = mock<CacheStore>()
@@ -92,16 +95,16 @@ internal class RequestClientTest() : DescribeSpec() {
                     )
                 )
                 client.request<Message>(uri)
-                verify(cache, times(1))[etagKey] = "123"
-                verify(cache, times(1))[resKey] = """{"message":"hello"}"""
+                verify(cache, times(1))[etagKey.raw()] = "123"
+                verify(cache, times(1))[resKey.raw()] = """{"message":"hello"}"""
             }
 
             it("should get from cache") {
                 whenever(requestCommand.request(any(), any())).thenReturn(
                     Response(304, null, emptyMap())
                 )
-                whenever(cache[etagKey]).thenReturn("123")
-                whenever(cache[resKey]).thenReturn("""{"message":"hello"}""")
+                whenever(cache[etagKey.raw()]).thenReturn("123")
+                whenever(cache[resKey.raw()]).thenReturn("""{"message":"hello"}""")
                 val message = client.request<Message>(uri)
                 message shouldBe Message("hello")
                 verify(requestCommand, times(1)).request(
@@ -115,7 +118,7 @@ internal class RequestClientTest() : DescribeSpec() {
             }
 
             it("should get new request if cache is missing") {
-                whenever(cache[etagKey]).thenReturn("123")
+                whenever(cache[etagKey.raw()]).thenReturn("123")
                 whenever(
                     requestCommand.request(
                         uri,
@@ -147,7 +150,7 @@ internal class RequestClientTest() : DescribeSpec() {
             }
 
             it("should throw if response after missing cache is not OK") {
-                whenever(cache[etagKey]).thenReturn("123")
+                whenever(cache[etagKey.raw()]).thenReturn("123")
                 whenever(
                     requestCommand.request(
                         uri,

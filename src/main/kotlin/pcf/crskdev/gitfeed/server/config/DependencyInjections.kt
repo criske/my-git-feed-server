@@ -35,6 +35,7 @@ import pcf.crskdev.gitfeed.server.core.feed.GitFeedManagerImpl
 import pcf.crskdev.gitfeed.server.core.net.RequestClient
 import pcf.crskdev.gitfeed.server.core.net.RequestClientImpl
 import pcf.crskdev.gitfeed.server.core.net.RequestCommand
+import pcf.crskdev.gitfeed.server.core.net.RequestCommandGraceDurationProxy
 import pcf.crskdev.gitfeed.server.impl.core.cache.EhcacheStore
 import pcf.crskdev.gitfeed.server.impl.core.cache.NaiveInMemoryCacheStore
 import pcf.crskdev.gitfeed.server.impl.core.net.RestTemplateCommand
@@ -73,14 +74,27 @@ class DependencyInjections {
     fun requestCommand(): RequestCommand = RestTemplateCommand()
 
     /**
+     * Request command grace duration proxy
+     *
+     * @param cache
+     * @param requestCommand
+     * @return
+     */
+    @Bean
+    fun requestCommandGraceDurationProxy(
+        cache: CacheStore,
+        requestCommand: RequestCommand
+    ): RequestCommandGraceDurationProxy = RequestCommandGraceDurationProxy(cache, requestCommand)
+
+    /**
      * Request client
      *
-     * @param cache CacheStore.
+     * @param requestCommandProxy Grace duration command request proxy.
      * @return RequestClient
      */
     @Bean
-    fun requestClient(cache: CacheStore, requestCommand: RequestCommand): RequestClient =
-        RequestClientImpl(cache, requestCommand)
+    fun requestClient(requestCommandProxy: RequestCommandGraceDurationProxy): RequestClient =
+        RequestClientImpl(requestCommandProxy, requestCommandProxy)
 
     /**
      * Git feed manager.
