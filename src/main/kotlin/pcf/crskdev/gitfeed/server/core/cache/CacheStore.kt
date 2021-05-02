@@ -57,3 +57,5 @@ interface CacheStore : Closeable {
      */
     fun exists(key: String): Boolean
 }
+
+operator fun CacheStore.get(entry: CacheKey): String? = this[CacheKeys.create(entry)]
