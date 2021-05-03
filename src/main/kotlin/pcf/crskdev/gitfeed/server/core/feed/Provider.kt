@@ -38,9 +38,11 @@ import pcf.crskdev.gitfeed.server.core.net.Unauthorized
  */
 enum class Provider(val accessToken: AccessToken) {
 
+    BITBUCKET(Basic.withEncoded(System.getenv("BB_TOKEN"))),
+
     GITHUB(Bearer(System.getenv("GH_TOKEN"))),
 
-    BITBUCKET(Basic.withEncoded(System.getenv("BB_TOKEN"))),
+    GITLAB(Bearer(System.getenv("GL_TOKEN"))),
 
     UNKNOWN(Unauthorized);
 
