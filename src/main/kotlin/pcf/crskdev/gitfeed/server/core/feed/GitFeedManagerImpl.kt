@@ -27,6 +27,7 @@ package pcf.crskdev.gitfeed.server.core.feed
 
 import pcf.crskdev.gitfeed.server.core.feed.bitbucket.BitbucketGitFeed
 import pcf.crskdev.gitfeed.server.core.feed.github.GithubGitFeed
+import pcf.crskdev.gitfeed.server.core.feed.gitlab.GitlabGitFeed
 import pcf.crskdev.gitfeed.server.core.net.AccessToken
 import pcf.crskdev.gitfeed.server.core.net.RequestClient
 import java.util.EnumMap
@@ -66,6 +67,9 @@ class GitFeedManagerImpl(
             },
             Provider.BITBUCKET to {
                 BitbucketGitFeed(client.authorized(it))
+            },
+            Provider.GITLAB to {
+                GitlabGitFeed(client.authorized(it))
             }
         )
     )
