@@ -387,5 +387,30 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                 }
             }
         }
+
+        describe("gitlab") {
+            describe("me endpoint") {
+                it("should get me") {
+                    val me = User(
+                        "criske",
+                        "https://secure.gravatar.com/avatar/d50208500191eb9b0d99ed29be6facd5?s=80&d=identicon",
+                        "https://gitlab.com/criske",
+                        "User",
+                        "Gitlab"
+                    )
+                    val feed = mock<GitFeed>()
+                    val manager = getBean<GitFeedManager>()
+                    whenever(manager.of("gitlab")).thenReturn(feed)
+                    whenever(feed.me()).thenReturn(me)
+
+                    mockMvc
+                        .perform(get("/api/gitlab/me"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<User>() shouldBe me
+                        }
+                }
+            }
+        }
     }
 }
