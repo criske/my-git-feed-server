@@ -26,8 +26,10 @@
 package pcf.crskdev.gitfeed.server.core.feed.gitlab
 
 import pcf.crskdev.gitfeed.server.core.feed.GitFeed
+import pcf.crskdev.gitfeed.server.core.feed.extractPaging
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
+import pcf.crskdev.gitfeed.server.core.feed.models.RepoExtended
 import pcf.crskdev.gitfeed.server.core.feed.models.Repos
 import pcf.crskdev.gitfeed.server.core.feed.models.User
 import pcf.crskdev.gitfeed.server.core.net.RequestClient
@@ -84,7 +86,43 @@ class GitlabGitFeed(
             }.asTree()
         }
 
-    override fun repos(page: Int?): Repos {
-        TODO("Not yet implemented")
+    override fun repos(page: Int?): Repos = this.repos(page) { !it.isFork }
+
+    private inline fun repos(page: Int?, owned: (RepoExtended) -> Boolean): Repos {
+        return this.client
+            .request<Repos>(URI.create("$baseUrl/users/$userId/projects?visibility=public&per_page=100&page=${page ?: 1}")) {
+                obj {
+                    "paging" to it.headers.extractPaging()
+                    "entries" to arr {
+                        it.body.elements().forEach {
+                            +obj {
+                                "simple" to obj {
+                                    "name" to it["name"]
+                                    "fullName" to it["path_with_namespace"]
+                                    "url" to it["web_url"]
+                                    "owner" to obj {
+                                        "name" to it["owner"]["username"]
+                                        "avatar" to it["owner"]["avatar_url"]
+                                        "url" to it["owner"]["web_url"]
+                                        "type" to (it["owner"]["type"]
+                                            ?: "User")
+                                        "provider" to "Gitlab"
+                                    }
+                                }
+                                "description" to it["description"]
+                                "isFork" to (it["forked_from_project"] != null)
+                                "isPrivate" to (it["visibility"].asText() != "public")
+                                "stars" to it["star_count"]
+                                "createdAt" to it["created_at"]
+                                "updatedAt" to it["last_activity_at"]
+                            }
+                        }
+                    }
+                }.asTree()
+            }.run {
+                this.copy(entries = this.entries.filter(owned))
+            }
+
     }
+
 }
