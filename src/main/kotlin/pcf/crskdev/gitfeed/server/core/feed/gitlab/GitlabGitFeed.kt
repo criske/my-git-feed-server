@@ -88,7 +88,15 @@ class GitlabGitFeed(
 
     override fun repos(page: Int?): Repos = this.repos(page) { !it.isFork }
 
-    private inline fun repos(page: Int?, owned: (RepoExtended) -> Boolean): Repos {
+    /**
+     * Filtered repos.
+     *
+     * @param page Page number.
+     * @param filter Predicate
+     * @receiver Takes RepoExtended and returns Boolean.
+     * @return Repos.
+     */
+    private inline fun repos(page: Int?, filter: (RepoExtended) -> Boolean): Repos {
         return this.client
             .request<Repos>(URI.create("$baseUrl/users/$userId/projects?visibility=public&per_page=100&page=${page ?: 1}")) {
                 obj {
@@ -104,8 +112,7 @@ class GitlabGitFeed(
                                         "name" to it["owner"]["username"]
                                         "avatar" to it["owner"]["avatar_url"]
                                         "url" to it["owner"]["web_url"]
-                                        "type" to (it["owner"]["type"]
-                                            ?: "User")
+                                        "type" to (it["owner"]["type"] ?: "User")
                                         "provider" to "Gitlab"
                                     }
                                 }
@@ -120,9 +127,7 @@ class GitlabGitFeed(
                     }
                 }.asTree()
             }.run {
-                this.copy(entries = this.entries.filter(owned))
+                this.copy(entries = this.entries.filter(filter))
             }
-
     }
-
 }

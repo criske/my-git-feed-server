@@ -29,6 +29,9 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import pcf.crskdev.gitfeed.server.core.feed.models.Paging
+import pcf.crskdev.gitfeed.server.core.feed.models.Repo
+import pcf.crskdev.gitfeed.server.core.feed.models.RepoExtended
 import pcf.crskdev.gitfeed.server.core.feed.models.User
 import pcf.crskdev.gitfeed.server.core.net.Bearer
 import pcf.crskdev.gitfeed.server.core.net.RequestClientImpl
@@ -64,6 +67,52 @@ internal class GitlabGitFeedTest : StringSpec({
             "https://gitlab.com/criske",
             "User",
             "Gitlab"
+        )
+    }
+
+    "should get owned repos (not forked)" {
+        val uri = URI.create("https://gitlab.com/api/v4/users/6018288/projects?visibility=public&per_page=100&page=1")
+        val command = mock<RequestCommand>()
+        val requestHeaders = headers {
+            "Content-Type" to "application/json"
+            "Authorization" to "Bearer fake_123"
+        }
+        val gitFeed = GitlabGitFeed(
+            RequestClientImpl(mock(), command, Bearer("fake_123"))
+        )
+        whenever(command.request(uri, requestHeaders)).thenReturn(
+            Response(
+                200,
+                File("src/test/resources/gitlab_repos.json").readText(),
+                emptyMap()
+            )
+        )
+
+        val repos = gitFeed.repos()
+
+        repos.entries.size shouldBe 2
+        repos.paging shouldBe Paging()
+        repos.entries.first() shouldBe RepoExtended(
+            Repo(
+                "self-xdsd-playground",
+                "criske/self-xdsd-playground",
+                "https://gitlab.com/criske/self-xdsd-playground",
+                User(
+                    "criske",
+                    "https://secure.gravatar.com/avatar/d50208500191eb9b0d99ed29be6facd5?s=80&d=identicon",
+                    "https://gitlab.com/criske",
+                    "User",
+                    "Gitlab"
+                )
+            ),
+            "Playground to test Gitlab API for Self https://github.com/self-xdsd",
+            false,
+            false,
+            1,
+            null,
+            null,
+            "2020-11-25T12:34:35.706Z",
+            "2021-01-26T12:56:14.310Z"
         )
     }
 })
