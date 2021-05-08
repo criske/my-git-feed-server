@@ -147,7 +147,12 @@ internal class RequestClientImpl(
         val jsonResponse = JsonResponse(json, response.headers)
         val jsonMapped = responseMapper(jsonResponse)
         val strMapped = this.objectMapper.writeValueAsString(jsonMapped)
-        val etag = response.headers.first("ETag")
+        val etag = response.headers
+            .filter { it.key.equals("ETag", true) }
+            .values
+            .takeIf { it.isNotEmpty() }
+            ?.first()
+            ?.first()
         if (etag != null) {
             logger.info {
                 "Got remote etag $etag for : $uri. Caching response."

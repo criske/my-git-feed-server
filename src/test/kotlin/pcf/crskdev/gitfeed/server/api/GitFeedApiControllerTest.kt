@@ -411,6 +411,49 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
                         }
                 }
             }
+            describe("repos endpoint") {
+                it("should get repos") {
+                    val repos = Repos(
+                        Paging(),
+                        listOf(
+                            RepoExtended(
+                                Repo(
+                                    "self-xdsd-playground",
+                                    "criske/self-xdsd-playground",
+                                    "https://gitlab.com/criske/self-xdsd-playground",
+                                    User(
+                                        "criske",
+                                        "https://secure.gravatar.com/avatar/d50208500191eb9b0d99ed29be6facd5?s=80&d=identicon",
+                                        "https://gitlab.com/criske",
+                                        "User",
+                                        "Gitlab"
+                                    )
+                                ),
+                                "Playground to test Gitlab API for Self https://github.com/self-xdsd",
+                                false,
+                                false,
+                                1,
+                                null,
+                                null,
+                                "2020-11-25T12:34:35.706Z",
+                                "2021-01-26T12:56:14.310Z"
+                            )
+                        )
+                    )
+
+                    val feed = mock<GitFeed>()
+                    val manager = getBean<GitFeedManager>()
+                    whenever(manager.of("gitlab")).thenReturn(feed)
+                    whenever(feed.repos()).thenReturn(repos)
+
+                    mockMvc
+                        .perform(get("/api/gitlab/repos"))
+                        .andDo(print()).andExpect(status().isOk)
+                        .andExpect { result ->
+                            result.response.contentAsString.jsonTo<Repos>() shouldBe repos
+                        }
+                }
+            }
         }
     }
 }
