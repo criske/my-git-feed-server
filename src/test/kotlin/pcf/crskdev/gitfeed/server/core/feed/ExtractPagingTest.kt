@@ -31,10 +31,17 @@ import pcf.crskdev.gitfeed.server.core.net.headers
 
 internal class ExtractPagingTest : StringSpec({
 
-    "should extract paging from header" {
+    "should extract paging from header github" {
         val paging = headers {
             "Link" to """<https://api.github.com/search/commits?q=author%3Acriske&sort=author-date&page=2>; rel="next", <https://api.github.com/search/commits?q=author%3Acriske&sort=author-date&page=34>; rel="last""""
         }.extractPaging().toString()
         paging shouldBe """{"first":null,"prev":null,"next":2,"last":34}"""
+    }
+
+    "should extract paging from header gitlab" {
+        val paging = headers {
+            "Link" to "<https://gitlab.com/api/v4/projects/criske%2Fself-rest/repository/commits?id=criske%2Fself-rest&order=default&page=2&per_page=1>; rel=\"next\", <https://gitlab.com/api/v4/projects/criske%2Fself-rest/repository/commits?id=criske%2Fself-rest&order=default&page=1&per_page=1>; rel=\"first\", <https://gitlab.com/api/v4/projects/criske%2Fself-rest/repository/commits?id=criske%2Fself-rest&order=default&page=2&per_page=1>; rel=\"last\""
+        }.extractPaging().toString()
+        paging shouldBe """{"first":1,"prev":null,"next":2,"last":2}"""
     }
 })

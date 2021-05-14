@@ -1,0 +1,1204 @@
+[
+  {
+    "id": "3be2aaade020fe4a2f77733f5a2301b227afec33",
+    "short_id": "3be2aaad",
+    "created_at": "2021-03-04T18:10:25.000+00:00",
+    "parent_ids": [
+      "058bf658a19f86f974c577841e262f156d4aa669",
+      "c7dc1fd684f026f287ce6693192bd0c90084e514"
+    ],
+    "title": "Merge branch 'issue21' into 'master'",
+    "message": "Merge branch 'issue21' into 'master'\n\n#21 ContributorInvoicesApi#all() implemented + tested.\n\nSee merge request self-xdsd/self-rest!13",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-03-04T18:10:25.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-03-04T18:10:25.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/3be2aaade020fe4a2f77733f5a2301b227afec33"
+  },
+  {
+    "id": "c7dc1fd684f026f287ce6693192bd0c90084e514",
+    "short_id": "c7dc1fd6",
+    "created_at": "2021-03-03T13:17:27.000+02:00",
+    "parent_ids": [
+      "058bf658a19f86f974c577841e262f156d4aa669"
+    ],
+    "title": "#21 ContributorInvoicesApi#all() implemented + tested.",
+    "message": "#21 ContributorInvoicesApi#all() implemented + tested.\n",
+    "author_name": "cristianpela",
+    "author_email": "cristypela05@gmail.com",
+    "authored_date": "2021-03-03T13:17:27.000+02:00",
+    "committer_name": "cristianpela",
+    "committer_email": "cristypela05@gmail.com",
+    "committed_date": "2021-03-03T13:17:27.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/c7dc1fd684f026f287ce6693192bd0c90084e514"
+  },
+  {
+    "id": "058bf658a19f86f974c577841e262f156d4aa669",
+    "short_id": "058bf658",
+    "created_at": "2021-02-26T07:32:36.000+00:00",
+    "parent_ids": [
+      "d9c5585ebc67e18232d976d8da38458be412882d"
+    ],
+    "title": "Update InvoicesApi.java",
+    "message": "Update InvoicesApi.java",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-26T07:32:36.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-26T07:32:36.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/058bf658a19f86f974c577841e262f156d4aa669"
+  },
+  {
+    "id": "d9c5585ebc67e18232d976d8da38458be412882d",
+    "short_id": "d9c5585e",
+    "created_at": "2021-02-26T07:30:23.000+00:00",
+    "parent_ids": [
+      "67ce996bc178fb42cc863d82da043bc3a00f0948",
+      "71d4d929efd206c7cfb6de40af5e9d4d27984162"
+    ],
+    "title": "Merge branch 'issue15' into 'master'",
+    "message": "Merge branch 'issue15' into 'master'\n\n#15 InvoicesApi#invoice() implemented + tested.\n\nSee merge request self-xdsd/self-rest!12",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-26T07:30:23.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-26T07:30:23.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/d9c5585ebc67e18232d976d8da38458be412882d"
+  },
+  {
+    "id": "71d4d929efd206c7cfb6de40af5e9d4d27984162",
+    "short_id": "71d4d929",
+    "created_at": "2021-02-19T14:26:59.000+02:00",
+    "parent_ids": [
+      "00057ddeac9be46d13f59d670cf695b91afa0a49"
+    ],
+    "title": "#15 Removed puzzle from origin.",
+    "message": "#15 Removed puzzle from origin.\n",
+    "author_name": "cristianpela",
+    "author_email": "cristypela05@gmail.com",
+    "authored_date": "2021-02-19T14:26:59.000+02:00",
+    "committer_name": "cristianpela",
+    "committer_email": "cristypela05@gmail.com",
+    "committed_date": "2021-02-19T14:26:59.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/71d4d929efd206c7cfb6de40af5e9d4d27984162"
+  },
+  {
+    "id": "00057ddeac9be46d13f59d670cf695b91afa0a49",
+    "short_id": "00057dde",
+    "created_at": "2021-02-19T14:24:53.000+02:00",
+    "parent_ids": [
+      "67ce996bc178fb42cc863d82da043bc3a00f0948"
+    ],
+    "title": "#15 InvoicesApi#invoice() implemented + tested.",
+    "message": "#15 InvoicesApi#invoice() implemented + tested.\n\nLeft puzzle for InvoicesApi#all()\n",
+    "author_name": "cristianpela",
+    "author_email": "cristypela05@gmail.com",
+    "authored_date": "2021-02-19T14:24:53.000+02:00",
+    "committer_name": "cristianpela",
+    "committer_email": "cristypela05@gmail.com",
+    "committed_date": "2021-02-19T14:24:53.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/00057ddeac9be46d13f59d670cf695b91afa0a49"
+  },
+  {
+    "id": "67ce996bc178fb42cc863d82da043bc3a00f0948",
+    "short_id": "67ce996b",
+    "created_at": "2021-02-14T13:39:57.000+00:00",
+    "parent_ids": [
+      "33f41edd1bd0bfcd01374a8fea190e2978af1f6e",
+      "9aa78756b495f78cdc39b2399b7781d2c70aae76"
+    ],
+    "title": "Merge branch '18' into 'master'",
+    "message": "Merge branch '18' into 'master'\n\n#18 currency and unit for JsonContract and JsonPlatformInvoice\n\nCloses #18\n\nSee merge request self-xdsd/self-rest!11",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-14T13:39:57.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-14T13:39:57.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/67ce996bc178fb42cc863d82da043bc3a00f0948"
+  },
+  {
+    "id": "9aa78756b495f78cdc39b2399b7781d2c70aae76",
+    "short_id": "9aa78756",
+    "created_at": "2021-02-14T15:38:46.000+02:00",
+    "parent_ids": [
+      "06d16d31ed34cd270a5ac057225f56a78c061de9"
+    ],
+    "title": "#18 currency and unit for JsonPlatformInvoice",
+    "message": "#18 currency and unit for JsonPlatformInvoice\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-14T15:38:46.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-14T15:38:46.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/9aa78756b495f78cdc39b2399b7781d2c70aae76"
+  },
+  {
+    "id": "06d16d31ed34cd270a5ac057225f56a78c061de9",
+    "short_id": "06d16d31",
+    "created_at": "2021-02-14T15:36:00.000+02:00",
+    "parent_ids": [
+      "33f41edd1bd0bfcd01374a8fea190e2978af1f6e"
+    ],
+    "title": "#18 currency and unit for JsonContract",
+    "message": "#18 currency and unit for JsonContract\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-14T15:36:00.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-14T15:36:00.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/06d16d31ed34cd270a5ac057225f56a78c061de9"
+  },
+  {
+    "id": "33f41edd1bd0bfcd01374a8fea190e2978af1f6e",
+    "short_id": "33f41edd",
+    "created_at": "2021-02-14T13:16:07.000+00:00",
+    "parent_ids": [
+      "094dd8daf42b337837bdf33bd1508108d28e5185",
+      "9bd4677ef19ea18ec17f937f72040eb50ed504ac"
+    ],
+    "title": "Merge branch 'issue14' into 'master'",
+    "message": "Merge branch 'issue14' into 'master'\n\n#14 ContributorTasksApi#task() implemented+tested.\n\nSee merge request self-xdsd/self-rest!10",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-14T13:16:07.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-14T13:16:07.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/33f41edd1bd0bfcd01374a8fea190e2978af1f6e"
+  },
+  {
+    "id": "9bd4677ef19ea18ec17f937f72040eb50ed504ac",
+    "short_id": "9bd4677e",
+    "created_at": "2021-02-14T13:20:56.000+02:00",
+    "parent_ids": [
+      "c990bcf28be22a912b1e95a45dcac8c8f2f2419a"
+    ],
+    "title": "#14 JsonTask estimation as string in minutes.",
+    "message": "#14 JsonTask estimation as string in minutes.\n",
+    "author_name": "cristianpela",
+    "author_email": "cristypela05@gmail.com",
+    "authored_date": "2021-02-14T13:20:56.000+02:00",
+    "committer_name": "cristianpela",
+    "committer_email": "cristypela05@gmail.com",
+    "committed_date": "2021-02-14T13:20:56.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/9bd4677ef19ea18ec17f937f72040eb50ed504ac"
+  },
+  {
+    "id": "c990bcf28be22a912b1e95a45dcac8c8f2f2419a",
+    "short_id": "c990bcf2",
+    "created_at": "2021-02-14T13:07:11.000+02:00",
+    "parent_ids": [
+      "3177d966048ef4a9a0baa5686b727d4210634cf6"
+    ],
+    "title": "#14 Removed contract id encoding, added estimation.",
+    "message": "#14 Removed contract id encoding, added estimation.\n\nContributorTasksApi base endpoint now is: `/contracts/{owner}/{name}/tasks/{role}`\n",
+    "author_name": "cristianpela",
+    "author_email": "cristypela05@gmail.com",
+    "authored_date": "2021-02-14T13:07:11.000+02:00",
+    "committer_name": "cristianpela",
+    "committer_email": "cristypela05@gmail.com",
+    "committed_date": "2021-02-14T13:07:11.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/c990bcf28be22a912b1e95a45dcac8c8f2f2419a"
+  },
+  {
+    "id": "3177d966048ef4a9a0baa5686b727d4210634cf6",
+    "short_id": "3177d966",
+    "created_at": "2021-02-14T12:35:54.000+02:00",
+    "parent_ids": [
+      "3b61f3246380188663fe7d9d429f1eed565ee660",
+      "094dd8daf42b337837bdf33bd1508108d28e5185"
+    ],
+    "title": "Merge branch 'master' into issue14",
+    "message": "Merge branch 'master' into issue14\n\n# Conflicts:\n#\tsrc/main/java/com/selfxdsd/rest/BaseRestController.java\n",
+    "author_name": "cristianpela",
+    "author_email": "cristypela05@gmail.com",
+    "authored_date": "2021-02-14T12:35:54.000+02:00",
+    "committer_name": "cristianpela",
+    "committer_email": "cristypela05@gmail.com",
+    "committed_date": "2021-02-14T12:35:54.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/3177d966048ef4a9a0baa5686b727d4210634cf6"
+  },
+  {
+    "id": "094dd8daf42b337837bdf33bd1508108d28e5185",
+    "short_id": "094dd8da",
+    "created_at": "2021-02-14T07:42:16.000+00:00",
+    "parent_ids": [
+      "7f38e7c85b4ebcb3ae0a55bf3cc88f657bd90b98",
+      "d45441d2c792adbffbda9d7f3d8666e9de96e408"
+    ],
+    "title": "Merge branch 'issue13' into 'master'",
+    "message": "Merge branch 'issue13' into 'master'\n\n#13 ProjectsApi#project() implemented+tested.\n\nSee merge request self-xdsd/self-rest!9",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-14T07:42:16.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-14T07:42:16.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/094dd8daf42b337837bdf33bd1508108d28e5185"
+  },
+  {
+    "id": "d45441d2c792adbffbda9d7f3d8666e9de96e408",
+    "short_id": "d45441d2",
+    "created_at": "2021-02-12T13:27:47.000+02:00",
+    "parent_ids": [
+      "431f25c0923e44713f51564d6ffb956240236d42"
+    ],
+    "title": "#13 Removed puzzle.",
+    "message": "#13 Removed puzzle.\n",
+    "author_name": "cristianpela",
+    "author_email": "cristypela05@gmail.com",
+    "authored_date": "2021-02-12T13:27:47.000+02:00",
+    "committer_name": "cristianpela",
+    "committer_email": "cristypela05@gmail.com",
+    "committed_date": "2021-02-12T13:27:47.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/d45441d2c792adbffbda9d7f3d8666e9de96e408"
+  },
+  {
+    "id": "3b61f3246380188663fe7d9d429f1eed565ee660",
+    "short_id": "3b61f324",
+    "created_at": "2021-02-12T13:26:38.000+02:00",
+    "parent_ids": [
+      "ba156d8114b5a54e8a0e860fa8e855184216ecc9"
+    ],
+    "title": "#14 ContributorTasksApi#task() implemented+tested.",
+    "message": "#14 ContributorTasksApi#task() implemented+tested.\n\n- in order to pass the contract id to ContributorTaskApi base endpoint url, the contract id is encoded with base64 (the generated encoding is also added to JsonContract as id key too - this way the ContributorTaskApi base url can be constructed by clients: ` /contracts/{contractId}/tasks`).\n- support for base64 encode/decode Contract.Id in JsonContract.\n- implemented+tested JsonTask.\n",
+    "author_name": "cristianpela",
+    "author_email": "cristypela05@gmail.com",
+    "authored_date": "2021-02-12T13:26:38.000+02:00",
+    "committer_name": "cristianpela",
+    "committer_email": "cristypela05@gmail.com",
+    "committed_date": "2021-02-12T13:26:38.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/3b61f3246380188663fe7d9d429f1eed565ee660"
+  },
+  {
+    "id": "431f25c0923e44713f51564d6ffb956240236d42",
+    "short_id": "431f25c0",
+    "created_at": "2021-02-12T11:15:16.000+02:00",
+    "parent_ids": [
+      "2d6fddf30513bc98e5f8bdcc25ae114a25d934f5"
+    ],
+    "title": "#13 Modified JsonProject output.",
+    "message": "#13 Modified JsonProject output.\n",
+    "author_name": "cristianpela",
+    "author_email": "cristypela05@gmail.com",
+    "authored_date": "2021-02-12T11:15:16.000+02:00",
+    "committer_name": "cristianpela",
+    "committer_email": "cristypela05@gmail.com",
+    "committed_date": "2021-02-12T11:15:16.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/431f25c0923e44713f51564d6ffb956240236d42"
+  },
+  {
+    "id": "7f38e7c85b4ebcb3ae0a55bf3cc88f657bd90b98",
+    "short_id": "7f38e7c8",
+    "created_at": "2021-02-11T20:03:35.000+02:00",
+    "parent_ids": [
+      "96876a5ee4a20ca1dcd4660e7178b9d1a87e93c1"
+    ],
+    "title": "self-core 63",
+    "message": "self-core 63\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-11T20:03:35.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-11T20:03:35.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/7f38e7c85b4ebcb3ae0a55bf3cc88f657bd90b98"
+  },
+  {
+    "id": "96876a5ee4a20ca1dcd4660e7178b9d1a87e93c1",
+    "short_id": "96876a5e",
+    "created_at": "2021-02-11T19:29:29.000+02:00",
+    "parent_ids": [
+      "e498bab069b27f313a10fb0ba261b1e2860f5938"
+    ],
+    "title": "core 62; storage 28",
+    "message": "core 62; storage 28\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-11T19:29:29.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-11T19:29:29.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/96876a5ee4a20ca1dcd4660e7178b9d1a87e93c1"
+  },
+  {
+    "id": "2d6fddf30513bc98e5f8bdcc25ae114a25d934f5",
+    "short_id": "2d6fddf3",
+    "created_at": "2021-02-11T11:51:20.000+02:00",
+    "parent_ids": [
+      "e2f40bd5224c1090680380407d24d71e01079dac"
+    ],
+    "title": "#13 ProjectsApi#project() implemented+tested.",
+    "message": "#13 ProjectsApi#project() implemented+tested.\n",
+    "author_name": "cristianpela",
+    "author_email": "cristypela05@gmail.com",
+    "authored_date": "2021-02-11T11:51:20.000+02:00",
+    "committer_name": "cristianpela",
+    "committer_email": "cristypela05@gmail.com",
+    "committed_date": "2021-02-11T11:51:20.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/2d6fddf30513bc98e5f8bdcc25ae114a25d934f5"
+  },
+  {
+    "id": "e2f40bd5224c1090680380407d24d71e01079dac",
+    "short_id": "e2f40bd5",
+    "created_at": "2021-02-11T11:37:02.000+02:00",
+    "parent_ids": [
+      "ba156d8114b5a54e8a0e860fa8e855184216ecc9"
+    ],
+    "title": "#13 ProjectsApi#project() implemented+tested.",
+    "message": "#13 ProjectsApi#project() implemented+tested.\n",
+    "author_name": "cristianpela",
+    "author_email": "cristypela05@gmail.com",
+    "authored_date": "2021-02-11T11:37:02.000+02:00",
+    "committer_name": "cristianpela",
+    "committer_email": "cristypela05@gmail.com",
+    "committed_date": "2021-02-11T11:37:02.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/e2f40bd5224c1090680380407d24d71e01079dac"
+  },
+  {
+    "id": "e498bab069b27f313a10fb0ba261b1e2860f5938",
+    "short_id": "e498bab0",
+    "created_at": "2021-02-09T16:42:05.000+00:00",
+    "parent_ids": [
+      "5add11c47c306bcff430d073b1c09ebb33481af3",
+      "2cde0d5a46114983ac450aea63ab159a6254d8cc"
+    ],
+    "title": "Merge branch '17' into 'master'",
+    "message": "Merge branch '17' into 'master'\n\n#17 PlatformInvoicesApi.all() implemented and tested\n\nSee merge request self-xdsd/self-rest!8",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-09T16:42:05.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-09T16:42:05.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/e498bab069b27f313a10fb0ba261b1e2860f5938"
+  },
+  {
+    "id": "2cde0d5a46114983ac450aea63ab159a6254d8cc",
+    "short_id": "2cde0d5a",
+    "created_at": "2021-02-09T18:39:23.000+02:00",
+    "parent_ids": [
+      "3c6e0d864f3eef4ab51290efef216b9e80cfe646"
+    ],
+    "title": "#17 PlatformInvoicesApi.all() implemented and tested",
+    "message": "#17 PlatformInvoicesApi.all() implemented and tested\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-09T18:39:23.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-09T18:39:23.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/2cde0d5a46114983ac450aea63ab159a6254d8cc"
+  },
+  {
+    "id": "3c6e0d864f3eef4ab51290efef216b9e80cfe646",
+    "short_id": "3c6e0d86",
+    "created_at": "2021-02-09T18:27:03.000+02:00",
+    "parent_ids": [
+      "5add11c47c306bcff430d073b1c09ebb33481af3"
+    ],
+    "title": "#17 JsonPlatformInvoices implemented and tested",
+    "message": "#17 JsonPlatformInvoices implemented and tested\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-09T18:27:03.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-09T18:27:03.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/3c6e0d864f3eef4ab51290efef216b9e80cfe646"
+  },
+  {
+    "id": "5add11c47c306bcff430d073b1c09ebb33481af3",
+    "short_id": "5add11c4",
+    "created_at": "2021-02-09T12:24:59.000+00:00",
+    "parent_ids": [
+      "f10b56d70e8fd085bb0de15ae00daf8bfdae24c7"
+    ],
+    "title": "Update README.md",
+    "message": "Update README.md",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-09T12:24:59.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-09T12:24:59.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/5add11c47c306bcff430d073b1c09ebb33481af3"
+  },
+  {
+    "id": "f10b56d70e8fd085bb0de15ae00daf8bfdae24c7",
+    "short_id": "f10b56d7",
+    "created_at": "2021-02-09T14:08:11.000+02:00",
+    "parent_ids": [
+      "700581ccdd3eb0d62e8219626942f273dfa7b31c"
+    ],
+    "title": "branch master and test",
+    "message": "branch master and test\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-09T14:08:11.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-09T14:08:11.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/f10b56d70e8fd085bb0de15ae00daf8bfdae24c7"
+  },
+  {
+    "id": "700581ccdd3eb0d62e8219626942f273dfa7b31c",
+    "short_id": "700581cc",
+    "created_at": "2021-02-09T12:07:32.000+00:00",
+    "parent_ids": [
+      "1f848afe30c5bdf88c30367b90603d0a5ed69c64"
+    ],
+    "title": "Update .gitlab-ci.yml",
+    "message": "Update .gitlab-ci.yml",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-09T12:07:32.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-09T12:07:32.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/700581ccdd3eb0d62e8219626942f273dfa7b31c"
+  },
+  {
+    "id": "1f848afe30c5bdf88c30367b90603d0a5ed69c64",
+    "short_id": "1f848afe",
+    "created_at": "2021-02-09T12:00:48.000+00:00",
+    "parent_ids": [
+      "ffc77d123f1e427393aaacab7575226b61b0a3e2"
+    ],
+    "title": "Update .gitlab-ci.yml",
+    "message": "Update .gitlab-ci.yml",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-09T12:00:48.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-09T12:00:48.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/1f848afe30c5bdf88c30367b90603d0a5ed69c64"
+  },
+  {
+    "id": "ffc77d123f1e427393aaacab7575226b61b0a3e2",
+    "short_id": "ffc77d12",
+    "created_at": "2021-02-09T11:54:57.000+00:00",
+    "parent_ids": [
+      "faa0d3127d28dbb5316c6986fc779ec52e541cd8"
+    ],
+    "title": "Update .gitlab-ci.yml",
+    "message": "Update .gitlab-ci.yml",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-09T11:54:57.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-09T11:54:57.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/ffc77d123f1e427393aaacab7575226b61b0a3e2"
+  },
+  {
+    "id": "faa0d3127d28dbb5316c6986fc779ec52e541cd8",
+    "short_id": "faa0d312",
+    "created_at": "2021-02-09T13:25:54.000+02:00",
+    "parent_ids": [
+      "d455bc908dc88620cc410a5e1c85f2f4fd6c5914"
+    ],
+    "title": "excludes 3",
+    "message": "excludes 3\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-09T13:25:54.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-09T13:25:54.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/faa0d3127d28dbb5316c6986fc779ec52e541cd8"
+  },
+  {
+    "id": "d455bc908dc88620cc410a5e1c85f2f4fd6c5914",
+    "short_id": "d455bc90",
+    "created_at": "2021-02-09T12:25:50.000+02:00",
+    "parent_ids": [
+      "4d7e4f65b5b1b7d839051766f2094f84ae0b3066"
+    ],
+    "title": "exclude2",
+    "message": "exclude2\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-09T12:25:50.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-09T12:25:50.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/d455bc908dc88620cc410a5e1c85f2f4fd6c5914"
+  },
+  {
+    "id": "4d7e4f65b5b1b7d839051766f2094f84ae0b3066",
+    "short_id": "4d7e4f65",
+    "created_at": "2021-02-09T12:21:12.000+02:00",
+    "parent_ids": [
+      "58b1ff2a80425155ad6c91e59363f5fb33ba9fd9"
+    ],
+    "title": "exclude",
+    "message": "exclude\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-09T12:21:12.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-09T12:21:12.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/4d7e4f65b5b1b7d839051766f2094f84ae0b3066"
+  },
+  {
+    "id": "58b1ff2a80425155ad6c91e59363f5fb33ba9fd9",
+    "short_id": "58b1ff2a",
+    "created_at": "2021-02-09T12:14:25.000+02:00",
+    "parent_ids": [
+      "a18ffdb2428618678757b46cce30094c5ac5e19c"
+    ],
+    "title": "coveralls repo token",
+    "message": "coveralls repo token\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-09T12:14:25.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-09T12:14:25.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/58b1ff2a80425155ad6c91e59363f5fb33ba9fd9"
+  },
+  {
+    "id": "a18ffdb2428618678757b46cce30094c5ac5e19c",
+    "short_id": "a18ffdb2",
+    "created_at": "2021-02-09T10:06:26.000+00:00",
+    "parent_ids": [
+      "3fd71f81dd7412ecde75a0f015140ab6bee197a7"
+    ],
+    "title": "Update .gitlab-ci.yml",
+    "message": "Update .gitlab-ci.yml",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-09T10:06:26.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-09T10:06:26.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/a18ffdb2428618678757b46cce30094c5ac5e19c"
+  },
+  {
+    "id": "3fd71f81dd7412ecde75a0f015140ab6bee197a7",
+    "short_id": "3fd71f81",
+    "created_at": "2021-02-09T10:03:35.000+00:00",
+    "parent_ids": [
+      "ba156d8114b5a54e8a0e860fa8e855184216ecc9",
+      "bba7b6a984fff77c11a67a4d247191b4ed2276cd"
+    ],
+    "title": "Merge branch '16' into 'master'",
+    "message": "Merge branch '16' into 'master'\n\n#16 Started Implementing PlatformInvoicesApi\n\nSee merge request self-xdsd/self-rest!7",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-09T10:03:35.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-09T10:03:35.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/3fd71f81dd7412ecde75a0f015140ab6bee197a7"
+  },
+  {
+    "id": "bba7b6a984fff77c11a67a4d247191b4ed2276cd",
+    "short_id": "bba7b6a9",
+    "created_at": "2021-02-09T11:54:37.000+02:00",
+    "parent_ids": [
+      "3a3c79c348fea40afed69d128784bc144ea71a75"
+    ],
+    "title": "#16 PlatformInvoicesApi.platformInvoice(...) implemented and tested",
+    "message": "#16 PlatformInvoicesApi.platformInvoice(...) implemented and tested\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-09T11:54:37.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-09T11:54:37.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/bba7b6a984fff77c11a67a4d247191b4ed2276cd"
+  },
+  {
+    "id": "3a3c79c348fea40afed69d128784bc144ea71a75",
+    "short_id": "3a3c79c3",
+    "created_at": "2021-02-08T15:11:57.000+02:00",
+    "parent_ids": [
+      "ba156d8114b5a54e8a0e860fa8e855184216ecc9"
+    ],
+    "title": "#16 JsonPlatformInvoice implemented and tested",
+    "message": "#16 JsonPlatformInvoice implemented and tested\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-08T15:11:57.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-08T15:11:57.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/3a3c79c348fea40afed69d128784bc144ea71a75"
+  },
+  {
+    "id": "ba156d8114b5a54e8a0e860fa8e855184216ecc9",
+    "short_id": "ba156d81",
+    "created_at": "2021-02-08T09:09:07.000+00:00",
+    "parent_ids": [
+      "e51cd0a007e9c0b3566991e7bc165e2b45e408ed",
+      "cc6d420cdeba5a4f6ed65fb5bf7c1230d97a8b1f"
+    ],
+    "title": "Merge branch '12' into 'master'",
+    "message": "Merge branch '12' into 'master'\n\n#12 ContractsApi.contract(...) Implemented\n\nSee merge request self-xdsd/self-rest!6",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-08T09:09:07.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-08T09:09:07.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/ba156d8114b5a54e8a0e860fa8e855184216ecc9"
+  },
+  {
+    "id": "cc6d420cdeba5a4f6ed65fb5bf7c1230d97a8b1f",
+    "short_id": "cc6d420c",
+    "created_at": "2021-02-08T11:05:34.000+02:00",
+    "parent_ids": [
+      "e0373b3dd7689478688fada7d9406013d07bbf82"
+    ],
+    "title": "we can start",
+    "message": "we can start\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-08T11:05:34.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-08T11:05:34.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/cc6d420cdeba5a4f6ed65fb5bf7c1230d97a8b1f"
+  },
+  {
+    "id": "e0373b3dd7689478688fada7d9406013d07bbf82",
+    "short_id": "e0373b3d",
+    "created_at": "2021-02-08T11:04:23.000+02:00",
+    "parent_ids": [
+      "c0ba4d73a6ad029662a2b1c734129b5951edc796"
+    ],
+    "title": "#12 puzzles",
+    "message": "#12 puzzles\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-08T11:04:23.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-08T11:04:23.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/e0373b3dd7689478688fada7d9406013d07bbf82"
+  },
+  {
+    "id": "c0ba4d73a6ad029662a2b1c734129b5951edc796",
+    "short_id": "c0ba4d73",
+    "created_at": "2021-02-08T10:51:35.000+02:00",
+    "parent_ids": [
+      "1d521a46929811829f4debabba5e9baa796a1964"
+    ],
+    "title": "#12 ContractsApi.contract(...) implemented and tested",
+    "message": "#12 ContractsApi.contract(...) implemented and tested\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-08T10:51:35.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-08T10:51:35.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/c0ba4d73a6ad029662a2b1c734129b5951edc796"
+  },
+  {
+    "id": "1d521a46929811829f4debabba5e9baa796a1964",
+    "short_id": "1d521a46",
+    "created_at": "2021-02-08T10:51:19.000+02:00",
+    "parent_ids": [
+      "e51cd0a007e9c0b3566991e7bc165e2b45e408ed"
+    ],
+    "title": "#12 JsonContract implemented and tested",
+    "message": "#12 JsonContract implemented and tested\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-08T10:51:19.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-08T10:51:19.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/1d521a46929811829f4debabba5e9baa796a1964"
+  },
+  {
+    "id": "e51cd0a007e9c0b3566991e7bc165e2b45e408ed",
+    "short_id": "e51cd0a0",
+    "created_at": "2021-02-06T12:05:49.000+00:00",
+    "parent_ids": [
+      "3bf5c5b5b8af8ff0c003019de2b723653eaf41d7"
+    ],
+    "title": "Update .gitlab-ci.yml",
+    "message": "Update .gitlab-ci.yml",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-06T12:05:49.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-06T12:05:49.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/e51cd0a007e9c0b3566991e7bc165e2b45e408ed"
+  },
+  {
+    "id": "3bf5c5b5b8af8ff0c003019de2b723653eaf41d7",
+    "short_id": "3bf5c5b5",
+    "created_at": "2021-02-06T08:44:39.000+00:00",
+    "parent_ids": [
+      "734cfd157f57dcea161a9058f2e8b5637e731364"
+    ],
+    "title": "Update .gitlab-ci.yml",
+    "message": "Update .gitlab-ci.yml",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-06T08:44:39.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-06T08:44:39.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/3bf5c5b5b8af8ff0c003019de2b723653eaf41d7"
+  },
+  {
+    "id": "734cfd157f57dcea161a9058f2e8b5637e731364",
+    "short_id": "734cfd15",
+    "created_at": "2021-02-06T08:43:14.000+00:00",
+    "parent_ids": [
+      "17774b8bccb0c24269660a981791f64a4b5ba1bb"
+    ],
+    "title": "Update .gitlab-ci.yml",
+    "message": "Update .gitlab-ci.yml",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-06T08:43:14.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-06T08:43:14.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/734cfd157f57dcea161a9058f2e8b5637e731364"
+  },
+  {
+    "id": "17774b8bccb0c24269660a981791f64a4b5ba1bb",
+    "short_id": "17774b8b",
+    "created_at": "2021-02-06T08:42:52.000+00:00",
+    "parent_ids": [
+      "58c328255c81f110755fa08a3f2e6009177cc202"
+    ],
+    "title": "Update .gitlab-ci.yml",
+    "message": "Update .gitlab-ci.yml",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-06T08:42:52.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-06T08:42:52.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/17774b8bccb0c24269660a981791f64a4b5ba1bb"
+  },
+  {
+    "id": "58c328255c81f110755fa08a3f2e6009177cc202",
+    "short_id": "58c32825",
+    "created_at": "2021-02-06T08:34:07.000+00:00",
+    "parent_ids": [
+      "93546cec684ef47a2fbee326d58edd7c5c1cd7c4"
+    ],
+    "title": "Update .gitlab-ci.yml",
+    "message": "Update .gitlab-ci.yml",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-06T08:34:07.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-06T08:34:07.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/58c328255c81f110755fa08a3f2e6009177cc202"
+  },
+  {
+    "id": "93546cec684ef47a2fbee326d58edd7c5c1cd7c4",
+    "short_id": "93546cec",
+    "created_at": "2021-02-06T08:33:39.000+00:00",
+    "parent_ids": [
+      "9e2318d8381b5ccc33fbac2024e9286b6aa76570"
+    ],
+    "title": "Add new file",
+    "message": "Add new file",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-06T08:33:39.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-06T08:33:39.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/93546cec684ef47a2fbee326d58edd7c5c1cd7c4"
+  },
+  {
+    "id": "9e2318d8381b5ccc33fbac2024e9286b6aa76570",
+    "short_id": "9e2318d8",
+    "created_at": "2021-02-06T08:21:49.000+00:00",
+    "parent_ids": [
+      "356f365bba924209c4e71d1695d43e21faac0d3d",
+      "3037a24c056312317a35f62bacc795b14ff3d142"
+    ],
+    "title": "Merge branch '10' into 'master'",
+    "message": "Merge branch '10' into 'master'\n\n#10 UsersApi.returnMe() Implemented and Tested\n\nSee merge request self-xdsd/self-rest!5",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-06T08:21:49.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-06T08:21:49.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/9e2318d8381b5ccc33fbac2024e9286b6aa76570"
+  },
+  {
+    "id": "3037a24c056312317a35f62bacc795b14ff3d142",
+    "short_id": "3037a24c",
+    "created_at": "2021-02-06T10:18:30.000+02:00",
+    "parent_ids": [
+      "983a175c325658bc9a492b4c3990d822824fab3f"
+    ],
+    "title": "#10 unit tests",
+    "message": "#10 unit tests\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-06T10:18:30.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-06T10:18:30.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/3037a24c056312317a35f62bacc795b14ff3d142"
+  },
+  {
+    "id": "983a175c325658bc9a492b4c3990d822824fab3f",
+    "short_id": "983a175c",
+    "created_at": "2021-02-05T18:40:51.000+02:00",
+    "parent_ids": [
+      "356f365bba924209c4e71d1695d43e21faac0d3d"
+    ],
+    "title": "#10 UsersApi.returnMe + exception handlers; needs tests",
+    "message": "#10 UsersApi.returnMe + exception handlers; needs tests\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-02-05T18:40:51.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-02-05T18:40:51.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/983a175c325658bc9a492b4c3990d822824fab3f"
+  },
+  {
+    "id": "356f365bba924209c4e71d1695d43e21faac0d3d",
+    "short_id": "356f365b",
+    "created_at": "2021-02-03T08:05:56.000+00:00",
+    "parent_ids": [
+      "af726aa2ea3108e2b0c783b87b370ba834a10f6d",
+      "80692593da5e57dd95248e97507184c40df7689b"
+    ],
+    "title": "Merge branch 'issue9' into 'master'",
+    "message": "Merge branch 'issue9' into 'master'\n\nForbiddenAccessException with handler implemented.\n\nSee merge request self-xdsd/self-rest!4",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-02-03T08:05:56.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-02-03T08:05:56.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/356f365bba924209c4e71d1695d43e21faac0d3d"
+  },
+  {
+    "id": "80692593da5e57dd95248e97507184c40df7689b",
+    "short_id": "80692593",
+    "created_at": "2021-01-31T14:27:56.000+02:00",
+    "parent_ids": [
+      "af726aa2ea3108e2b0c783b87b370ba834a10f6d"
+    ],
+    "title": "ForbiddenAccessException with handler implemented.",
+    "message": "ForbiddenAccessException with handler implemented.\n",
+    "author_name": "Mykyta Monokov",
+    "author_email": "Mykyta_Monokov@neimanmarcus.com",
+    "authored_date": "2021-01-31T14:27:56.000+02:00",
+    "committer_name": "Mykyta Monokov",
+    "committer_email": "Mykyta_Monokov@neimanmarcus.com",
+    "committed_date": "2021-01-31T14:27:56.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/80692593da5e57dd95248e97507184c40df7689b"
+  },
+  {
+    "id": "af726aa2ea3108e2b0c783b87b370ba834a10f6d",
+    "short_id": "af726aa2",
+    "created_at": "2021-01-31T10:25:13.000+00:00",
+    "parent_ids": [
+      "4b099a022605e68e7e97d30ccfc995317098c840"
+    ],
+    "title": "Update .gitlab-ci.yml",
+    "message": "Update .gitlab-ci.yml",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-01-31T10:25:13.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-01-31T10:25:13.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/af726aa2ea3108e2b0c783b87b370ba834a10f6d"
+  },
+  {
+    "id": "4b099a022605e68e7e97d30ccfc995317098c840",
+    "short_id": "4b099a02",
+    "created_at": "2021-01-31T10:23:06.000+00:00",
+    "parent_ids": [
+      "1882578c0fbb22c69a031a0b6631396e822269bb"
+    ],
+    "title": "Add .gitlab-ci.yml",
+    "message": "Add .gitlab-ci.yml",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-01-31T10:23:06.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-01-31T10:23:06.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/4b099a022605e68e7e97d30ccfc995317098c840"
+  },
+  {
+    "id": "1882578c0fbb22c69a031a0b6631396e822269bb",
+    "short_id": "1882578c",
+    "created_at": "2021-01-30T16:00:47.000+00:00",
+    "parent_ids": [
+      "dcbe421856e41a9efa911e4984c4c91fd6c7eeff",
+      "790a508f4177b6848ef4fb3c9f46e6c137bbc5a3"
+    ],
+    "title": "Merge branch '8' into 'master'",
+    "message": "Merge branch '8' into 'master'\n\n#8 Self.authenticate(personalAccessToken) implemented and tested\n\nSee merge request self-xdsd/self-rest!3",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-01-30T16:00:47.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-01-30T16:00:47.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/1882578c0fbb22c69a031a0b6631396e822269bb"
+  },
+  {
+    "id": "790a508f4177b6848ef4fb3c9f46e6c137bbc5a3",
+    "short_id": "790a508f",
+    "created_at": "2021-01-30T17:57:02.000+02:00",
+    "parent_ids": [
+      "e3e69731cd5af7420fda3e6cf8bb510a23900655"
+    ],
+    "title": "#8 UserProducer.authenticate(...) token auth implemented and tested",
+    "message": "#8 UserProducer.authenticate(...) token auth implemented and tested\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-01-30T17:57:02.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-01-30T17:57:02.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/790a508f4177b6848ef4fb3c9f46e6c137bbc5a3"
+  },
+  {
+    "id": "e3e69731cd5af7420fda3e6cf8bb510a23900655",
+    "short_id": "e3e69731",
+    "created_at": "2021-01-30T17:53:44.000+02:00",
+    "parent_ids": [
+      "9398dc9468f960f109520325fe8cb52e44aa3579"
+    ],
+    "title": "#8 SelfCoreComponent.authenticate(...) implemented and tested",
+    "message": "#8 SelfCoreComponent.authenticate(...) implemented and tested\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-01-30T17:53:44.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-01-30T17:53:44.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/e3e69731cd5af7420fda3e6cf8bb510a23900655"
+  },
+  {
+    "id": "9398dc9468f960f109520325fe8cb52e44aa3579",
+    "short_id": "9398dc94",
+    "created_at": "2021-01-30T17:51:52.000+02:00",
+    "parent_ids": [
+      "dcbe421856e41a9efa911e4984c4c91fd6c7eeff"
+    ],
+    "title": "#8 core 61, storage 26",
+    "message": "#8 core 61, storage 26\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-01-30T17:51:52.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-01-30T17:51:52.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/9398dc9468f960f109520325fe8cb52e44aa3579"
+  },
+  {
+    "id": "dcbe421856e41a9efa911e4984c4c91fd6c7eeff",
+    "short_id": "dcbe4218",
+    "created_at": "2021-01-30T14:45:21.000+00:00",
+    "parent_ids": [
+      "022690dff7ac9bfdc5c1b8108089baf7c5b0689f",
+      "4201846121c9d554ece2bc65d14f4a5338f81eb6"
+    ],
+    "title": "Merge branch '7' into 'master'",
+    "message": "Merge branch '7' into 'master'\n\n#7 UserProducer and SelfCoreComponent implemented and tested\n\nCloses #7\n\nSee merge request self-xdsd/self-rest!2",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-01-30T14:45:21.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-01-30T14:45:21.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/dcbe421856e41a9efa911e4984c4c91fd6c7eeff"
+  },
+  {
+    "id": "4201846121c9d554ece2bc65d14f4a5338f81eb6",
+    "short_id": "42018461",
+    "created_at": "2021-01-30T16:42:01.000+02:00",
+    "parent_ids": [
+      "1baadcf1a914982778937ec46104e70df41723eb"
+    ],
+    "title": "#7 UserProducer implemented and tested",
+    "message": "#7 UserProducer implemented and tested\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-01-30T16:42:01.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-01-30T16:42:01.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/4201846121c9d554ece2bc65d14f4a5338f81eb6"
+  },
+  {
+    "id": "1baadcf1a914982778937ec46104e70df41723eb",
+    "short_id": "1baadcf1",
+    "created_at": "2021-01-30T15:49:30.000+02:00",
+    "parent_ids": [
+      "022690dff7ac9bfdc5c1b8108089baf7c5b0689f"
+    ],
+    "title": "#7 SelfCoreComponent + unit tests",
+    "message": "#7 SelfCoreComponent + unit tests\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-01-30T15:49:30.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-01-30T15:49:30.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/1baadcf1a914982778937ec46104e70df41723eb"
+  },
+  {
+    "id": "022690dff7ac9bfdc5c1b8108089baf7c5b0689f",
+    "short_id": "022690df",
+    "created_at": "2021-01-30T14:30:59.000+02:00",
+    "parent_ids": [
+      "cf3cd6daf58431bcfb3f4fdb65741774c737f87a"
+    ],
+    "title": "clean props",
+    "message": "clean props\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-01-30T14:30:59.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-01-30T14:30:59.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/022690dff7ac9bfdc5c1b8108089baf7c5b0689f"
+  },
+  {
+    "id": "cf3cd6daf58431bcfb3f4fdb65741774c737f87a",
+    "short_id": "cf3cd6da",
+    "created_at": "2021-01-30T14:29:04.000+02:00",
+    "parent_ids": [
+      "900c84045c9e3db910ad274dc7b8f4e34ae6158a"
+    ],
+    "title": "ignore sync.sh",
+    "message": "ignore sync.sh\n",
+    "author_name": "amihaiemil",
+    "author_email": "amihaiemil@gmail.com",
+    "authored_date": "2021-01-30T14:29:04.000+02:00",
+    "committer_name": "amihaiemil",
+    "committer_email": "amihaiemil@gmail.com",
+    "committed_date": "2021-01-30T14:29:04.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/cf3cd6daf58431bcfb3f4fdb65741774c737f87a"
+  },
+  {
+    "id": "900c84045c9e3db910ad274dc7b8f4e34ae6158a",
+    "short_id": "900c8404",
+    "created_at": "2021-01-30T12:20:34.000+00:00",
+    "parent_ids": [
+      "49b35280cb262f1f87fa7c688e92f64fc3f30933"
+    ],
+    "title": "Update README.md",
+    "message": "Update README.md",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-01-30T12:20:34.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-01-30T12:20:34.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/900c84045c9e3db910ad274dc7b8f4e34ae6158a"
+  },
+  {
+    "id": "49b35280cb262f1f87fa7c688e92f64fc3f30933",
+    "short_id": "49b35280",
+    "created_at": "2021-01-30T12:05:49.000+00:00",
+    "parent_ids": [
+      "bf998daa0fbfbdd7f2786575f74d9d14231e5644",
+      "5548b71a43e479ee1a8e1b490c03a7e5af81bf7f"
+    ],
+    "title": "Merge branch 'issue1' into 'master'",
+    "message": "Merge branch 'issue1' into 'master'\n\n#1 Maven Project Skeleton.\n\nCloses #1\n\nSee merge request self-xdsd/self-rest!1",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-01-30T12:05:49.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-01-30T12:05:49.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/49b35280cb262f1f87fa7c688e92f64fc3f30933"
+  },
+  {
+    "id": "5548b71a43e479ee1a8e1b490c03a7e5af81bf7f",
+    "short_id": "5548b71a",
+    "created_at": "2021-01-29T12:09:55.000+02:00",
+    "parent_ids": [
+      "9f57c4e4788ceec8f7c1980ca46df40a7515ae8e"
+    ],
+    "title": "#1 Maven Project Skeleton.",
+    "message": "#1 Maven Project Skeleton.\n",
+    "author_name": "cristianpela",
+    "author_email": "cristypela05@gmail.com",
+    "authored_date": "2021-01-29T12:09:55.000+02:00",
+    "committer_name": "cristianpela",
+    "committer_email": "cristypela05@gmail.com",
+    "committed_date": "2021-01-29T12:09:55.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/5548b71a43e479ee1a8e1b490c03a7e5af81bf7f"
+  },
+  {
+    "id": "9f57c4e4788ceec8f7c1980ca46df40a7515ae8e",
+    "short_id": "9f57c4e4",
+    "created_at": "2021-01-21T16:54:07.000+02:00",
+    "parent_ids": [
+      "bf998daa0fbfbdd7f2786575f74d9d14231e5644"
+    ],
+    "title": "#1 Maven Project Skeleton.",
+    "message": "#1 Maven Project Skeleton.\n",
+    "author_name": "cristianpela",
+    "author_email": "cristypela05@gmail.com",
+    "authored_date": "2021-01-21T16:54:07.000+02:00",
+    "committer_name": "cristianpela",
+    "committer_email": "cristypela05@gmail.com",
+    "committed_date": "2021-01-21T16:54:07.000+02:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/9f57c4e4788ceec8f7c1980ca46df40a7515ae8e"
+  },
+  {
+    "id": "bf998daa0fbfbdd7f2786575f74d9d14231e5644",
+    "short_id": "bf998daa",
+    "created_at": "2021-01-20T15:40:01.000+00:00",
+    "parent_ids": [
+      "b8efd067e51337b787f4b21668358fda536d7ffa"
+    ],
+    "title": "Add LICENSE",
+    "message": "Add LICENSE",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-01-20T15:40:01.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-01-20T15:40:01.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/bf998daa0fbfbdd7f2786575f74d9d14231e5644"
+  },
+  {
+    "id": "b8efd067e51337b787f4b21668358fda536d7ffa",
+    "short_id": "b8efd067",
+    "created_at": "2021-01-20T15:39:23.000+00:00",
+    "parent_ids": [],
+    "title": "Initial commit",
+    "message": "Initial commit",
+    "author_name": "Mihai A",
+    "author_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "authored_date": "2021-01-20T15:39:23.000+00:00",
+    "committer_name": "Mihai A",
+    "committer_email": "5347296-amihaiemil@users.noreply.gitlab.com",
+    "committed_date": "2021-01-20T15:39:23.000+00:00",
+    "web_url": "https://gitlab.com/criske/self-rest/-/commit/b8efd067e51337b787f4b21668358fda536d7ffa"
+  }
+]
