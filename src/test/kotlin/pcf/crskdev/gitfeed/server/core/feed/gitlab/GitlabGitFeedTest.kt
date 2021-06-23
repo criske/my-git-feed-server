@@ -25,10 +25,13 @@
 
 package pcf.crskdev.gitfeed.server.core.feed.gitlab
 
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import pcf.crskdev.gitfeed.server.core.feed.models.Commit
 import pcf.crskdev.gitfeed.server.core.feed.models.Paging
 import pcf.crskdev.gitfeed.server.core.feed.models.Repo
 import pcf.crskdev.gitfeed.server.core.feed.models.RepoExtended
@@ -40,6 +43,8 @@ import pcf.crskdev.gitfeed.server.core.net.Response
 import pcf.crskdev.gitfeed.server.core.net.headers
 import java.io.File
 import java.net.URI
+import java.nio.file.Path
+import java.nio.file.Paths
 
 internal class GitlabGitFeedTest : StringSpec({
 
@@ -114,5 +119,59 @@ internal class GitlabGitFeedTest : StringSpec({
             "2020-11-25T12:34:35.706Z",
             "2021-01-26T12:56:14.310Z"
         )
+    }
+
+    "should get all commits for a single repo" {
+        val command = mock<RequestCommand>()
+        val requestHeaders = headers {
+            "Content-Type" to "application/json"
+            "Authorization" to "Bearer fake_123"
+        }
+        val commitsDir = Paths.get("src/test/resources/gitlab_commits")
+        val repoDir = commitsDir.resolve("self-rest")
+        val gitFeed = GitlabGitFeed(
+            RequestClientImpl(mock(), command, Bearer("fake_123")),
+            mapOf(GitlabGitFeed.COMMITS_PAGE_SIZE to "2")
+        )
+        whenever(command.request(any(), eq(requestHeaders)))
+            .thenAnswer {
+                val uri = it.getArgument<URI>(0).toString()
+                val file: Path = when {
+                    uri.contains("/commits") -> {
+                        val page = uri.split("&page=")[1]
+                        repoDir.resolve(Paths.get("commit_page$page.json"))
+                    }
+                    else -> {
+                        commitsDir.resolve(Paths.get("repos_single.json"))
+                    }
+                }
+                Response(
+                    200,
+                    file.toFile().readText(),
+                    emptyMap()
+                )
+            }
+
+        with(gitFeed.commits(1)) {
+            paging shouldBe Paging(null, null, 2, 7)
+            entries.first() shouldBe Commit(
+                "c7dc1fd6",
+                "2021-03-03T13:17:27.000+02:00",
+                "https://gitlab.com/criske/self-rest/-/commit/c7dc1fd684f026f287ce6693192bd0c90084e514",
+                "#21 ContributorInvoicesApi#all() implemented + tested.\n",
+                Repo(
+                    "Self Rest",
+                    "criske/self-rest",
+                    "https://gitlab.com/criske/self-rest",
+                    User(
+                        "criske",
+                        "https://secure.gravatar.com/avatar/d50208500191eb9b0d99ed29be6facd5?s=80&d=identicon",
+                        "https://gitlab.com/criske",
+                        "User",
+                        "Gitlab"
+                    )
+                ),
+            )
+        }
     }
 })

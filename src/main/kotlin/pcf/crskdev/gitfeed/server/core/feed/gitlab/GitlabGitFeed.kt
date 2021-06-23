@@ -150,7 +150,7 @@ class GitlabGitFeed(
      */
     private fun commits(repo: Repo, page: Int): Commits {
         val repoFullName = repo.fullName.replace("/", "%2F")
-        val url = URI.create("$baseUrl/projects/$repoFullName$page")
+        val url = URI.create("$baseUrl/projects/$repoFullName/repository/commits?per_page=100&page=$page")
         return client.request(url) {
             obj {
                 "paging" to it.headers.extractPaging()
