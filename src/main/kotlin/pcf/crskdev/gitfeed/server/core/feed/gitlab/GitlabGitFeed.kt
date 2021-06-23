@@ -25,10 +25,13 @@
 
 package pcf.crskdev.gitfeed.server.core.feed.gitlab
 
+import pcf.crskdev.gitfeed.server.core.feed.CommitsTemplate
 import pcf.crskdev.gitfeed.server.core.feed.GitFeed
+import pcf.crskdev.gitfeed.server.core.feed.bitbucket.BitbucketGitFeed
 import pcf.crskdev.gitfeed.server.core.feed.extractPaging
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
+import pcf.crskdev.gitfeed.server.core.feed.models.Repo
 import pcf.crskdev.gitfeed.server.core.feed.models.RepoExtended
 import pcf.crskdev.gitfeed.server.core.feed.models.Repos
 import pcf.crskdev.gitfeed.server.core.feed.models.User
@@ -66,9 +69,16 @@ class GitlabGitFeed(
      */
     private val userId = "6018288"
 
-    override fun commits(page: Int?): Commits {
-        TODO("Not yet implemented")
-    }
+    /**
+     * Commits template.
+     */
+    private val commitsTemplate = CommitsTemplate(
+        this.config[BitbucketGitFeed.COMMITS_PAGE_SIZE]?.toInt() ?: 30,
+        { page -> this.repos(page) { true } },
+        { repo, page -> this.commits(repo, page) }
+    )
+
+    override fun commits(page: Int?): Commits = this.commitsTemplate.execute(page)
 
     override fun assignments(state: Assignments.State, page: Int?): Assignments {
         TODO("Not yet implemented")
@@ -96,7 +106,7 @@ class GitlabGitFeed(
      * @receiver Takes RepoExtended and returns Boolean.
      * @return Repos.
      */
-    private inline fun repos(page: Int?, filter: (RepoExtended) -> Boolean): Repos {
+    private inline fun repos(page: Int?, filter: (RepoExtended) -> Boolean = { true }): Repos {
         return this.client
             .request<Repos>(URI.create("$baseUrl/users/$userId/projects?visibility=public&per_page=100&page=${page ?: 1}")) {
                 obj {
@@ -129,5 +139,40 @@ class GitlabGitFeed(
             }.run {
                 this.copy(entries = this.entries.filter(filter))
             }
+    }
+
+    /**
+     * Commits Page for a single repo.
+     *
+     * @param repo Repo.
+     * @param page Page.
+     * @return Commits.
+     */
+    private fun commits(repo: Repo, page: Int): Commits {
+        val repoFullName = repo.fullName.replace("/", "%2F")
+        val url = URI.create("$baseUrl/projects/$repoFullName$page")
+        return client.request(url) {
+            obj {
+                "paging" to it.headers.extractPaging()
+                "entries" to arr {
+                    it.body
+                        .elements()
+                        .asSequence()
+                        .filter {
+                            it["author_name"].asText() == "cristianpela" ||
+                                it["author_name"].asText() == "criske"
+                        }
+                        .forEach {
+                            +obj {
+                                "sha" to it["short_id"]
+                                "date" to it["created_at"]
+                                "url" to it["web_url"]
+                                "message" to it["message"]
+                                "repo" to repo
+                            }
+                        }
+                }
+            }.asTree()
+        }
     }
 }

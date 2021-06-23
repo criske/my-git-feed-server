@@ -26,9 +26,9 @@ package pcf.crskdev.gitfeed.server.core.feed.bitbucket
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.JsonSerializable
+import pcf.crskdev.gitfeed.server.core.feed.CommitsTemplate
 import pcf.crskdev.gitfeed.server.core.feed.GitFeed
 import pcf.crskdev.gitfeed.server.core.feed.models.Assignments
-import pcf.crskdev.gitfeed.server.core.feed.models.Commit
 import pcf.crskdev.gitfeed.server.core.feed.models.Commits
 import pcf.crskdev.gitfeed.server.core.feed.models.Paging
 import pcf.crskdev.gitfeed.server.core.feed.models.Repo
@@ -39,10 +39,7 @@ import pcf.crskdev.gitfeed.server.core.net.request
 import pcf.crskdev.gitfeed.server.core.util.ObjectScope
 import pcf.crskdev.gitfeed.server.core.util.obj
 import java.net.URI
-import java.time.OffsetDateTime
-import java.util.stream.Collectors
 import kotlin.math.ceil
-import kotlin.math.min
 
 /**
  * Bitbucket git feed implementation with an optional configuration.
@@ -70,52 +67,17 @@ class BitbucketGitFeed(
      */
     private val baseUrl = "https://bitbucket.org/api/2.0"
 
-    override fun commits(page: Int?): Commits {
-        val repos = mutableListOf<Repo>().apply {
-            var next: Int? = 1
-            while (next != null) {
-                repos(next, false).also { r ->
-                    addAll(r.entries.map { it.simple })
-                    next = r.paging.next
-                }
-            }
-        }
-        val allCommits: List<Commit> = repos
-            .parallelStream()
-            .flatMap { repo ->
-                mutableListOf<Commit>()
-                    .apply {
-                        var next: Int? = 1
-                        while (next != null) {
-                            val pageCommits = commits(repo, next!!)
-                            addAll(pageCommits.entries)
-                            next = pageCommits.paging.next
-                        }
-                    }.toList().stream()
-            }
-            .collect(Collectors.toList())
-            .sortedWith { a, b ->
-                // order descending
-                -1 * OffsetDateTime.parse(a.date)
-                    .compareTo(OffsetDateTime.parse(b.date))
-            }
+    /**
+     * Commits template.
+     */
+    private val commitsTemplate = CommitsTemplate(
+        this.config[COMMITS_PAGE_SIZE]?.toInt() ?: 30,
+        { page -> this.repos(page, false) },
+        { repo, page -> this.commits(repo, page) }
+    )
 
-        val pageSize = this.config[COMMITS_PAGE_SIZE]?.toInt() ?: 30
-        val lastPage = ceil(allCommits.size.toDouble().div(pageSize)).toInt()
-        val currPage = page ?: 1
-        return Commits(
-            Paging(
-                if (currPage == 1) null else 1,
-                if (currPage > 1) currPage - 1 else null,
-                if (currPage < lastPage) currPage + 1 else null,
-                if (currPage == lastPage) null else lastPage
-            ),
-            allCommits.subList(
-                (currPage - 1) * pageSize,
-                min((currPage - 1) * pageSize + pageSize, allCommits.size)
-            )
-        )
-    }
+    override fun commits(page: Int?): Commits =
+        this.commitsTemplate.execute(page)
 
     override fun assignments(state: Assignments.State, page: Int?): Assignments {
         TODO("Not yet implemented")
