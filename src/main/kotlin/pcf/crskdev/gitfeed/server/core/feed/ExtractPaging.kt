@@ -31,15 +31,17 @@ import pcf.crskdev.gitfeed.server.core.net.Headers
 import pcf.crskdev.gitfeed.server.core.net.first
 import pcf.crskdev.gitfeed.server.core.util.obj
 
-private val LINKS_REGEX = """^<.+page=(\d+)>;\srel="(.+)"$""".toRegex()
+private val LINKS_REGEX = """^<.+(\?|&)page=(\d+).*>;\srel="(.+)"$""".toRegex()
 
 internal fun Headers.extractPaging(): JsonNode = obj {
     this@extractPaging.first("Link")?.run {
         split(",").forEach {
-            LINKS_REGEX.find(it.trim())?.destructured?.let { groups ->
-                val (page, rel) = groups
-                rel to page.toInt()
-            }
+            LINKS_REGEX.find(it.trim())
+                ?.destructured
+                ?.let { groups ->
+                    val (_, page, rel) = groups
+                    rel to page.toInt()
+                }
         }
     }
 }.asTree().let {
