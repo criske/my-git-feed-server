@@ -25,16 +25,26 @@
 
 package pcf.crskdev.gitfeed.server.config
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest
 import org.springframework.cache.annotation.EnableCaching
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.env.Environment
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.util.matcher.RequestMatcher
 import org.springframework.web.cors.CorsConfiguration
 
 @Configuration
 @EnableCaching
 class HerokuWebSecurityConfig : WebSecurityConfigurerAdapter() {
+
+    @Autowired
+    private lateinit var env: Environment
 
     override fun configure(http: HttpSecurity) {
         http
@@ -45,5 +55,20 @@ class HerokuWebSecurityConfig : WebSecurityConfigurerAdapter() {
             .requestMatchers(RequestMatcher { it.getHeader("X-Forwarded-Proto") != null })
             .requiresSecure()
             .and()
+            .authorizeRequests()
+            .mvcMatchers("/api/**", "/check/**").permitAll()
+            .requestMatchers(EndpointRequest.toAnyEndpoint()).authenticated()
+            .and()
+            .httpBasic()
     }
+
+    override fun configure(auth: AuthenticationManagerBuilder) {
+        auth.inMemoryAuthentication()
+            .withUser(env.getProperty("ADMIN_USER"))
+            .password(this.passwordEncoder().encode(env.getProperty("ADMIN_PASSWORD")))
+            .roles("ADMIN")
+    }
+
+    @Bean
+    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 }
