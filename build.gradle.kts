@@ -22,6 +22,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.ehcache:ehcache:3.9.2")
     implementation("com.giffing.bucket4j.spring.boot.starter:bucket4j-spring-boot-starter:0.3.3")
     val springSec = "5.4.5"
@@ -70,7 +71,9 @@ tasks.test {
         "GH_TOKEN" to "gh_fake_123",
         "GL_TOKEN" to "gl_fake_123",
         "BB_TOKEN" to "bb_fake_123",
-        "REDIS_URL" to "redis://localhost:6379"
+        "REDIS_URL" to "redis://localhost:6379",
+        "ADMIN_USER" to "test_user",
+        "ADMIN_PASSWORD" to "fake_password"
     ))
 }
 
