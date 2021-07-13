@@ -34,6 +34,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.actuate.trace.http.HttpExchangeTracer
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
@@ -61,6 +62,9 @@ internal class GitFeedApiControllerTest @Autowired constructor(mockMvc: MockMvc)
     class Inject {
         @Bean
         fun gitFeedManager(): GitFeedManager = mock()
+
+        @Bean
+        fun httpExchangeTracer() = HttpExchangeTracer(emptySet())
     }
 
     init {

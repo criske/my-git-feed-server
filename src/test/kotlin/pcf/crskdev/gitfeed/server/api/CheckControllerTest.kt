@@ -28,7 +28,10 @@ package pcf.crskdev.gitfeed.server.api
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.actuate.trace.http.HttpExchangeTracer
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.context.TestConfiguration
+import org.springframework.context.annotation.Bean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
@@ -38,6 +41,12 @@ import pcf.crskdev.gitfeed.server.core.util.obj
 
 @WebMvcTest(CheckController::class)
 class CheckControllerTest @Autowired constructor(mockMvc: MockMvc) : StringSpec() {
+
+    @TestConfiguration
+    class Inject {
+        @Bean
+        fun httpExchangeTracer() = HttpExchangeTracer(emptySet())
+    }
 
     init {
         "should call ping api endpoint" {
