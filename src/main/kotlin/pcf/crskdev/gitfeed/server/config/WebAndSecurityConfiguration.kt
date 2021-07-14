@@ -38,13 +38,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.util.matcher.RequestMatcher
 import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 @EnableCaching
-class HerokuWebSecurityConfig : WebSecurityConfigurerAdapter() {
+class WebAndSecurityConfiguration : WebSecurityConfigurerAdapter(), WebMvcConfigurer {
 
     @Autowired
     private lateinit var env: Environment
+
+    override fun addViewControllers(registry: ViewControllerRegistry) {
+        registry.addViewController("/httptrace")
+            .setViewName("httptrace-ui.html")
+    }
 
     override fun configure(http: HttpSecurity) {
         http
@@ -57,6 +64,7 @@ class HerokuWebSecurityConfig : WebSecurityConfigurerAdapter() {
             .and()
             .authorizeRequests()
             .mvcMatchers("/api/**", "/check/**").permitAll()
+            .mvcMatchers("/httptrace").authenticated()
             .requestMatchers(EndpointRequest.toAnyEndpoint()).authenticated()
             .and()
             .httpBasic()

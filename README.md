@@ -9,4 +9,10 @@ REST API backend app that centralize my git activity on various git platform pro
   - `/me`
   - `/repos`
 - `/check` (api status checks)
-  - `/ping`  
+  - `/ping` 
+  
+### Miscellaneous
+- `/actuator/httptrace` - http trace actuator endpoint<sup>*</sup>
+- `/httptrace` - ui for http trace actuator endpoint<sup>*</sup>
+
+<sub><sup>*requires authentication</sup></sub>
