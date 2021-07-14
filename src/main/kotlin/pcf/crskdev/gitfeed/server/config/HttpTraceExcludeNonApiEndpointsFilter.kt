@@ -32,11 +32,11 @@ import org.springframework.stereotype.Component
 import javax.servlet.http.HttpServletRequest
 
 @Component
-class HttpTraceExcludeActuatorEndpointsFilter(
+class HttpTraceExcludeNonApiEndpointsFilter(
     repository: HttpTraceRepository,
     tracer: HttpExchangeTracer
 ) : HttpTraceFilter(repository, tracer) {
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean =
-        request.servletPath.contains("actuator")
+        !(request.servletPath.contains("api") || request.servletPath.contains("check"))
 }
