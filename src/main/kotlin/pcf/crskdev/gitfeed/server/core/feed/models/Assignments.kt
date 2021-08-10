@@ -42,7 +42,7 @@ data class Assignments(val paging: Paging, val entries: List<Assignment>, val fi
 
 data class Assignment(
     val title: String,
-    val body: String,
+    val body: String?,
     val url: String,
     val isOpen: Boolean,
     val repo: Repo,
